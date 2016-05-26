@@ -67,18 +67,24 @@ class App(tkinter.Frame):
     def blast(self):
         IDs = list(set(self.ID_add.lines()))
         print (' '.join(IDs))
-        self.master.title('Toking to NCBI. Running BLAST. Be VERY patient ...')
-        result_handle = NCBIWWW.qblast("blastn", "nt", '\n'.join(IDs))#, hitlist_size=50, perc_ident=90, threshold=1, alignments=50, filter="HEV", format_type='XML', results_file=blast_file_name )
-        self.master.title('Adding new sequences')
-        print('returned')
-        # http://tkinter.unpythonic.net/wiki/tkFileDialog
         blast_file_name = filedialog.asksaveasfilename(filetypes=(("BLAST", "*.xml"), ("All files", "*.*") ), defaultextension='xml', title='Save the BLAST result in XML format')
-        with open(blast_file_name, mode='w') as blast_file:
-            blast_file.write(result_handle.read())
-        result_handle.close()
-        # self.load_blast_data(result_handle)
-        with open(blast_file_name, mode='r') as blast_file:
-            self.load_blast_data(blast_file)
+        # lets limit the number of sequences to BLAST in one pass to NS
+        NS = 2
+        i = 0
+        while i < len(IDs):
+            self.master.title('Talking to NCBI. Running BLAST. Be VERY patient ...')
+            print('BLAST: ' + ' '.join(IDs[i : i + NS]))
+            result_handle = NCBIWWW.qblast("blastn", "nt", '\n'.join(IDs[i:i+NS]))   #, hitlist_size=50, perc_ident=90, threshold=1, alignments=50, filter="HEV", format_type='XML', results_file=blast_file_name )
+            self.master.title('Adding new sequences...')
+            print('returned')
+            # http://tkinter.unpythonic.net/wiki/tkFileDialog
+            with open(blast_file_name+'-'+str(i), mode='w') as blast_file:
+                blast_file.write(result_handle.read())
+            result_handle.close()
+            # self.load_blast_data(result_handle)
+            with open(blast_file_name+'-'+str(i), mode='r') as blast_file:
+                self.load_blast_data(blast_file)
+            i += NS
 
     def load_blast(self):
         with filedialog.askopenfile(filetypes=(("BLAST (xml)", "*.xml"), ("All files", "*.*") ), title='Load a BLAST result in XML format') as blast_file:
