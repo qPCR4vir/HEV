@@ -101,13 +101,13 @@ class App(tkinter.Frame):
         '''
 
         print (IDs)
-        self.master.title('Toking to NCBI. Getting sequences. Be VERY patient ...')
+        self.master.title('Talking to the NCBI. Getting sequences. Be VERY patient ...')
         seq_handle = Entrez.efetch(db="nuccore",
                                    id=IDs,
                                    rettype="gb",
                                    retmode="text" )
         # Entrez.efetch(db="nucleotide", id="57240072", rettype="gb", retmode="text")
-        self.master.title('Adding new sequences')
+        self.master.title('Adding new sequences...')
         print('returned')
 
         seq_flat_file_name = filedialog.asksaveasfilename(filetypes=(("Seq flat GB", "*.gb"), ("All files", "*.*") ),
