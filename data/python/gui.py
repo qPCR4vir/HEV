@@ -65,7 +65,7 @@ class App(tkinter.Frame):
         self.filter_add(self.ID_add.lines())
 
     def blast(self):
-        IDs = self.ID_add.lines()
+        IDs = list(set(self.ID_add.lines()))
         print (' '.join(IDs))
         self.master.title('Toking to NCBI. Running BLAST. Be VERY patient ...')
         result_handle = NCBIWWW.qblast("blastn", "nt", '\n'.join(IDs))#, hitlist_size=50, perc_ident=90, threshold=1, alignments=50, filter="HEV", format_type='XML', results_file=blast_file_name )
