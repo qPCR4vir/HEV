@@ -68,6 +68,8 @@ class App(tkinter.Frame):
         IDs = list(set(self.ID_add.lines()))
         print (' '.join(IDs))
         blast_file_name = filedialog.asksaveasfilename(filetypes=(("BLAST", "*.xml"), ("All files", "*.*") ), defaultextension='xml', title='Save the BLAST result in XML format')
+        if not blast_file_name:
+            return
         # lets limit the number of sequences to BLAST in one pass to NS
         NS = 2
         i = 0
