@@ -52,9 +52,9 @@ class App(tkinter.Frame):
                              command=self.filter)                    .grid(row=3, column=2)
 
     def filter_add(self, add):
-        ori  = set(self.ID_original.lines())
-        uniq = set(self.ID_unique.lines())
-        uniq.update(add)
+        ori  = set([oID.split('.')[0] for oID in self.ID_original.lines()])
+        uniq = set([oID.split('.')[0] for oID in self.ID_unique.lines()])
+        uniq.update([oID.split('.')[0] for oID in add])
         uniq -= ori
         self.ID_add.clear()
         self.ID_unique.clear()
