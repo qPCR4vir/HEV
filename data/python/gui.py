@@ -139,10 +139,49 @@ class App(tkinter.Frame):
 
     def load_blast_data(self, blast_data):
         IDs = set()
+        print('proccesing BLASt file')
         blast_records = NCBIXML.parse(blast_data)
+        print('proccesing BLASt file: parsed')
+        q_is_ref = False
+        # http://biopython.org/DIST/docs/tutorial/Tutorial.html#htoc91
         for blast_record in blast_records:
+            qID = blast_record.query_id.split('|')[3].split('.')[0]
+            q_is_ref = qID in self.refSeq.keys()
+            h_is_ref = False
+            print('Query: ' + blast_record.query_id + ' : ' + qID + '. Is a Reference: ' + str(q_is_ref))
             for alignment in blast_record.alignments:
+                h_is_ref = alignment.accession in self.refSeq.keys()
+                print('Hit: ' + alignment.accession + '. Is a Reference: ' + str(h_is_ref))
                 IDs.add(alignment.accession)           # alignment.title.split('|')[3].split('.')[0])
+                if q_is_ref:
+                    if not h_is_ref:
+                        q_a_beg, q_a_end = self.refSeq[qID]
+                        q_h_beg, q_h_end, h_h_beg, h_h_end = self.hit_positions(alignment)
+                        h_a_beg = q_a_beg + q_h_beg - h_h_beg
+                        h_a_end = h_a_beg + h_h_end
+                        print(str((q_h_beg, q_h_end, h_h_beg, h_h_end)))
+                        print(str((q_a_beg, q_a_end, h_a_beg, h_a_end)))
+
+                        if alignment.accession in self.newSeq:
+                            h_a_beg = min(self.newSeq[alignment.accession][0], h_a_beg)
+                            h_a_end = max(self.newSeq[alignment.accession][1], h_a_end)
+                        self.newSeq[alignment.accession] = (h_a_beg, h_a_end)
+                        print(str((q_a_beg, q_a_end, h_a_beg, h_a_end)))
+                else:
+                    if  h_is_ref:
+                        h_a_beg, h_a_end = self.refSeq[alignment.accession]
+                        q_h_beg, q_h_end, h_h_beg, h_h_end = self.hit_positions(alignment)
+                        q_a_beg = h_a_beg + h_h_beg - q_h_beg
+                        q_a_end = q_a_beg + q_h_end
+                        print(str((q_h_beg, q_h_end, h_h_beg, h_h_end)))
+                        print(str((q_a_beg, q_a_end, h_a_beg, h_a_end)))
+
+                        if qID in self.newSeq:
+                            q_a_beg = min(self.newSeq[qID][0], q_a_beg)
+                            q_a_end = max(self.newSeq[qID][1], q_a_end)
+                        self.newSeq[qID] = (q_a_beg, q_a_end)
+                        print(str((q_a_beg, q_a_end, h_a_beg, h_a_end)))
+
         self.filter_add(IDs)
 
     def hit_positions(self, alignments):
