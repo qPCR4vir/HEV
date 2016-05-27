@@ -100,6 +100,23 @@ class App(tkinter.Frame):
                 IDs.add(alignment.accession)           # alignment.title.split('|')[3].split('.')[0])
         self.filter_add(IDs)
 
+    def hit_positions(self, alignments):
+        #assert (isinstance(alignments, NCBIXML.alignment))
+        pos=[ (hit.query_start, hit.query_end, hit.sbjct_start, hit.sbjct_end)  for hit in alignments.hsps ]
+        q_h_beg = pos[0][0]
+        q_h_end = pos[0][1]
+        h_h_beg = pos[0][2]
+        h_h_end = pos[0][3]
+        for p in pos:
+            if  p[0] < q_h_beg :
+                q_h_beg = p[0]
+                h_h_beg = p[2]
+            if  p[1] > q_h_end :
+                q_h_end = p[1]
+                h_h_end = p[3]
+
+        return q_h_beg , q_h_end , h_h_beg , h_h_end
+
     def get_seq_GB(self, IDs):
         '''
         Get the sequences corresponding to the list of IDs from GenBank online,
