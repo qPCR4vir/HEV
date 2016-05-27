@@ -55,6 +55,46 @@ class App(tkinter.Frame):
                              command=self.parseGB)                   .grid(row=2, column=0)
         tkinter.Button(self, text="Filter",
                              command=self.filter)                    .grid(row=3, column=2)
+        tkinter.Button(self, text="Parse alignment",
+                             command=self.parseAlign)                .grid(row=3, column=0)
+        if align_file_name:
+            self.parseAlign(align_file_name)
+
+    def parseAlign(self, file_name=None):
+        if not file_name:
+            file_name = filedialog.askopenfilename( filetypes=(("fasta aligment", "*.fas"), ("All files", "*.*")),
+                                                      defaultextension='fas',
+                                                      title='Select Master Alignment')
+            if not file_name:
+                return
+
+        self.refSeq.clear()
+        print(file_name)
+        with open(file_name) as align_file:
+            seq_name=''
+            for line in align_file.readlines():
+                # print(line)
+                if line[0] == '>':
+                    seq_name = line[1:].rstrip()
+                else:
+                    ln = len(line)
+                    self.refLen = max(ln, self.refLen)
+                    seq_beg = 0
+                    seq_end = ln-2
+                    while seq_beg<ln :
+                        if line[seq_beg] == '-':
+                            seq_beg += 1
+                        else:
+                            break   # todo :  check it is a valid base not line end???
+                    while seq_end > seq_beg:
+                        if line[seq_end] == '-':
+                            seq_end -= 1
+                        else:
+                            break   # todo :  check it is a valid base not line end???
+                    print('Seq: ' + seq_name + str((seq_beg,seq_end)))
+                    self.refSeq[seq_name] = (seq_beg, seq_end)
+        self.ID_original.clear()
+        self.ID_original.add('\n'.join(self.refSeq.keys()))
 
     def filter_add(self, add):
         ori  = set([oID.split('.')[0] for oID in self.ID_original.lines()])
