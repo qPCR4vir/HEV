@@ -1,6 +1,7 @@
 __author__ = 'Ariel'
 
 import tkinter
+# http://biopython.org/DIST/docs/tutorial/Tutorial.html
 # http://biopython.org/DIST/docs/api/Bio-module.html
 from Bio.Blast import NCBIWWW
 from Bio.Blast import NCBIXML
@@ -10,17 +11,21 @@ Entrez.email = "ArielVina.Rodriguez@fli.bund.de"
 # http://biopython.org/wiki/SeqIO
 # http://biopython.org/DIST/docs/api/Bio.SeqRecord.SeqRecord-class.html
 # http://biopython.org/DIST/docs/api/Bio.SeqFeature.SeqFeature-class.html
+# http://biopython.org/DIST/docs/tutorial/Tutorial.html#htoc16
 #from Bio import SeqIO
 from Bio import GenBank
+# http://tkinter.unpythonic.net/wiki/tkFileDialog
 from tkinter import filedialog
 from tkinter import scrolledtext
 
 class App(tkinter.Frame):
 
     def __init__(self):
-
         tkinter.Frame.__init__(self, tkinter.Tk(),  width=600, height=600)
         self.master.title('Adding new sequences')
+        # http://effbot.org/tkinterbook/pack.htm
+        # http://effbot.org/tkinterbook/grid.htm#Tkinter.Grid.grid-method
+        # http://infohost.nmt.edu/tcc/help/pubs/tkinter/web/grid.html
         self.grid(sticky=tkinter.NS)
 
         self.winfo_toplevel().rowconfigure(0, weight=1)
@@ -47,9 +52,9 @@ class App(tkinter.Frame):
                              command=self.filter)                    .grid(row=3, column=2)
 
     def filter_add(self, add):
-        ori  = set(self.ID_original.lines())
-        uniq = set(self.ID_unique.lines())
-        uniq.update(add)
+        ori  = set([oID.split('.')[0] for oID in self.ID_original.lines()])
+        uniq = set([oID.split('.')[0] for oID in self.ID_unique.lines()])
+        uniq.update([oID.split('.')[0] for oID in add])
         uniq -= ori
         self.ID_add.clear()
         self.ID_unique.clear()
@@ -60,19 +65,28 @@ class App(tkinter.Frame):
         self.filter_add(self.ID_add.lines())
 
     def blast(self):
-        IDs = self.ID_add.lines()
+        IDs = list(set(self.ID_add.lines()))
         print (' '.join(IDs))
-        self.master.title('Toking to NCBI. Running BLAST. Be VERY patient ...')
-        result_handle = NCBIWWW.qblast("blastn", "nt", '\n'.join(IDs))#, hitlist_size=50, perc_ident=90, threshold=1, alignments=50, filter="HEV", format_type='XML', results_file=blast_file_name )
-        self.master.title('Adding new sequences')
-        print('returned')
         blast_file_name = filedialog.asksaveasfilename(filetypes=(("BLAST", "*.xml"), ("All files", "*.*") ), defaultextension='xml', title='Save the BLAST result in XML format')
-        with open(blast_file_name, mode='w') as blast_file:
-            blast_file.write(result_handle.read())
-        result_handle.close()
-        # self.load_blast_data(result_handle)
-        with open(blast_file_name, mode='r') as blast_file:
-            self.load_blast_data(blast_file)
+        if not blast_file_name:
+            return
+        # lets limit the number of sequences to BLAST in one pass to NS
+        NS = 2
+        i = 0
+        while i < len(IDs):
+            self.master.title('Talking to NCBI. Running BLAST. Be VERY patient ...')
+            print('BLAST: ' + ' '.join(IDs[i : i + NS]))
+            result_handle = NCBIWWW.qblast("blastn", "nt", '\n'.join(IDs[i:i+NS]))   #, hitlist_size=50, perc_ident=90, threshold=1, alignments=50, filter="HEV", format_type='XML', results_file=blast_file_name )
+            self.master.title('Adding new sequences...')
+            print('returned')
+            # http://tkinter.unpythonic.net/wiki/tkFileDialog
+            with open(blast_file_name+'-'+str(i), mode='w') as blast_file:
+                blast_file.write(result_handle.read())
+            result_handle.close()
+            # self.load_blast_data(result_handle)
+            with open(blast_file_name+'-'+str(i), mode='r') as blast_file:
+                self.load_blast_data(blast_file)
+            i += NS
 
     def load_blast(self):
         with filedialog.askopenfile(filetypes=(("BLAST (xml)", "*.xml"), ("All files", "*.*") ), title='Load a BLAST result in XML format') as blast_file:
@@ -95,13 +109,13 @@ class App(tkinter.Frame):
         '''
 
         print (IDs)
-        self.master.title('Toking to NCBI. Getting sequences. Be VERY patient ...')
+        self.master.title('Talking to the NCBI. Getting sequences. Be VERY patient ...')
         seq_handle = Entrez.efetch(db="nuccore",
                                    id=IDs,
                                    rettype="gb",
                                    retmode="text" )
         # Entrez.efetch(db="nucleotide", id="57240072", rettype="gb", retmode="text")
-        self.master.title('Adding new sequences')
+        self.master.title('Adding new sequences...')
         print('returned')
 
         seq_flat_file_name = filedialog.asksaveasfilename(filetypes=(("Seq flat GB", "*.gb"), ("All files", "*.*") ),
@@ -128,7 +142,7 @@ class App(tkinter.Frame):
         # https://docs.python.org/3.4/library/os.path.html#module-os.path
         fasta_file_name = seq_flat_file_name.replace('.gb', '')+'.fasta'
         csv_file_name = seq_flat_file_name.replace('.gb', '')+'.csv'
-        sep = '; '
+        sep = ';'
         el = '\n'
         with open(fasta_file_name, 'w') as fasta:
             with open(csv_file_name, 'w') as csv:
@@ -141,7 +155,6 @@ class App(tkinter.Frame):
                         fasta.write('>' + record.locus + el + record.sequence +el)   # record.accession[0]  ??
                         csv.write(record.locus + sep)               # MEGA name:(A)
                         csv.write('no'         + sep)               # Tab-Pub:  (B)
-                        csv.write(sep+sep+sep)                      #           ( C D E)
 
                         strain  = ''
                         isolate = ''
@@ -150,25 +163,58 @@ class App(tkinter.Frame):
                         region  = ''
                         collection_date = ''
                         source  = ''
+                        genotype = ''
                         #  http://biopython.org/DIST/docs/api/Bio.GenBank.Record-pysrc.html#Feature
                         for feature in record.features:
                             if feature.key == 'source':
                                 # http://biopython.org/DIST/docs/api/Bio.GenBank.Record.Qualifier-class.html
                                 for q in feature.qualifiers:
                                     if q.key == '/strain=':
-                                        strain = q.value[1:-1]
+                                        strain = q.value[1:-1].strip()
                                     elif q.key == '/isolate=':
-                                        isolate = q.value[1:-1]
+                                        isolate = q.value[1:-1].strip()
                                     elif q.key == '/country=':
                                         country = q.value[1:-1].split(':')
                                         if len(country) > 1:
                                             region = country[1].strip() # ok?
-                                        country = country[0]
+                                        country = country[0].strip()
                                     elif q.key == '/collection_date=':
-                                        collection_date = q.value[1:-1]
-                                    elif q.key == '/source=':
-                                        source = q.value[1:-1]
+                                        collection_date = q.value[1:-1].strip()
+                                    elif q.key == '/source=' or q.key == '/isolation_source=':
+                                        source = q.value[1:-1].strip()
+                                    elif q.key == '/note=':
+                                        val = q.value[1:-1]
+                                        if val.startswith('genotype: '):
+                                            genotype = val[9:].strip()
+                        des = record.definition
+                        if 'isolate' in des:
+                            iso = des.split('isolate')[1]
+                            if iso[0] == ':':
+                                iso = iso[1:].strip()
+                            iso = iso.split()[0].strip()
+                            if iso[-1] == '.':
+                                iso = iso[:-1].strip()
+                            if isolate == '':
+                                isolate = iso
+                            else:
+                                if isolate != iso:
+                                    isolate = isolate + ' or ' + iso
+                        if 'strain' in des:
+                            st = des.split('strain')[1]
+                            if st[0] == ':':
+                                st = st[1:].strip()
+                            st = st.split()[0].strip()
+                            if st[-1] == '.':
+                                st = st[:-1].strip()
+                            if strain == '':
+                                strain = st
+                            else:
+                                if strain != st:
+                                    strain = strain + ' or ' + st
 
+
+                        csv.write(genotype + sep)            #           ( C )
+                        csv.write(sep+sep)                   #           ( C D E)
                         csv.write(strain  +sep)              # Strain name: (F)
                         csv.write(isolate +sep)              # isolate:   (G )
                         csv.write(country +sep +sep +sep)    # country:   (H I J)
@@ -178,6 +224,8 @@ class App(tkinter.Frame):
                         csv.write(collection_date +sep +sep) # year !!! parse !! (OPQ)
                         csv.write(sep + sep)                 #            (RS)
                         csv.write(str(len(record.sequence)) + sep)# Length     (RS)
+                        csv.write(record.definition + sep)
+
 
                         csv.write(el)
 
