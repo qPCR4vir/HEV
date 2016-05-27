@@ -210,22 +210,30 @@ class App(tkinter.Frame):
         '''
 
         print (IDs)
-        self.master.title('Talking to the NCBI. Getting sequences. Be VERY patient ...')
-        seq_handle = Entrez.efetch(db="nuccore",
-                                   id=IDs,
-                                   rettype="gb",
-                                   retmode="text" )
-        # Entrez.efetch(db="nucleotide", id="57240072", rettype="gb", retmode="text")
-        self.master.title('Adding new sequences...')
-        print('returned')
-
-        seq_flat_file_name = filedialog.asksaveasfilename(filetypes=(("Seq flat GB", "*.gb"), ("All files", "*.*") ),
+        seq_flat_file_name = filedialog.asksaveasfilename(filetypes=(("Seq flat GB", "*.gb"), ("All files", "*.*")),
                                                           defaultextension='gb',
                                                           title='Save the GenBank sequences in flat format')
+
+        NS = 100
+        i = 0
+        IDs = IDs.split(',')
         with open(seq_flat_file_name, mode='w') as seq_file:
-            for line in seq_handle:
-                seq_file.write(line)
-        seq_handle.close()
+            while i < len(IDs):
+                #ID =
+                print('GenBank: ' + str(IDs[i: i + NS]))
+                self.master.title('Talking to the NCBI. Getting sequences. Be VERY patient ...')
+                seq_handle = Entrez.efetch(db="nuccore",
+                                           id=IDs[i: i + NS],
+                                           rettype="gb",
+                                           retmode="text" )
+                # Entrez.efetch(db="nucleotide", id="57240072", rettype="gb", retmode="text")
+                i += NS
+                self.master.title('Adding new sequences...')
+                print('returned')
+
+                for line in seq_handle:
+                    seq_file.write(line)
+                seq_handle.close()
 
         self.parseGBfile(seq_flat_file_name)
 
