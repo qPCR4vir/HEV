@@ -245,90 +245,105 @@ class App(tkinter.Frame):
         csv_file_name = seq_flat_file_name.replace('.gb', '')+'.csv'
         sep = ';'
         el = '\n'
+        seq = []
+        with open(csv_file_name, 'w') as csv:
+            with open(seq_flat_file_name) as seq_flat_file:
+                # http://biopython.org/DIST/docs/api/Bio.GenBank-module.html#parse
+                for record in GenBank.parse(seq_flat_file):     #, "genbank"
+                    #  http://biopython.org/DIST/docs/api/Bio.GenBank.Record-module.html
+                    #  http://biopython.org/DIST/docs/api/Bio.GenBank.Record.Record-class.html
+                    #  http://biopython.org/DIST/docs/api/Bio.GenBank.Scanner-pysrc.html#GenBankScanner._feed_header_lines
+                    if record.locus in self.refSeq:
+                        continue
+                    beg = 0
+                    end = 0
+                    if record.locus in self.newSeq:
+                        beg, end = self.newSeq[record.locus]
+                        record.sequence = '-' * beg + record.sequence
+                        record.sequence = record.sequence + '-' * (self.refLen-len(record.sequence) )
+
+                    sq = '>' + record.locus + el + record.sequence + el
+                    # fasta.write('>' + record.locus + el + record.sequence +el)   # record.accession[0]  ??
+                    seq.append((sq, beg))
+                    csv.write(record.locus + sep)               # MEGA name:(A)
+                    csv.write('no'         + sep)               # Tab-Pub:  (B)
+
+                    strain  = ''
+                    isolate = ''
+                    host    = ''
+                    country = ''
+                    region  = ''
+                    collection_date = ''
+                    source  = ''
+                    genotype = ''
+                    #  http://biopython.org/DIST/docs/api/Bio.GenBank.Record-pysrc.html#Feature
+                    for feature in record.features:
+                        if feature.key == 'source':
+                            # http://biopython.org/DIST/docs/api/Bio.GenBank.Record.Qualifier-class.html
+                            for q in feature.qualifiers:
+                                if q.key == '/strain=':
+                                    strain = q.value[1:-1].strip()
+                                elif q.key == '/isolate=':
+                                    isolate = q.value[1:-1].strip()
+                                elif q.key == '/country=':
+                                    country = q.value[1:-1].split(':')
+                                    if len(country) > 1:
+                                        region = country[1].strip() # ok?
+                                    country = country[0].strip()
+                                elif q.key == '/collection_date=':
+                                    collection_date = q.value[1:-1].strip()
+                                elif q.key == '/source=' or q.key == '/isolation_source=':
+                                    source = q.value[1:-1].strip()
+                                elif q.key == '/note=':
+                                    val = q.value[1:-1]
+                                    if val.startswith('genotype: '):
+                                        genotype = val[9:].strip()
+                    des = record.definition
+                    if 'isolate' in des:
+                        iso = des.split('isolate')[1]
+                        if iso[0] == ':':
+                            iso = iso[1:].strip()
+                        iso = iso.split()[0].strip()
+                        if iso[-1] == '.':
+                            iso = iso[:-1].strip()
+                        if isolate == '':
+                            isolate = iso
+                        else:
+                            if isolate != iso:
+                                isolate = isolate + ' or ' + iso
+                    if 'strain' in des:
+                        st = des.split('strain')[1]
+                        if st[0] == ':':
+                            st = st[1:].strip()
+                        st = st.split()[0].strip()
+                        if st[-1] == '.':
+                            st = st[:-1].strip()
+                        if strain == '':
+                            strain = st
+                        else:
+                            if strain != st:
+                                strain = strain + ' or ' + st
+
+
+                    csv.write(genotype + sep)            #           ( C )
+                    csv.write(sep+sep)                   #           ( C D E)
+                    csv.write(strain  +sep)              # Strain name: (F)
+                    csv.write(isolate +sep)              # isolate:   (G )
+                    csv.write(country +sep +sep +sep)    # country:   (H I J)
+                    csv.write(sep + region + sep)        # country:   (KL)
+                    csv.write(host +sep)                 # host:      (M)
+                    csv.write(source +sep)               # source:    (N)
+                    csv.write(collection_date +sep +sep) # year !!! parse !! (OPQ)
+                    csv.write(sep + sep)                 #            (RS)
+                    csv.write(str(len(record.sequence)) + sep)# Length     (RS)
+                    csv.write(record.definition + sep)
+
+                    csv.write(el)
+
         with open(fasta_file_name, 'w') as fasta:
-            with open(csv_file_name, 'w') as csv:
-                with open(seq_flat_file_name) as seq_flat_file:
-                    # http://biopython.org/DIST/docs/api/Bio.GenBank-module.html#parse
-                    for record in GenBank.parse(seq_flat_file):     #, "genbank"
-                        #  http://biopython.org/DIST/docs/api/Bio.GenBank.Record-module.html
-                        #  http://biopython.org/DIST/docs/api/Bio.GenBank.Record.Record-class.html
-                        #  http://biopython.org/DIST/docs/api/Bio.GenBank.Scanner-pysrc.html#GenBankScanner._feed_header_lines
-                        fasta.write('>' + record.locus + el + record.sequence +el)   # record.accession[0]  ??
-                        csv.write(record.locus + sep)               # MEGA name:(A)
-                        csv.write('no'         + sep)               # Tab-Pub:  (B)
-
-                        strain  = ''
-                        isolate = ''
-                        host    = ''
-                        country = ''
-                        region  = ''
-                        collection_date = ''
-                        source  = ''
-                        genotype = ''
-                        #  http://biopython.org/DIST/docs/api/Bio.GenBank.Record-pysrc.html#Feature
-                        for feature in record.features:
-                            if feature.key == 'source':
-                                # http://biopython.org/DIST/docs/api/Bio.GenBank.Record.Qualifier-class.html
-                                for q in feature.qualifiers:
-                                    if q.key == '/strain=':
-                                        strain = q.value[1:-1].strip()
-                                    elif q.key == '/isolate=':
-                                        isolate = q.value[1:-1].strip()
-                                    elif q.key == '/country=':
-                                        country = q.value[1:-1].split(':')
-                                        if len(country) > 1:
-                                            region = country[1].strip() # ok?
-                                        country = country[0].strip()
-                                    elif q.key == '/collection_date=':
-                                        collection_date = q.value[1:-1].strip()
-                                    elif q.key == '/source=' or q.key == '/isolation_source=':
-                                        source = q.value[1:-1].strip()
-                                    elif q.key == '/note=':
-                                        val = q.value[1:-1]
-                                        if val.startswith('genotype: '):
-                                            genotype = val[9:].strip()
-                        des = record.definition
-                        if 'isolate' in des:
-                            iso = des.split('isolate')[1]
-                            if iso[0] == ':':
-                                iso = iso[1:].strip()
-                            iso = iso.split()[0].strip()
-                            if iso[-1] == '.':
-                                iso = iso[:-1].strip()
-                            if isolate == '':
-                                isolate = iso
-                            else:
-                                if isolate != iso:
-                                    isolate = isolate + ' or ' + iso
-                        if 'strain' in des:
-                            st = des.split('strain')[1]
-                            if st[0] == ':':
-                                st = st[1:].strip()
-                            st = st.split()[0].strip()
-                            if st[-1] == '.':
-                                st = st[:-1].strip()
-                            if strain == '':
-                                strain = st
-                            else:
-                                if strain != st:
-                                    strain = strain + ' or ' + st
-
-
-                        csv.write(genotype + sep)            #           ( C )
-                        csv.write(sep+sep)                   #           ( C D E)
-                        csv.write(strain  +sep)              # Strain name: (F)
-                        csv.write(isolate +sep)              # isolate:   (G )
-                        csv.write(country +sep +sep +sep)    # country:   (H I J)
-                        csv.write(sep + region + sep)        # country:   (KL)
-                        csv.write(host +sep)                 # host:      (M)
-                        csv.write(source +sep)               # source:    (N)
-                        csv.write(collection_date +sep +sep) # year !!! parse !! (OPQ)
-                        csv.write(sep + sep)                 #            (RS)
-                        csv.write(str(len(record.sequence)) + sep)# Length     (RS)
-                        csv.write(record.definition + sep)
-
-
-                        csv.write(el)
+            seq.sort(key=lambda s : s[1])
+            for s in seq:
+                fasta.write(s[0])
 
 class ID_list(tkinter.Frame):
     def __init__(self, root, load_titel, width=15, height=40):
