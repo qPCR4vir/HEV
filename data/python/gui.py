@@ -17,6 +17,7 @@ from Bio import GenBank
 # http://tkinter.unpythonic.net/wiki/tkFileDialog
 from tkinter import filedialog
 from tkinter import scrolledtext
+align_file_name = None # '../alignment/HEV.fas'  # or None to ask first
 
 class App(tkinter.Frame):
 
@@ -27,6 +28,10 @@ class App(tkinter.Frame):
         # http://effbot.org/tkinterbook/grid.htm#Tkinter.Grid.grid-method
         # http://infohost.nmt.edu/tcc/help/pubs/tkinter/web/grid.html
         self.grid(sticky=tkinter.NS)
+
+        self.refLen = 0
+        self.refSeq = dict()
+        self.newSeq = dict()
 
         self.winfo_toplevel().rowconfigure(0, weight=1)
         self.rowconfigure(0, weight=1)
