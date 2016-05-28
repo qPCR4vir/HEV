@@ -1,23 +1,28 @@
 Attribute VB_Name = "ExportGrpFile"
-Sub reg()
-Attribute reg.VB_ProcData.VB_Invoke_Func = "r\n14"
+Sub SelectThisSeqRegion()
+Attribute SelectThisSeqRegion.VB_ProcData.VB_Invoke_Func = "r\n14"
 '
-' reg Makro
+' SelectThisSeqRegion Makro
 '
 ' Tastenkombination: Strg+r
 '
-' Let you want to analize a sequence that you have just enter in the big alignment.
-' You have allready inserted a row in the big table with the correct name (the same als in MEGA)
-' and with the position of biggining and end of the sequence in the alignment.
-' You now need to set the region and export the column into a group file.
-' With this macro you just click on the sequences row and then press Ctrl-r.
-' First create the directory Aut.MEGA\
-
+' Let you want to analyze a sequence that you have just enter in the big alignment.
+' You have already inserted a row in the large table with the correct name (the same as in the alignment used in MEGA)
+' and with the position of biginning and end of the sequence in the alignment.
+' You now need to set the region and export the column "span" into a group file.
+' With this macro you just click on the sequences row to select it entirely and then press Ctrl-r.
+' This macro first transfers the beginning and end of the selected sequence to the sheet "Region",
+' and sets the option "manual selection" there to trigger the selection of all the sequences
+' which span the same region of the alignment.
+' Then it copy the "span" column to a new workbook for which may create a directory Aut.MEGA\
+' if not yet exist.
+' Before closing the new workbook, it is saved as a text file with a name that show the region selected.
+    
     Application.CutCopyMode = False
     Dim beg As Integer, fin As Integer, FileName As String
      
-    beg = Application.Intersect(Selection, Range("SeqBeg")).Value ' where beging
-    fin = Application.Intersect(Selection, Range("SeqEnd")).Value ' where end the seq
+    beg = Application.Intersect(Selection, Range("SeqBeg")).Value ' where the seq begin in the aligment
+    fin = Application.Intersect(Selection, Range("SeqEnd")).Value ' where the seq end
     Range("manual_beg").Value = beg    ' set as the manually selected region
     Range("manual_end").Value = fin
     Range("GenRegSelect").Value = 3    ' select the manually selected region in the big table
