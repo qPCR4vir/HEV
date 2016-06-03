@@ -19,6 +19,33 @@ from tkinter import filedialog
 from tkinter import scrolledtext
 align_file_name = None # '../alignment/HEV.fas'  # or None to ask first
 
+
+class Seq_pos:
+
+    def __init__(self, seq_beg=0, seq_end=0):
+        self.beg = seq_beg
+        self.end = seq_end
+
+    def expand(self, pos):
+        self.beg = min(pos.beg, self.beg)
+        self.end = max(pos.end, self.end)
+
+
+class Q_hit_pos:
+
+    def __init__(self, q_pos=Seq_pos(), h_pos=Seq_pos()):
+        self.q = q_pos
+        self.h = h_pos
+
+    def adjust_h(self, hit):
+        self.h.beg = self.q.beg + (hit.q.beg - hit.h.beg)
+        self.h.end = self.h.beg + hit.h.end
+
+    def adjust_q(self, hit):
+        self.q.beg = self.h.beg + (hit.h.beg - hit.q.beg)
+        self.q.end = self.q.beg + hit.q.end
+
+
 class App(tkinter.Frame):
 
     def __init__(self):
