@@ -19,6 +19,33 @@ from tkinter import filedialog
 from tkinter import scrolledtext
 align_file_name = None # '../alignment/HEV.fas'  # or None to ask first
 
+
+class Seq_pos:
+
+    def __init__(self, seq_beg=0, seq_end=0):
+        self.beg = seq_beg
+        self.end = seq_end
+
+    def expand(self, pos):
+        self.beg = min(pos.beg, self.beg)
+        self.end = max(pos.end, self.end)
+
+
+class Q_hit_pos:
+
+    def __init__(self, q_pos=Seq_pos(), h_pos=Seq_pos()):
+        self.q = q_pos
+        self.h = h_pos
+
+    def adjust_h(self, hit):
+        self.h.beg = self.q.beg + (hit.q.beg - hit.h.beg)
+        self.h.end = self.h.beg + hit.h.end
+
+    def adjust_q(self, hit):
+        self.q.beg = self.h.beg + (hit.h.beg - hit.q.beg)
+        self.q.end = self.q.beg + hit.q.end
+
+
 class App(tkinter.Frame):
 
     def __init__(self):
@@ -92,7 +119,7 @@ class App(tkinter.Frame):
                         else:
                             break   # todo :  check it is a valid base not line end???
                     print('Seq: ' + seq_name + str((seq_beg,seq_end)))
-                    self.refSeq[seq_name] = (seq_beg, seq_end)
+                    self.refSeq[seq_name] = Seq_pos(seq_beg, seq_end)
         self.ID_original.clear()
         self.ID_original.add('\n'.join(self.refSeq.keys()))
 
@@ -147,59 +174,55 @@ class App(tkinter.Frame):
         for blast_record in blast_records:
             qID = blast_record.query_id.split('|')[3].split('.')[0]
             q_is_ref = qID in self.refSeq.keys()
+            align_pos = Q_hit_pos()
+            if q_is_ref:
+                align_pos.q = self.refSeq[qID]
             h_is_ref = False
             print('Query: ' + blast_record.query_id + ' : ' + qID + '. Is a Reference: ' + str(q_is_ref))
             for alignment in blast_record.alignments:
                 h_is_ref = alignment.accession in self.refSeq.keys()
                 print('Hit: ' + alignment.accession + '. Is a Reference: ' + str(h_is_ref))
                 IDs.add(alignment.accession)           # alignment.title.split('|')[3].split('.')[0])
+                if q_is_ref and h_is_ref:
+                    continue
+                h = self.hit_positions(alignment)
+                print(h)
+                print(align_pos)
                 if q_is_ref:
                     if not h_is_ref:
-                        q_a_beg, q_a_end = self.refSeq[qID]
-                        q_h_beg, q_h_end, h_h_beg, h_h_end = self.hit_positions(alignment)
-                        h_a_beg = q_a_beg + q_h_beg - h_h_beg
-                        h_a_end = h_a_beg + h_h_end
-                        print(str((q_h_beg, q_h_end, h_h_beg, h_h_end)))
-                        print(str((q_a_beg, q_a_end, h_a_beg, h_a_end)))
-
+                        align_pos.adjust_h(h)
                         if alignment.accession in self.newSeq:
-                            h_a_beg = min(self.newSeq[alignment.accession][0], h_a_beg)
-                            h_a_end = max(self.newSeq[alignment.accession][1], h_a_end)
-                        self.newSeq[alignment.accession] = (h_a_beg, h_a_end)
-                        print(str((q_a_beg, q_a_end, h_a_beg, h_a_end)))
+                            self.newSeq[alignment.accession].expand(align_pos.h)
+                        else:
+                            self.newSeq[alignment.accession] = align_pos.h
                 else:
-                    if  h_is_ref:
-                        h_a_beg, h_a_end = self.refSeq[alignment.accession]
-                        q_h_beg, q_h_end, h_h_beg, h_h_end = self.hit_positions(alignment)
-                        q_a_beg = h_a_beg + h_h_beg - q_h_beg
-                        q_a_end = q_a_beg + q_h_end
-                        print(str((q_h_beg, q_h_end, h_h_beg, h_h_end)))
-                        print(str((q_a_beg, q_a_end, h_a_beg, h_a_end)))
-
+                    if h_is_ref:
+                        align_pos.h = self.refSeq[alignment.accession]
+                        align_pos.adjust_q(h)
                         if qID in self.newSeq:
-                            q_a_beg = min(self.newSeq[qID][0], q_a_beg)
-                            q_a_end = max(self.newSeq[qID][1], q_a_end)
-                        self.newSeq[qID] = (q_a_beg, q_a_end)
-                        print(str((q_a_beg, q_a_end, h_a_beg, h_a_end)))
+                            self.newSeq[qID].expand(align_pos.q)
+                        else:
+                            self.newSeq[qID] = align_pos.q
+
+
+                print(align_pos)
 
         self.filter_add(IDs)
 
     def hit_positions(self, alignments):
         #assert (isinstance(alignments, NCBIXML.alignment))
-        pos=[ (hit.query_start, hit.query_end, hit.sbjct_start, hit.sbjct_end)  for hit in alignments.hsps ]
-        q_h_beg = pos[0][0]
-        q_h_end = pos[0][1]
-        h_h_beg = pos[0][2]
-        h_h_end = pos[0][3]
-        for p in pos:
-            if  p[0] < q_h_beg :
-                q_h_beg = p[0]
-                h_h_beg = p[2]
-            if  p[1] > q_h_end :
-                q_h_end = p[1]
-                h_h_end = p[3]
-
-        return q_h_beg , q_h_end , h_h_beg , h_h_end
+        pos=[Q_hit_pos(Seq_pos(hit.query_start, hit.query_end), Seq_pos(hit.sbjct_start, hit.sbjct_end)) for hit in alignments.hsps]
+        h = pos[0]
+        if len(pos) == 1:
+            return h
+        for p in pos[1:]:
+            if  h.q.beg < p.q.beg:
+                h.q.beg = p.q.beg
+                h.h.beg = p.h.beg
+            if  h.q.end > p.q.end :
+                h.q.end = p.q.end
+                h.h.end = p.h.end
+        return h
 
     def get_seq_GB(self, IDs):
         '''
