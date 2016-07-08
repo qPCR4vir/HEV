@@ -137,6 +137,12 @@ class App(tkinter.Frame):
         self.filter_add(self.ID_add.lines())
 
     def blast(self):
+        """
+        Take the set of the ID in the "add" list (center list) and make on-line an NCBI.BLAST.
+        Ask for a file to save the results of the BLAST.
+        Call self.load_blast_data(blast_file) to parse the results.
+        :return:
+        """
         IDs = list(set(self.ID_add.lines()))
         print (' '.join(IDs))
         blast_file_name = filedialog.asksaveasfilename(filetypes=(("BLAST", "*.xml"), ("All files", "*.*") ), defaultextension='xml', title='Save the BLAST result in XML format')
@@ -165,6 +171,13 @@ class App(tkinter.Frame):
             self.load_blast_data(blast_file)
 
     def load_blast_data(self, blast_data):
+        """
+        Uses NCBIXML.parse to parse the result of the BLAST and identify each sequence there:
+         Look for each sequence in the self.refSeq dictionary to know if it is a reference sequence (the ones added with
+         parse alignment) and add it to self.newSeq if not a ref.
+        :param blast_data: an open XML BLAST file.
+        :return:
+        """
         IDs = set()
         print('proccesing BLASt file')
         blast_records = NCBIXML.parse(blast_data)
@@ -172,7 +185,10 @@ class App(tkinter.Frame):
         q_is_ref = False
         # http://biopython.org/DIST/docs/tutorial/Tutorial.html#htoc91
         for blast_record in blast_records:
-            qID = blast_record.query_id.split('|')[3].split('.')[0]
+            try:
+                qID = blast_record.query_id.split('|')[3].split('.')[0]
+            except:
+                qID = blast_record.query
             q_is_ref = qID in self.refSeq.keys()
             align_pos = Q_hit_pos()
             if q_is_ref:
