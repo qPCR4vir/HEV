@@ -58,17 +58,30 @@ def create() -> sqlite3.Connection:
            );
     """)
 
-    # seq_fragment  -- just an arbitrary fragment from some seq, for example: a BLAST  hit,
-    #                  or a region selected for phylogenetic analysis
+    # seq_fragment  -- an arbitrary fragment from some seq, for example: a BLAST  hit for which the
+    #            original experimental sequence is known, or simple a region selected for phylogenetic analysis
     c.execute("""CREATE TABLE   seq_fragment
                      (
                        Id_frag INTEGER PRIMARY KEY NOT NULL,
                        Id_seq  INTEGER REFERENCES seq,
                        beg     INT,             -- relative to the original
                        end     INT,
+                     );
+              """)
+
+    # partial_seq  -- Usually a temporal information construct containing the seq text,
+    #                 for example from: a BLAST hit, or a region selected for phylogenetic analysis
+    #       if the corresponding experimental seq is found it can be converted into a seq_fragment
+    c.execute("""CREATE TABLE   partial_seq
+                     (
+                       Id_part INTEGER PRIMARY KEY NOT NULL,
+                       Id_seq  INTEGER REFERENCES seq,  -- if known
+                       beg     INT,             -- relative to the original
+                       end     INT,
                        seq     TXT              -- The aligned sequence, with internal gaps -, but without external
                      );
               """)
+
 
     # align -- for axample a BLAST result from one query, or a "normal" Multialignment.
     #          if all the sequences are experimental (not necessary bio_seq) it is a full_align (don't BLAST!)
@@ -80,16 +93,15 @@ def create() -> sqlite3.Connection:
                      );
               """)
 
+
     # aligned_seq
     c.execute("""CREATE TABLE   aligned_seq
                      (
                        Id_algseq  INTEGER PRIMARY KEY NOT NULL,
-                       Id_seq     INTEGER          REFERENCES seq,
-                       Id_frag    INTEGER          REFERENCES seq_fragment,
                        Id_align   INTEGER NOT NULL REFERENCES align,
+                       Id_part    INTEGER NOT NULL REFERENCES partial_seq,
                        beg        INT,             -- relative to the alignment
                        end        INT,
-                       seq        TXT              -- The aligned sequence, with internal gaps -, but without external
                      )
               """)
 
