@@ -1,0 +1,27 @@
+>Feature FJ705359				
+1	25	5'UTR		
+26	5137	CDS		
+			note	ORF 1
+			product	polyprotein
+191	736	mat_peptide		
+			product	methyltransferase
+671	1321	mat_peptide		
+			product	Y domain
+1322	1801	mat_peptide		
+			product	papain-like protease
+2159	2389	mat_peptide		
+			product	poly-proline hinge
+2408	2881	mat_peptide		
+			product	X domain
+2933	3667	mat_peptide		
+			product	helicase
+3674	5134	mat_peptide		
+			product	RNA-directed RNA polymerase
+5134	5502	CDS		
+			note	ORF 3
+			product	phosphoprotein
+5172	7154	CDS		
+			note	ORF 2
+			product	capsid protein
+7155	7237	3'UTR		
+				
