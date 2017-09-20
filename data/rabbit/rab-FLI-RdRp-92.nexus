@@ -1,0 +1,307 @@
+#NEXUS
+[ Title Phylogenetic Analysis]
+begin taxa;
+   dimensions ntax= 2;
+   taxlabels
+      FJ705359     
+      K092_HEV_RdRp
+;
+end;
+begin characters;
+   dimensions nchar= 7520;
+   format missing=? gap=- matchchar=. datatype=nucleotide interleave=yes;
+   matrix
+
+[!Domain=Data property=Coding CodonStart=1;]
+FJ705359      ----------GCAGACCACGTATGTGGTCGATGCC-ATGGAGGCCCACCAGTTTATTAAGGCTCCTGGCATTACTACT
+K092_HEV_RdRp ------------------------------------------------------------------------------
+
+FJ705359      GCCATTGAGCAAGCTGCTCTGGCTGCGGCCAATTCTGCCCTGGCGAATGCTGTGGTGGTTCGGCCGTTTTTATCTCGT
+K092_HEV_RdRp ------------------------------------------------------------------------------
+
+FJ705359      GTGCAAACTGAGATTCTTATTAATTTGATGCAACCCCGGCAGTTGGTTTTTCGGCCTGAAGTGCTCTGGAATCATCCT
+K092_HEV_RdRp ------------------------------------------------------------------------------
+
+FJ705359      ATCCAACGGGTTATCCATAATGAACTTGAACAGTACTGTCGGGCCCGGGCTGGTCGTTGTCTAGAGGTTGGGGCCCAC
+K092_HEV_RdRp ------------------------------------------------------------------------------
+
+FJ705359      CCAAGATCCATTAATGACAACCCAAATGTTCTTCACCGGTGCTTTCTACGACCAGTAGGGAGAGATGTTCAGCGCTGG
+K092_HEV_RdRp ------------------------------------------------------------------------------
+
+FJ705359      TACTCTGCTCCTACCCGCGGCCCTGCGGCTAACTGCCGCCGTTCTGCCTTGCGTGGCCTCCCCCCCGTTGATCGTACC
+K092_HEV_RdRp ------------------------------------------------------------------------------
+
+FJ705359      TATTGTTTTGATGGATTCTCCCGCTGCTCATTTGCCGCAGAAACTGGGGTTGCCCTTTATTCCCTGCATGACCTCTGG
+K092_HEV_RdRp ------------------------------------------------------------------------------
+
+FJ705359      CCGGCCGATGTTGCGGAGGCTATGGCCCGACACGGGATGACACGCTTGTATGCCGCACTACATCTCCCCCCTGAAGTA
+K092_HEV_RdRp ------------------------------------------------------------------------------
+
+FJ705359      CTACTACCACCTGGTACTTACCATACAACTTCATACCTTCTGATTCACGACGGTGATCGTGCTGTTGTGACCTATGAA
+K092_HEV_RdRp ------------------------------------------------------------------------------
+
+FJ705359      GGTGATACTAGTGCAGGCTACAACCATGATGTCTCCATACTTCGTGCATGGATCCGCACAACTAAGATAGTCGGCGAT
+K092_HEV_RdRp ------------------------------------------------------------------------------
+
+FJ705359      CATCCGCTGGTGATAGAGCGTGTGCGGGCTATTGGCTGCCATTTTGTGCTGCTGCTTACTGCAGCCCCTGAGCCGTCA
+K092_HEV_RdRp ------------------------------------------------------------------------------
+
+FJ705359      CCAATGCCTTATGTTCCATACCCCCGGTCGACAGAGGTGTATGTCCGCTCTATATTCGGCCCTGGCGGGTCCCCATCC
+K092_HEV_RdRp ------------------------------------------------------------------------------
+
+FJ705359      CTATTCCCATCAGCTTGCTCTACGAAATCCACATTTCACGCTGTCCCGGTTCATATTTGGGACCGGCTCATGCTTTTT
+K092_HEV_RdRp ------------------------------------------------------------------------------
+
+FJ705359      GGCGCTACTCTGGATGATCAGGCGTTTTGCTGTTCACGACTTATGACCTACCTCCGCGGGATTAGTTACAAGGTCACT
+K092_HEV_RdRp ------------------------------------------------------------------------------
+
+FJ705359      GTTGGCGCCCTTGTCGCTAACGAGGGGTGGAATGCTTCGGAGGACGCTCTTACCGCTGTTATTACTGCAGCGTATTTG
+K092_HEV_RdRp ------------------------------------------------------------------------------
+
+FJ705359      ACCATTTGCCATCAGCGTTACCTCCGTACTCAAGCTATATCCAAGGGTATGCGCCGACTGGAGGTTGAGCATGCCCAA
+K092_HEV_RdRp ------------------------------------------------------------------------------
+
+FJ705359      AAATTTATTACAAGACTTTATAGTTGGCTGTTCGAGAAGTCCGGCCGTGACTATATTCCCGGCCGCCAGCTCCAGTTC
+K092_HEV_RdRp ------------------------------------------------------------------------------
+
+FJ705359      TATGCACAGTGCCGCCGTTGGTTATCGGCGGGTTTCCATCTTGACCCAAGGGTGCTTGTTTTTGATGAGTCTGTGCCC
+K092_HEV_RdRp ------------------------------------------------------------------------------
+
+FJ705359      TGCCGTTGTAGGACATTTCTTAAGAAGGCTGTGGGTAAGTTCTGCTGTTTTATGAAGTGGTTGGGACAGGAGTGCACC
+K092_HEV_RdRp ------------------------------------------------------------------------------
+
+FJ705359      TGCTTTTTAGAACCAGCAGAGGGTCTAGTTGGCGACCATGGCCACGATAATGAAGCCTATGAGGGCTCTGAGGTCGAT
+K092_HEV_RdRp ------------------------------------------------------------------------------
+
+FJ705359      CAGGCCGAGCCCGCCCATCTCGATGTTTCTGGGACTTATGCCGTCCATGGCCGCCAACTTGAGGCCCTGTATAGGGCG
+K092_HEV_RdRp ------------------------------------------------------------------------------
+
+FJ705359      CTTAACATCCCGCATGACATCGTTGCCCGAGCCTCCCGTTTGACTGCCACCGTCGAACTCGCTGCAGGTCCAGACCGC
+K092_HEV_RdRp ------------------------------------------------------------------------------
+
+FJ705359      TTGGAGTGCCGCACTGTGCTCGGGAATAAGACTTTCCGGACGACGGTGGTTGATGGCGCCCACCTTGAGGCGAACGGC
+K092_HEV_RdRp ------------------------------------------------------------------------------
+
+FJ705359      CCCGAGCAGTATGTTCTTTCGTTCGACGCCTCTCGCCAGTCAATGGGGGCCGGGCCGCATAGTCTCTCCTACGAGCTC
+K092_HEV_RdRp ------------------------------------------------------------------------------
+
+FJ705359      ACTCCTGCTGGTTTGCAGGTCAAGATCTCATCTAATGGCCTGGATTGCACTGCAACATTCCCCCCGGGCGGGGCCCCT
+K092_HEV_RdRp ------------------------------------------------------------------------------
+
+FJ705359      AGCGTTGCTCCGGGGGAGGTAGCAGCCTTTTGCAGTGCCCTTTACAGGTACAACAGGTTCACTCAGCGCCATTCGCTT
+K092_HEV_RdRp ------------------------------------------------------------------------------
+
+FJ705359      ATAGGTGGCTTGTGGCTGCATCCTGAGGGGTTGTTGGGTATCTTCCCCCCTTTTTCTCCCGGGCACCTTTGGGAGTCC
+K092_HEV_RdRp ------------------------------------------------------------------------------
+
+FJ705359      GCTAACCCTTTTTGTGGGGAGGGAACCTTGTACACCCGGACATGGTCAACATCTGGTTTTTCTAGTGACTTTTCCCCC
+K092_HEV_RdRp ------------------------------------------------------------------------------
+
+FJ705359      CCTGAGGCAGCTGTCGCAGCGCCGGCTGCAACTCCGGGGTTACGCCACCCCACACCTCCT---GTTAGTGACGTTTGG
+K092_HEV_RdRp ------------------------------------------------------------------------------
+
+FJ705359      GTGTTACCGCCACCTTCTGAAGAATTTCAGGTTGATACAGCGCCCACTCCCCCTGCCCCTGAGCCCGCTCAACCATCT
+K092_HEV_RdRp ------------------------------------------------------------------------------
+
+FJ705359      AGCTCCGCTGGGCCAAAG------------------------------------------------------------
+K092_HEV_RdRp ------------------------------------------------------------------------------
+
+FJ705359      ---------------------------GCTCCCGTGCGTAAGCCGCCAACGCCACCATCCCCGCGCACCCGCCGCCTT
+K092_HEV_RdRp ------------------------------------------------------------------------------
+
+FJ705359      CTTTACACCTATCCGGATGGGGCAAAGGTGTATGCGGGATCACTGTTTGAGTCTGACTGTGATTGGCTGGTTAACGCG
+K092_HEV_RdRp ------------------------------------------------------------------------------
+
+FJ705359      TCGAATCCCGGTCATCGTCCTGGAGGCGGCCTTTGCCATGCCTTCTACCAGCGCTACCCCGAGTCTTTCCACCCAACT
+K092_HEV_RdRp ------------------------------------------------------------------------------
+
+FJ705359      GAGTTCATCATGCGCGACGGTCTTGCCGCGTACACTTTAACTCCCCGGCCTATTATTCATGCAGTGGCTCCTGATTAT
+K092_HEV_RdRp ------------------------------------------------------------------------------
+
+FJ705359      AGGGTTGAGCATAACCCGAAGAGGCTTGAGGCAGCATACCGAGAGACTTGCTCTCGCCGCGGTACCGCCGCCTATCCA
+K092_HEV_RdRp ------------------------------------------------------------------------------
+
+FJ705359      CTCCTCGGTTCGGGCATATACCAAGTTCCCGTCAGCCTCAGCTTCGACGCTTGGGAGCGTAACCACCGCCCCGGGGAC
+K092_HEV_RdRp ------------------------------------------------------------------------------
+
+FJ705359      GAGCTCTACCTAACCGACCTCGCCGCTACCTGGTTCGAGGCCAATAAGCCAACACAG---------------------
+K092_HEV_RdRp ------------------------------------------------------------------------------
+
+FJ705359      ------------------------------------------------------------------------CCGGCC
+K092_HEV_RdRp ------------------------------------------------------------------------------
+
+FJ705359      CTCACAATAACTGAGGATGCAGCCCGCACAGCCAACCTAGCACTGGAGATCGATGCTGCTACTGAGGTCGGCCGGGCT
+K092_HEV_RdRp ------------------------------------------------------------------------------
+
+FJ705359      TGTGCCGGCTGCGCGGTTAGTCCTGGGGTTGTGCACTATCAGTTCACTGCTGGGGTCCCAGGTTCGGGGAAGTCGCGT
+K092_HEV_RdRp ------------------------------------------------------------------------------
+
+FJ705359      TCTATACAGCAGGGGGATGTTGACGTAGTGGTTGTTCCCACTCGGGAGCTCCGGAATAGTTGGCGTCGCCGGGGTTTC
+K092_HEV_RdRp ------------------------------------------------------------------------------
+
+FJ705359      GCAGCTTTTACACCTCATACGGCGGCCCGTGTCACCACGGGTCGTCGTGTTGTGATTGATGAGGCCCCATCCCTCCCA
+K092_HEV_RdRp ------------------------------------------------------------------------------
+
+FJ705359      CCGCATCTGTTGCTACTACACATGCAGCGGGCCTCGTCGGTCCACCTTCTCGGCGACCCAAACCAGATCCCTGCCATA
+K092_HEV_RdRp ------------------------------------------------------------------------------
+
+FJ705359      GACTTCGAGCATGCCGGCCTGGTCCCCGCAATACGCCCTGAGCTTGCGCCCACCAGTTGGTGGCATGTCACCCATCGC
+K092_HEV_RdRp ------------------------------------------------------------------------------
+
+FJ705359      TGCCCCGCTGATGTGTGCGAGCTTATACGCGGGGCTTATCCCAAAATCCAAACCACTAGCCGCGTGCTGCGGTCTTTA
+K092_HEV_RdRp ------------------------------------------------------------------------------
+
+FJ705359      TTCTGGAATGAGCCTGCCATTGGCCAGAAGTTAGTTTTCACCCAGGCCGCTAAGGCCGCCAACCCCGGTGCGATTACA
+K092_HEV_RdRp ------------------------------------------------------------------------------
+
+FJ705359      GTCCACGAGGCCCAGGGCGCCACTTTCACGGAAACTACAATCATAGCCACGGCTGATGCTAGGGGGCTCATCCAATCT
+K092_HEV_RdRp ------------------------------------------------------------------------------
+
+FJ705359      TCCCGAGCTCATGCCATAGTCGCACTTACCCGCCACACAGAGAAGTGCGTTATTCTTGACGCCCCCGGCTTGTTACGT
+K092_HEV_RdRp ------------------------------------------------------------------------------
+
+FJ705359      GAGGTTGGTATATCGGATGTGATTGTCAACAACTTTTTCCTCGCCGGCGGGGAGGTGGGTCACCATCGCCCCTCTGTG
+K092_HEV_RdRp ------------------------------------------------------------------------------
+
+FJ705359      ATACCTCGCGGTAATCCTGACCAGAACCTCGCGACACTACAGGCCTTTCCACCTTCCTGCCAGATCAGTGCCTATCAC
+K092_HEV_RdRp ------------------------------------------------------------------------------
+
+FJ705359      CAGTTAGCTGAGGAACTTGGCCACCGCCCAGCTCCTGTCGCCGCCGTCCTGCCCCCTTGCCCTGAACTTGAGCAAGGC
+K092_HEV_RdRp ------------------------------------------------------------------------------
+
+FJ705359      TTGTTATATATGCCGCAGGAGCTTACGGTGTCTGATAGCGTGCTGGTCTTTGAACTCACGGACATAGTCCACTGTCGG
+K092_HEV_RdRp ------------------------------------------------------------------------------
+
+FJ705359      ATGGCTGCCCCCAGCCAGCGGAAGGCCGTCCTATCGACGCTCGTGGGTAGGTACGGCCGTCGGACGAAGCTGTATGAA
+K092_HEV_RdRp ------------------------------------------------------------------------------
+
+FJ705359      GCAGCTCACTCTGACGTCCGTGAGTCCCTGGCTAGATTTATCCCCACCATTGGGCCCGTTCAGGCCACTACGTGTGAG
+K092_HEV_RdRp ------------------------------------------------------------------------------
+
+FJ705359      TTATATGAGCTGGTTGAGGCCATGGTGGAGAAAGGTCAGGATGGCTCTGCCGTGCTTGAGCTCGACCTCTGCAATCGT
+K092_HEV_RdRp ------------------------------------------------------------------------------
+
+FJ705359      GATGTATCGCGTATCACATTTTTCCAGAAAGATTGTAACAAATTCACCACAGGGGAGACCATTGCCCACGGTAAGGTC
+K092_HEV_RdRp ------------------------------------------------------------------------------
+
+FJ705359      GGCCAGGGCATCTCGGCTTGGAGCAAGACCTTCTGTGCCCTGTTTGGTCCGTGGTTTCGTGCTATTGAAAAAGAAATA
+K092_HEV_RdRp -----------------------------------------------------------ggccattgagaagcagatg
+
+FJ705359      CTAGCCCTGCTCCCGCCTAATATTTTCTACGGCGACGCATACGAGGAGTCTGTGTTTGCCGCCGCTGTGTCGGGGGCA
+K092_HEV_RdRp ctagccctgctcccgcccaacattttctatggtgatgcctatgaggactctgtgttctctgcagctgtcactggtgca
+
+FJ705359      GGTTCAAGCATGGTATTTGAGAATGATTTTTCAGAGTTTGATAGCACCCAAAATAACTTCTCCCTTGGTCTC------
+K092_HEV_RdRp gggtcaagtatggtatttgagaatgacttctcggaatttgacagcactcagaataacttctcgctgggcctt------
+
+FJ705359      ------------GAGTGTGTAGTCATGGAGGAATGTGGCATGCCCCAGTGGCTAATCCGGTTGTACCATTTGGTTCGG
+K092_HEV_RdRp ------------gagtgtgcaattatggaggaatgtggtatgccccagtggctagttagattataccacctggtccgg
+
+FJ705359      TCGGCCTGGATCTTACAGGCGCCGAAGGAGTCTCTTAAGGGATTTTGGAAGAAGCATTCTGGTGAGCCTGGCACCCTC
+K092_HEV_RdRp tccgcctggattttgcaagccccaaaggaatctctgaaagggttt---------------------------------
+
+FJ705359      CTTTGGAACACTGTCTGGAACATGGCGATCATAGCACACTGCTATGAATTTCGTGATTTTAGGGTTGCCGCTTTCAAG
+K092_HEV_RdRp ------------------------------------------------------------------------------
+
+FJ705359      GGAGATGATTCCGTGGTCCTCTGTAGCGACTACCGCCAGAGCCGCAATGCAGCGGCCCTGATTGCAGGTTGCGGGCTC
+K092_HEV_RdRp ------------------------------------------------------------------------------
+
+FJ705359      AAACTGAAGGTTGACTATCGCCCTATTGGGTTGTATGCTGGTGTGGTGGTGGCCCCTGGCCTGGGGACGCTACCCGAT
+K092_HEV_RdRp ------------------------------------------------------------------------------
+
+FJ705359      GTGGTGCGCTTTGCCGGCCGGCTGTCTGAGAAGAACTGGGGCCCTGGGCCGGAGCGGGCTGAGCAGTTGCGCCTAGCT
+K092_HEV_RdRp ------------------------------------------------------------------------------
+
+FJ705359      GTTTGTGACTTCCTTCGAGGGTTAACGAATGTTGCGCAGGTATGTGTCGATGTTGTATCCCGAGTTTATGGAGTTAGC
+K092_HEV_RdRp ------------------------------------------------------------------------------
+
+FJ705359      CCTGGGCTGGTACATAACCTTATTGGCATGTTGCAAACCATAGCCGATGGCAAAGCCCATTTCACAGAGACTGTTAAA
+K092_HEV_RdRp ------------------------------------------------------------------------------
+
+FJ705359      CCTGTGCTTGACCTCACGAACTCTATCATACAGCGGGTGGAATGAATAACATGT----TTTGTGCATTGCCCATGGGA
+K092_HEV_RdRp ------------------------------------------------------------------------------
+
+FJ705359      TC---ACCATGCGCCCTAGGGCTGTTCTGTTGCTGTTCTTCGTGTTTCTGCCTATGCTGCCCGCGCCACCGGCCGGCC
+K092_HEV_RdRp ------------------------------------------------------------------------------
+
+FJ705359      AGCCGTCTGGCCGCCGTCGTGGGCGGCGCAGCGGCGGTGCCGGCAGTGGTTTCTGGGGTGACAGGGTTGATTCTCAGC
+K092_HEV_RdRp ------------------------------------------------------------------------------
+
+FJ705359      CCTTCGCCCTCCCCTATATTCATCCAACCAACCCCTTTGCCGCCGATGTCGTACCGCAATCCGGGGCTGGAGCTCGCC
+K092_HEV_RdRp ------------------------------------------------------------------------------
+
+FJ705359      CTCGACAGCCGTCCCGCCCCCTCGGCTCCTCTTGGCGTGATCAATCCCAGCGCCCCTCCGCTGTCCCACGTCGTCGAT
+K092_HEV_RdRp ------------------------------------------------------------------------------
+
+FJ705359      CTGCCCCAGCCGGGGCTGCGCCGCTGA-CTGCCATATCACCTGCTCCCGATACAGCTCCTGTACCTGATGTTGACTCA
+K092_HEV_RdRp ------------------------------------------------------------------------------
+
+FJ705359      CGCGGCGCCATATTGCGACGCCAGTACAATTTATCCACATCCCCGCTCACATCATCTGTCGCTTCGGGTACTAATCTG
+K092_HEV_RdRp ------------------------------------------------------------------------------
+
+FJ705359      GTTCTTTACGCTGCCCCGTTAAACCCTTTGCTGCCCCTTCAGGATGGCACTAATACTCACATCATGGCCACTGAGGCA
+K092_HEV_RdRp ------------------------------------------------------------------------------
+
+FJ705359      TCTAATTATGCCCAGTATCGGGTTGTCCGAGCTACGATTCGTTACAGGCCATTGGTGCCAAATGCTGTCGGCGGTTAT
+K092_HEV_RdRp ------------------------------------------------------------------------------
+
+FJ705359      GCAATATCCATCTCATTCTGGCCTCAGACAACTACCACCCCCACGTCTGTTGATATGAACTCTATTACTTCCACTGAT
+K092_HEV_RdRp ------------------------------------------------------------------------------
+
+FJ705359      GTTAGGATTCTAGTTCAGCCCGGCATTGCTTCTGAGTTGGTTATCCCTAGTGAGCGCCTCCATTATCGTAACCAGGGC
+K092_HEV_RdRp ------------------------------------------------------------------------------
+
+FJ705359      TGGCGCTCTGTGGAGACCTCGGGTGTGGCTGAAGAGGAGGCTACTTCTGGTTTGGTAATGCTTTGTATCCATGGCTCC
+K092_HEV_RdRp ------------------------------------------------------------------------------
+
+FJ705359      CCTGTTAACTCCTACACCAATACCCCCTATACCGGGGCGCTTGGGCTCCTTGATTTCGCTTTAGAGCTTGAGTTTAGG
+K092_HEV_RdRp ------------------------------------------------------------------------------
+
+FJ705359      AACCTGACACCCGGGAACACCAACACCCGTGTATCTCGGTATACAAGCACAGCCCGTCATCGGCTGCGCCGCGGTGCT
+K092_HEV_RdRp ------------------------------------------------------------------------------
+
+FJ705359      GATGGCACCGCCGAACTTACCACCACAGCGGCCACGCGCTTCATGAAGGACCTGCACTTCACCGGTACGAATGGGGTC
+K092_HEV_RdRp ------------------------------------------------------------------------------
+
+FJ705359      GGTGAAGTGGGTCGTGGTATTGCTCTCACACTCTTTAATCTTGCTGACACGCTTCTCGGTGGTTTGCCGACAGAATTA
+K092_HEV_RdRp ------------------------------------------------------------------------------
+
+FJ705359      ATTTCGTCGGCTGGGGGACAGTTATTTTACTCCCGCCCTGTCGTCTCAGCCAATGGCGAGCCGACTGTCAAGTTATAC
+K092_HEV_RdRp ------------------------------------------------------------------------------
+
+FJ705359      ACATCTGTAGAGAATGCGCAGCAGGATAAAGGGATCGCTATCCCACATGATATAGATCTGGGTGACTCCCGTGTGGTC
+K092_HEV_RdRp ------------------------------------------------------------------------------
+
+FJ705359      GTCCAAGACTATGACAACCAGCATGAGCAGGATCGACCCACTCCCTCGCCTGCCCCTTCTCGCCCTTTTTCGGTTCTT
+K092_HEV_RdRp ------------------------------------------------------------------------------
+
+FJ705359      CGCGCTAATGATGTTTTATGGCTTTCTCTTACTGCCGCCGAGTACGACCAGACTACATATGGGTCGTCCACCAACCCG
+K092_HEV_RdRp ------------------------------------------------------------------------------
+
+FJ705359      ATGTATGTCTCGGATACTGTCACATTTGTCAACGTGGCTACAGGAGCCCAGGCTGTCGCCCGTTCCCTTGACTGGTCT
+K092_HEV_RdRp ------------------------------------------------------------------------------
+
+FJ705359      AAAGTTACTCTGGACGGCCGCCCTCTTACTACTATCCAGCAGTACTCCAAAACATTTTATGTTCTCCCGCTTCGCGGG
+K092_HEV_RdRp ------------------------------------------------------------------------------
+
+FJ705359      AAGTTATCCTTTTGGGAGGCCGGGACGACTAAGGCCGGCTACCCCTATAATTACAACACAACTGCTAGTGATCAGATT
+K092_HEV_RdRp ------------------------------------------------------------------------------
+
+FJ705359      TTGATTGAAAATGCGGCTGGTCATCGTGTAGCTATTTCCACGTACACCACCAGCTTGGGCGCAGGCCCTGTGTCTGTT
+K092_HEV_RdRp ------------------------------------------------------------------------------
+
+FJ705359      TCTGCAGTCGGTGTTTTAGCCCCACATTCGGCTCTTGCAGTCCTTGAAGACACTATTGACTACCCTGCCCGTGCCCAC
+K092_HEV_RdRp ------------------------------------------------------------------------------
+
+FJ705359      ACTTTTGATGATTTCTGTCCGGAGTGTCGCGCTCTTGGTTTGCAGGGGTGTGCTTTCCAGTCTACTATTGCTGAGCTT
+K092_HEV_RdRp ------------------------------------------------------------------------------
+
+FJ705359      CAGCGTCTTAAAATGAAGTTAGGTAAAACCCGGGAGTTTTAATCAATTT---CCTTTGTGCCCCCTTCATAGCT----
+K092_HEV_RdRp ------------------------------------------------------------------------------
+
+FJ705359      -TTGCTTT-----ATTTTTTCTTTTCTGCGGTTCGCGCTCCCTG---------------------GAAAAAAAAAAAA
+K092_HEV_RdRp ------------------------------------------------------------------------------
+
+FJ705359      AAA-----------------------------
+K092_HEV_RdRp --------------------------------
+;
+end;

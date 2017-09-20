@@ -1,0 +1,871 @@
+Seq-submit ::= {
+  sub {
+    contact {
+      contact {
+        name
+          name {
+            last "Vina-Rodriguez" ,
+            first "Ariel" ,
+            initials "A." } ,
+        affil
+          std {
+            affil "Friedrich-Loeffler-Institut" ,
+            div "Institute for Novel and Emerging Infectious Diseases" ,
+            city "Greifswald-Insel Riems" ,
+            sub "MV" ,
+            country "Germany" ,
+            street "Suedufer 10" ,
+            email "arielvina@yahoo.es" ,
+            postal-code "17493" } } } ,
+    cit {
+      authors {
+        names
+          std {
+            {
+              name
+                name {
+                  last "Hammerschmidt" ,
+                  first "Felicitas" ,
+                  initials "F." } } ,
+            {
+              name
+                name {
+                  last "Daehnert" ,
+                  first "Lisa" ,
+                  initials "L." } } ,
+            {
+              name
+                name {
+                  last "Eiden" ,
+                  first "Martin" ,
+                  initials "M." } } ,
+            {
+              name
+                name {
+                  last "Vina-Rodriguez" ,
+                  first "Ariel" ,
+                  initials "A." } } ,
+            {
+              name
+                name {
+                  last "Gareis" ,
+                  first "Manfred" ,
+                  initials "M." } } ,
+            {
+              name
+                name {
+                  last "Groschup" ,
+                  first "Martin" ,
+                  initials "M.H." } } ,
+            {
+              name
+                name {
+                  last "Schwaiger" ,
+                  first "Karin" ,
+                  initials "K." } } } ,
+        affil
+          std {
+            affil "Friedrich-Loeffler-Institut" ,
+            div "Institute for Novel and Emerging Infectious Diseases" ,
+            city "Greifswald-Insel Riems" ,
+            sub "MV" ,
+            country "Germany" ,
+            street "Suedufer 10" ,
+            postal-code "17493" } } ,
+      date
+        std {
+          year 2016 ,
+          month 11 ,
+          day 8 } } ,
+    subtype new ,
+    tool "Sequin 15.10 - MS WINDOWS VISTA" } ,
+  data
+    entrys {
+      set {
+        class phy-set ,
+        descr {
+          pub {
+            pub {
+              gen {
+                cit "Unpublished" ,
+                authors {
+                  names
+                    std {
+                      {
+                        name
+                          name {
+                            last "Hammerschmidt" ,
+                            first "Felicitas" ,
+                            initials "F." } } ,
+                      {
+                        name
+                          name {
+                            last "Daehnert" ,
+                            first "Lisa" ,
+                            initials "L." } } ,
+                      {
+                        name
+                          name {
+                            last "Eiden" ,
+                            first "Martin" ,
+                            initials "M." } } ,
+                      {
+                        name
+                          name {
+                            last "Vina-Rodriguez" ,
+                            first "Ariel" ,
+                            initials "A." } } ,
+                      {
+                        name
+                          name {
+                            last "Gareis" ,
+                            first "Manfred" ,
+                            initials "M." } } ,
+                      {
+                        name
+                          name {
+                            last "Groschup" ,
+                            first "Martin" ,
+                            initials "M.H." } } ,
+                      {
+                        name
+                          name {
+                            last "Schwaiger" ,
+                            first "Karin" ,
+                            initials "K." } } } ,
+                  affil
+                    std {
+                      affil "Friedrich-Loeffler-Institut" ,
+                      div "Institute for Novel and Emerging Infectious
+ Diseases" ,
+                      city "Greifswald-Insel Riems" ,
+                      sub "MV" ,
+                      country "Germany" ,
+                      street "Suedufer 10" ,
+                      postal-code "17493" } } ,
+                title "Hepatitis E Virus in wild rabbits and European brown
+ hares in Germany" } } } ,
+          user {
+            type
+              str "NcbiCleanup" ,
+            data {
+              {
+                label
+                  str "method" ,
+                data
+                  str "SequinCleanup" } ,
+              {
+                label
+                  str "version" ,
+                data
+                  int 8 } ,
+              {
+                label
+                  str "month" ,
+                data
+                  int 11 } ,
+              {
+                label
+                  str "day" ,
+                data
+                  int 8 } ,
+              {
+                label
+                  str "year" ,
+                data
+                  int 2016 } } } ,
+          create-date
+            std {
+              year 2016 ,
+              month 11 ,
+              day 8 } } ,
+        seq-set {
+          set {
+            class nuc-prot ,
+            descr {
+              source {
+                genome genomic ,
+                org {
+                  taxname "Hepatitis E virus" ,
+                  orgname {
+                    mod {
+                      {
+                        subtype strain ,
+                        subname "wbGER27" } ,
+                      {
+                        subtype subtype ,
+                        subname "3c" } ,
+                      {
+                        subtype nat-host ,
+                        subname "wild boar" } } ,
+                    gcode 1 } } ,
+                subtype {
+                  {
+                    subtype genotype ,
+                    name "3" } ,
+                  {
+                    subtype country ,
+                    name "Germany:Brandenburg" } ,
+                  {
+                    subtype collection-date ,
+                    name "2006" } } } } ,
+            seq-set {
+              seq {
+                id {
+                  local
+                    str "FJ705359" } ,
+                descr {
+                  title "Hepatitis E virus strain K092 RNA-directed RNA
+ polymerase gene, partial cds" ,
+                  molinfo {
+                    biomol genomic } ,
+                  user {
+                    type
+                      str "StructuredComment" ,
+                    data {
+                      {
+                        label
+                          str "StructuredCommentPrefix" ,
+                        data
+                          str "##Assembly-Data-START##" } ,
+                      {
+                        label
+                          str "StructuredCommentSuffix" ,
+                        data
+                          str "##Assembly-Data-END##" } ,
+                      {
+                        label
+                          str "Sequencing Technology" ,
+                        data
+                          str "Sanger dideoxy sequencing" } } } } ,
+                inst {
+                  repr raw ,
+                  mol rna ,
+                  length 7237 ,
+                  seq-data
+                    ncbi2na '92146CEEB6394E8A5452FCF0A75E93C71E53E24279DE9E694
+3DE57A60E7BAEBDA5BFF376EE40788F7CF0FE39055A4BEBFF69782E77A0D35CD41ABCD4C381F81
+2C7B6A56A7ADBEDC8AFAA54542353C3841503BDF45AE7F71852CA888EF499EB1DE75C56695E69C
+1E596F797E6E975556F8DB173EFF8E8F75679D3F964807AAF95FCF579385DE96963BE68A73A561
+1A8E119FB39647137555E0B1C7145EB1F14C41F4C5F78F461AE36E7BEE17382B8C72E4A710538E
+DD4C7DB93A35910708CB698D359EB8C89BB9A9CFA794FFB9E79F1E4957896D14397CEF53155AD8
+48AECED67733DA57A6AD54D5CF54D27E77180D44FD19ED5AF4CFEA169D39FFE99C77A38D29BFE7
+BD187CE171759A8F2F10AD1EFA657ED9C18AAE839F68A19DF167BCF1E49B3F853F94D26F175B1D
+09CCD42ACE6587A2BE24E5400FCF1087F32FA7BD882D696E1CCF569652752F73912E596FAF369A
+BF537E150AB9FBFF8E2DEE5796FB284FDF0829EEAC2F79EFF382EBEA128B9179FFC814922ADCBE
+9853A518C3825CE2A778AD8D29625654DD8EFDEA1F396D4E96507E295ECCA99F04D59384DBE562
+5D5BF87945B6076792B52167E8B9647B9DA83087F5A186BAF8E99517E2981A55892CEF7F6F6197
+7652D0EAA5A964CB775C627475E7AFE4AD08DD370E97A3E47904F555A9AA55C9BE75AA8AC925FF
+92E57F12B104AF474994F67CCAE9FBA7935E2ABEFAB37D557FF756A45FEA2D67057FFBAA2A05FB
+115A13AD04DEBFF72E1FF55578A49ED9265A79075AAF194551175EF2E1BFABBC5945F7820FD2BE
+31265475579578959D05372759EA5029D5B9B096506514D566456597DFC45CD68EA902BB39A8D1
+EFE2DE1EE3E9EBC19B60D5AD36D7A29A5FE5397DC52671562DFD4541E2F4D39986B7E59B11FC1D
+56973CF4E4BA75E3CCABE24C158229F8A49316221F9DD966B16597351D76BDA933142F56D25D27
+D867EA26C145956A86277170585D96717AF629430941125A57443078A39256449417247A23639E
+71E2B696A7EE5A799AF2D7AAFB91CD2F479EAB54AF6A82D9BDCC492AA3BE1B2EBEF5476A275A0C
+BE9B65AAFD927FC45D31A695BB451AB6DBBEE3E38A55357545937BE71C44E49A976DAD45F76985
+405235794C87D8939697AD5643195E27E65452FAE93B454D9E559E3BB989F319AA7CD500D4051C
+966E79ADFCF7A0E25E53E9482F2FF454A59C2965055AE63C4B518A54A9947F4680710D3251A78E
+72AA74D437D589D394CB647C56511220B9BCF7E1955A7EF1B8AFACCDA3B8FB4107FF5D969AA2BA
+B453655DEE31766B0D785205D98471297F517D7948D2E5CD14BC9E281FA516549D7B6596D7955F
+95E07E2429FBCCCE59289F1AEDE326E7ADFE074684CB51EDA3A795525268296D73619DBAB2B1A5
+B68609ECE092747786D6E2D5E9C8FCD5453EA56F4A51C6EE2F3389EBE294EBA202B4A3A7796E7E
+27617790DB8ECD9B344FFD4808FB040F4512A8853E546B0ADA52A4DDA7E89085F7B95EFEB5BAFD
+B9CF80080C72579D5970CFF71A619318A2DEEFE5967BB6AA4AF424EB3F8838FFD22FE324540307
+DD5FADD8BBB2D3A283BA4E552E9C35AFB14FEBDADA5E8DF129960A2DDF0A8FFA0824F7AE25E915
+D7FA047B7A04E98D324479CE0FDB8FF2AF967F42A238F5BAD77B261C5948964392695E3E4AF9A9
+D01E0AF8736573EAFB39EBBAEBA55E97AA19C563BAE67F96969EDE2081EA95EA5A26A7892F9972
+7BFB87D7D8ABC183BE64ACEED8EFB3562FCE8BC95EA7AC4C17CFA4EF9014C963A40953F44887BC
+05EE7E174607734C49ABA0E0C13BFEE4F953A8D14E6572A7BDEF9EF7DBBF79739E566516969496
+DE965B6EA699269AE5A4BAFDEAB84ABE3DD257D95D5733D3505055FE5963B6C590D6A9E89D95D8
+496D5955DA75DFA6E34354995759ED51B6D8DE5525AA799678794CD179D58C49D7B178EF874669
+94CF98652C43F3513559D134DED9F6AC70DEBDFC67956F015FE7957D28E91C31D134E9478A4DC3
+CE54B36AFB589C63DBC4A53EB940E7B69AF390CD4DD3DE974841C51551B7BE3381DCF1F51E3BCA
+3DCBD25693E7DE2FAF3572E265D4F36C14A9E99DEE885DABBA78228A71F7AFEB0E7FB353A755EF
+075C450C557316A99FA9D7E3F67F227E2FCA05E115A8114115BB376B31091256D369E659AE78E9
+16581F14512694667D38285E47D16B183AADAE0BAB6EB3E774477F0DF9E119F76BAFE58483C3F6
+DA7AA84BCFF1D595EDB74943A62587B42F31137B220E64928C0A8D9CD5138CC8DEAE1D5BBADB50
+8738414938928D85475765E55F7657FF6BDF6670E3BFCE9FDDF1E5962C61487133AB6D450563B3
+B768C7B44FED06E9C4A254A7B656F57E1EB702F1DE8696577C71CD492C75004FF3BDD59F66A0BC
+D7FEA296A1870A5A715730F10441E72E348FF8F8039A7AD36EC9CFD46C45149FA99295EEDEFDE4
+B6BBFC9544F69DF92D7E08473E1C5795B9511FF8E3F7B5A2ED99DFAFE4AAEE7F52DC73E789F49B
+7C0382F2B0056A2FF0D0FD7FB955F4C9FE7F3FFDFF79AF66757A000000000'H } ,
+                annot {
+                  {
+                    data
+                      ftable {
+                        {
+                          data
+                            imp {
+                              key "5'UTR" } ,
+                          location
+                            int {
+                              from 0 ,
+                              to 24 ,
+                              strand plus ,
+                              id
+                                local
+                                  str "FJ705359" } } ,
+                        {
+                          data
+                            cdregion {
+                              frame one ,
+                              code {
+                                id 1 } } ,
+                          comment "ORF 1" ,
+                          product
+                            whole
+                              local
+                                str "FJ705359_1" ,
+                          location
+                            int {
+                              from 25 ,
+                              to 5136 ,
+                              strand plus ,
+                              id
+                                local
+                                  str "FJ705359" } } ,
+                        {
+                          data
+                            prot {
+                              name {
+                                "methyltransferase" } ,
+                              processed mature } ,
+                          location
+                            int {
+                              from 190 ,
+                              to 735 ,
+                              strand plus ,
+                              id
+                                local
+                                  str "FJ705359" } } ,
+                        {
+                          data
+                            prot {
+                              name {
+                                "Y domain" } ,
+                              processed mature } ,
+                          location
+                            int {
+                              from 670 ,
+                              to 1320 ,
+                              strand plus ,
+                              id
+                                local
+                                  str "FJ705359" } } ,
+                        {
+                          data
+                            prot {
+                              name {
+                                "papain-like protease" } ,
+                              processed mature } ,
+                          location
+                            int {
+                              from 1321 ,
+                              to 1800 ,
+                              strand plus ,
+                              id
+                                local
+                                  str "FJ705359" } } ,
+                        {
+                          data
+                            prot {
+                              name {
+                                "poly-proline hinge" } ,
+                              processed mature } ,
+                          location
+                            int {
+                              from 2158 ,
+                              to 2388 ,
+                              strand plus ,
+                              id
+                                local
+                                  str "FJ705359" } } ,
+                        {
+                          data
+                            prot {
+                              name {
+                                "X domain" } ,
+                              processed mature } ,
+                          location
+                            int {
+                              from 2407 ,
+                              to 2880 ,
+                              strand plus ,
+                              id
+                                local
+                                  str "FJ705359" } } ,
+                        {
+                          data
+                            prot {
+                              name {
+                                "helicase" } ,
+                              processed mature } ,
+                          location
+                            int {
+                              from 2932 ,
+                              to 3666 ,
+                              strand plus ,
+                              id
+                                local
+                                  str "FJ705359" } } ,
+                        {
+                          data
+                            prot {
+                              name {
+                                "RNA-directed RNA polymerase" } ,
+                              processed mature } ,
+                          location
+                            int {
+                              from 3673 ,
+                              to 5133 ,
+                              strand plus ,
+                              id
+                                local
+                                  str "FJ705359" } } ,
+                        {
+                          data
+                            cdregion {
+                              frame one ,
+                              code {
+                                id 1 } } ,
+                          comment "ORF 3" ,
+                          product
+                            whole
+                              local
+                                str "FJ705359_2" ,
+                          location
+                            int {
+                              from 5133 ,
+                              to 5501 ,
+                              strand plus ,
+                              id
+                                local
+                                  str "FJ705359" } } ,
+                        {
+                          data
+                            cdregion {
+                              frame one ,
+                              code {
+                                id 1 } } ,
+                          comment "ORF 2" ,
+                          product
+                            whole
+                              local
+                                str "FJ705359_3" ,
+                          location
+                            int {
+                              from 5171 ,
+                              to 7153 ,
+                              strand plus ,
+                              id
+                                local
+                                  str "FJ705359" } } ,
+                        {
+                          data
+                            imp {
+                              key "3'UTR" } ,
+                          location
+                            int {
+                              from 7154 ,
+                              to 7236 ,
+                              strand plus ,
+                              id
+                                local
+                                  str "FJ705359" } } } } } } ,
+              seq {
+                id {
+                  local
+                    str "FJ705359_1" } ,
+                descr {
+                  molinfo {
+                    biomol peptide ,
+                    tech concept-trans } } ,
+                inst {
+                  repr raw ,
+                  mol aa ,
+                  length 1703 ,
+                  seq-data
+                    ncbieaa "MEAHQFIKAPGITTAIEQAALAAANSALANAVVVRPFLSRVQTEILINL
+MQPRQLVFRPEVLWNHPIQRVIHNELEQYCRARAGRCLEVGAHPRSINDNPNVLHRCFLRPVGRDVQRWYSAPTRGPA
+ANCRRSALRGLPPVDRTYCFDGFSRCSFAAETGVALYSLHDLWPADVAEAMARHGMTRLYAALHLPPEVLLPPGTYHT
+TSYLLIHDGDRAVVTYEGDTSAGYNHDVSILRAWIRTTKIVGDHPLVIERVRAIGCHFVLLLTAAPEPSPMPYVPYPR
+STEVYVRSIFGPGGSPSLFPSACSTKSTFHAVPVHIWDRLMLFGATLDDQAFCCSRLMTYLRGISYKVTVGALVANEG
+WNASEDALTAVITAAYLTICHQRYLRTQAISKGMRRLEVEHAQKFITRLYSWLFEKSGRDYIPGRQLQFYAQCRRWLS
+AGFHLDPRVLVFDESVPCRCRTFLKKAVGKFCCFMKWLGQECTCFLEPAEGLVGDHGHDNEAYEGSEVDQAEPAHLDV
+SGTYAVHGRQLEALYRALNIPHDIVARASRLTATVELAAGPDRLECRTVLGNKTFRTTVVDGAHLEANGPEQYVLSFD
+ASRQSMGAGPHSLSYELTPAGLQVKISSNGLDCTATFPPGGAPSVAPGEVAAFCSALYRYNRFTQRHSLIGGLWLHPE
+GLLGIFPPFSPGHLWESANPFCGEGTLYTRTWSTSGFSSDFSPPEAAVAAPAATPGLRHPTPPVSDVWVLPPPSEEFQ
+VDTAPTPPAPEPAQPSSSAGPKAPVRKPPTPPSPRTRRLLYTYPDGAKVYAGSLFESDCDWLVNASNPGHRPGGGLCH
+AFYQRYPESFHPTEFIMRDGLAAYTLTPRPIIHAVAPDYRVEHNPKRLEAAYRETCSRRGTAAYPLLGSGIYQVPVSL
+SFDAWERNHRPGDELYLTDLAATWFEANKPTQPALTITEDAARTANLALEIDAATEVGRACAGCAVSPGVVHYQFTAG
+VPGSGKSRSIQQGDVDVVVVPTRELRNSWRRRGFAAFTPHTAARVTTGRRVVIDEAPSLPPHLLLLHMQRASSVHLLG
+DPNQIPAIDFEHAGLVPAIRPELAPTSWWHVTHRCPADVCELIRGAYPKIQTTSRVLRSLFWNEPAIGQKLVFTQAAK
+AANPGAITVHEAQGATFTETTIIATADARGLIQSSRAHAIVALTRHTEKCVILDAPGLLREVGISDVIVNNFFLAGGE
+VGHHRPSVIPRGNPDQNLATLQAFPPSCQISAYHQLAEELGHRPAPVAAVLPPCPELEQGLLYMPQELTVSDSVLVFE
+LTDIVHCRMAAPSQRKAVLSTLVGRYGRRTKLYEAAHSDVRESLARFIPTIGPVQATTCELYELVEAMVEKGQDGSAV
+LELDLCNRDVSRITFFQKDCNKFTTGETIAHGKVGQGISAWSKTFCALFGPWFRAIEKEILALLPPNIFYGDAYEESV
+FAAAVSGAGSSMVFENDFSEFDSTQNNFSLGLECVVMEECGMPQWLIRLYHLVRSAWILQAPKESLKGFWKKHSGEPG
+TLLWNTVWNMAIIAHCYEFRDFRVAAFKGDDSVVLCSDYRQSRNAAALIAGCGLKLKVDYRPIGLYAGVVVAPGLGTL
+PDVVRFAGRLSEKNWGPGPERAEQLRLAVCDFLRGLTNVAQVCVDVVSRVYGVSPGLVHNLIGMLQTIADGKAHFTET
+VKPVLDLTNSIIQRVE" } ,
+                annot {
+                  {
+                    data
+                      ftable {
+                        {
+                          data
+                            prot {
+                              name {
+                                "polyprotein" } } ,
+                          location
+                            int {
+                              from 0 ,
+                              to 1702 ,
+                              id
+                                local
+                                  str "FJ705359_1" } } } } } } ,
+              seq {
+                id {
+                  local
+                    str "FJ705359_2" } ,
+                descr {
+                  molinfo {
+                    biomol peptide ,
+                    tech concept-trans } } ,
+                inst {
+                  repr raw ,
+                  mol aa ,
+                  length 122 ,
+                  seq-data
+                    ncbieaa "MNNMFCALPMGSPCALGLFCCCSSCFCLCCPRHRPASRLAAVVGGAAAV
+PAVVSGVTGLILSPSPSPIFIQPTPLPPMSYRNPGLELALDSRPAPSAPLGVINPSAPPLSHVVDLPQPGLRR" } ,
+                annot {
+                  {
+                    data
+                      ftable {
+                        {
+                          data
+                            prot {
+                              name {
+                                "phosphoprotein" } } ,
+                          location
+                            int {
+                              from 0 ,
+                              to 121 ,
+                              id
+                                local
+                                  str "FJ705359_2" } } } } } } ,
+              seq {
+                id {
+                  local
+                    str "FJ705359_3" } ,
+                descr {
+                  molinfo {
+                    biomol peptide ,
+                    tech concept-trans } } ,
+                inst {
+                  repr raw ,
+                  mol aa ,
+                  length 660 ,
+                  seq-data
+                    ncbieaa "MRPRAVLLLFFVFLPMLPAPPAGQPSGRRRGRRSGGAGSGFWGDRVDSQ
+PFALPYIHPTNPFAADVVPQSGAGARPRQPSRPLGSSWRDQSQRPSAVPRRRSAPAGAAPLTAISPAPDTAPVPDVDS
+RGAILRRQYNLSTSPLTSSVASGTNLVLYAAPLNPLLPLQDGTNTHIMATEASNYAQYRVVRATIRYRPLVPNAVGGY
+AISISFWPQTTTTPTSVDMNSITSTDVRILVQPGIASELVIPSERLHYRNQGWRSVETSGVAEEEATSGLVMLCIHGS
+PVNSYTNTPYTGALGLLDFALELEFRNLTPGNTNTRVSRYTSTARHRLRRGADGTAELTTTAATRFMKDLHFTGTNGV
+GEVGRGIALTLFNLADTLLGGLPTELISSAGGQLFYSRPVVSANGEPTVKLYTSVENAQQDKGIAIPHDIDLGDSRVV
+VQDYDNQHEQDRPTPSPAPSRPFSVLRANDVLWLSLTAAEYDQTTYGSSTNPMYVSDTVTFVNVATGAQAVARSLDWS
+KVTLDGRPLTTIQQYSKTFYVLPLRGKLSFWEAGTTKAGYPYNYNTTASDQILIENAAGHRVAISTYTTSLGAGPVSV
+SAVGVLAPHSALAVLEDTIDYPARAHTFDDFCPECRALGLQGCAFQSTIAELQRLKMKLGKTREF" } ,
+                annot {
+                  {
+                    data
+                      ftable {
+                        {
+                          data
+                            prot {
+                              name {
+                                "capsid protein" } } ,
+                          location
+                            int {
+                              from 0 ,
+                              to 659 ,
+                              id
+                                local
+                                  str "FJ705359_3" } } } } } } } } ,
+          set {
+            class nuc-prot ,
+            descr {
+              source {
+                genome genomic ,
+                org {
+                  taxname "Hepatitis E virus" ,
+                  orgname {
+                    mod {
+                      {
+                        subtype strain ,
+                        subname "K092" } ,
+                      {
+                        subtype subtype ,
+                        subname "Rab" } ,
+                      {
+                        subtype nat-host ,
+                        subname "rabbit" } } ,
+                    gcode 1 } } ,
+                subtype {
+                  {
+                    subtype genotype ,
+                    name "Rab" } ,
+                  {
+                    subtype country ,
+                    name "Germany:Rhineland-Palatinate, 55435 Gau-Algesheim" } ,
+                  {
+                    subtype isolation-source ,
+                    name "liver" } ,
+                  {
+                    subtype collection-date ,
+                    name "27-11-2015" } ,
+                  {
+                    subtype other ,
+                    name "RNA-directed RNA polymerase gene" } } ,
+                pcr-primers {
+                  {
+                    forward {
+                      {
+                        seq "tcgcgcatcacmttyttccaraa" ,
+                        name "HEV.RdRp_F1" } } ,
+                    reverse {
+                      {
+                        seq "gccatgttccagacdgtrttcca" ,
+                        name "HEV.RdRp_R1" } } } ,
+                  {
+                    forward {
+                      {
+                        seq "gtgctctgtttggcccntggttymg" ,
+                        name "HEV.RdRp_F2" } } ,
+                    reverse {
+                      {
+                        seq "ccaggctcaccrgartgyttcttcca" ,
+                        name "HEV.RdRp_R2" } } } } } } ,
+            seq-set {
+              seq {
+                id {
+                  local
+                    str "K092_HEV_RdRp" } ,
+                descr {
+                  title "Hepatitis E virus strain K092 RNA-directed RNA
+ polymerase gene, partial cds" ,
+                  molinfo {
+                    biomol genomic } ,
+                  user {
+                    type
+                      str "StructuredComment" ,
+                    data {
+                      {
+                        label
+                          str "StructuredCommentPrefix" ,
+                        data
+                          str "##Assembly-Data-START##" } ,
+                      {
+                        label
+                          str "StructuredCommentSuffix" ,
+                        data
+                          str "##Assembly-Data-END##" } ,
+                      {
+                        label
+                          str "Sequencing Technology" ,
+                        data
+                          str "Sanger dideoxy sequencing" } } } } ,
+                inst {
+                  repr raw ,
+                  mol rna ,
+                  length 280 ,
+                  seq-data
+                    ncbi2na 'A53E209239C95E7565413FDCEB8E5CE2877BBDDE49ED1EB92
+AD0B3ACFE20E1F7683F8491D20C1F767A97E2EE43CE8A0EEB3954BA72F23CC517AD6B597A3FE42
+5502837780ABF'H } ,
+                annot {
+                  {
+                    data
+                      ftable {
+                        {
+                          data
+                            cdregion {
+                              frame two ,
+                              code {
+                                id 1 } } ,
+                          partial TRUE ,
+                          comment "ORF 1" ,
+                          product
+                            whole
+                              local
+                                str "K092_HEV_RdRp_1" ,
+                          location
+                            int {
+                              from 0 ,
+                              to 279 ,
+                              strand plus ,
+                              id
+                                local
+                                  str "K092_HEV_RdRp" ,
+                              fuzz-from
+                                lim lt ,
+                              fuzz-to
+                                lim gt } } ,
+                        {
+                          data
+                            prot {
+                              name {
+                                "RNA-directed RNA polymerase" } ,
+                              processed mature } ,
+                          location
+                            int {
+                              from 0 ,
+                              to 279 ,
+                              strand plus ,
+                              id
+                                local
+                                  str "K092_HEV_RdRp" } } } } } } ,
+              seq {
+                id {
+                  local
+                    str "K092_HEV_RdRp_1" } ,
+                descr {
+                  molinfo {
+                    biomol peptide ,
+                    tech concept-trans ,
+                    completeness no-ends } } ,
+                inst {
+                  repr raw ,
+                  mol aa ,
+                  length 93 ,
+                  seq-data
+                    ncbieaa "AIEKQMLALLPPNIFYGDAYEDSVFSAAVTGAGSSMVFENDFSEFDSTQ
+NNFSLGLECAIMEECGMPQWLVRLYHLVRSAWILQAPKESLKGF" } ,
+                annot {
+                  {
+                    data
+                      ftable {
+                        {
+                          data
+                            prot {
+                              name {
+                                "polyprotein" } } ,
+                          partial TRUE ,
+                          location
+                            int {
+                              from 0 ,
+                              to 92 ,
+                              id
+                                local
+                                  str "K092_HEV_RdRp_1" ,
+                              fuzz-from
+                                lim lt ,
+                              fuzz-to
+                                lim gt } } } } } } } } } ,
+        annot {
+          {
+            data
+              align {
+                {
+                  type partial ,
+                  dim 2 ,
+                  segs
+                    denseg {
+                      dim 2 ,
+                      numseg 29 ,
+                      ids {
+                        local
+                          str "FJ705359" ,
+                        local
+                          str "K092_HEV_RdRp" } ,
+                      starts {
+                        -1 ,
+                        -1 ,
+                        0 ,
+                        -1 ,
+                        -1 ,
+                        -1 ,
+                        25 ,
+                        -1 ,
+                        -1 ,
+                        -1 ,
+                        2233 ,
+                        -1 ,
+                        -1 ,
+                        -1 ,
+                        2344 ,
+                        -1 ,
+                        -1 ,
+                        -1 ,
+                        2842 ,
+                        -1 ,
+                        4311 ,
+                        0 ,
+                        -1 ,
+                        -1 ,
+                        4480 ,
+                        169 ,
+                        4591 ,
+                        -1 ,
+                        -1 ,
+                        -1 ,
+                        5146 ,
+                        -1 ,
+                        -1 ,
+                        -1 ,
+                        5168 ,
+                        -1 ,
+                        -1 ,
+                        -1 ,
+                        5502 ,
+                        -1 ,
+                        -1 ,
+                        -1 ,
+                        7161 ,
+                        -1 ,
+                        -1 ,
+                        -1 ,
+                        7183 ,
+                        -1 ,
+                        -1 ,
+                        -1 ,
+                        7190 ,
+                        -1 ,
+                        -1 ,
+                        -1 ,
+                        7221 ,
+                        -1 ,
+                        -1 ,
+                        -1 } ,
+                      lens {
+                        10 ,
+                        25 ,
+                        1 ,
+                        2208 ,
+                        3 ,
+                        111 ,
+                        87 ,
+                        498 ,
+                        93 ,
+                        1469 ,
+                        169 ,
+                        18 ,
+                        111 ,
+                        555 ,
+                        4 ,
+                        22 ,
+                        3 ,
+                        334 ,
+                        1 ,
+                        1659 ,
+                        3 ,
+                        22 ,
+                        5 ,
+                        7 ,
+                        5 ,
+                        31 ,
+                        21 ,
+                        16 ,
+                        29 } } } } } } } } }

@@ -1,0 +1,60 @@
+LOCUS       K092_HEV_RdRp            280 bp    RNA     linear       08-NOV-2016
+DEFINITION  Hepatitis E virus strain K092 RNA-directed RNA polymerase gene,
+            partial cds.
+ACCESSION
+VERSION
+KEYWORDS    .
+SOURCE      Hepatitis E virus
+  ORGANISM  Hepatitis E virus
+            Unclassified.
+REFERENCE   1  (bases 1 to 280)
+  AUTHORS   Hammerschmidt,F., Daehnert,L., Eiden,M., Vina-Rodriguez,A.,
+            Gareis,M., Groschup,M.H. and Schwaiger,K.
+  TITLE     Hepatitis E Virus in wild rabbits and European brown hares in
+            Germany
+  JOURNAL   Unpublished
+REFERENCE   2  (bases 1 to 280)
+  AUTHORS   Hammerschmidt,F., Daehnert,L., Eiden,M., Vina-Rodriguez,A.,
+            Gareis,M., Groschup,M.H. and Schwaiger,K.
+  TITLE     Direct Submission
+  JOURNAL   Submitted (08-NOV-2016) Institute for Novel and Emerging Infectious
+            Diseases, Friedrich-Loeffler-Institut, Suedufer 10,
+            Greifswald-Insel Riems, MV 17493, Germany
+COMMENT     ##Assembly-Data-START##
+            Sequencing Technology :: Sanger dideoxy sequencing
+            ##Assembly-Data-END##
+FEATURES             Location/Qualifiers
+     source          1..280
+                     /organism="Hepatitis E virus"
+                     /mol_type="genomic RNA"
+                     /strain="K092"
+                     /isolation_source="liver"
+                     /host="rabbit"
+                     /country="Germany:Rhineland-Palatinate, 55435
+                     Gau-Algesheim"
+                     /collection_date="27-11-2015"
+                     /PCR_primers="fwd_name: HEV.RdRp_F1, fwd_seq:
+                     tcgcgcatcacmttyttccaraa, rev_name: HEV.RdRp_R1, rev_seq:
+                     gccatgttccagacdgtrttcca"
+                     /PCR_primers="fwd_name: HEV.RdRp_F2, fwd_seq:
+                     gtgctctgtttggcccntggttymg, rev_name: HEV.RdRp_R2, rev_seq:
+                     ccaggctcaccrgartgyttcttcca"
+                     /subtype="Rab"
+                     /genotype="Rab"
+                     /note="RNA-directed RNA polymerase gene"
+     CDS             <1..>280
+                     /note="ORF 1"
+                     /codon_start=2
+                     /product="polyprotein"
+                     /translation="AIEKQMLALLPPNIFYGDAYEDSVFSAAVTGAGSSMVFENDFSE
+                     FDSTQNNFSLGLECAIMEECGMPQWLVRLYHLVRSAWILQAPKESLKGF"
+     mat_peptide     2..280
+                     /product="RNA-directed RNA polymerase"
+BASE COUNT       62 a     64 c     75 g     79 t
+ORIGIN
+        1 ggccattgag aagcagatgc tagccctgct cccgcccaac attttctatg gtgatgccta
+       61 tgaggactct gtgttctctg cagctgtcac tggtgcaggg tcaagtatgg tatttgagaa
+      121 tgacttctcg gaatttgaca gcactcagaa taacttctcg ctgggccttg agtgtgcaat
+      181 tatggaggaa tgtggtatgc cccagtggct agttagatta taccacctgg tccggtccgc
+      241 ctggattttg caagccccaa aggaatctct gaaagggttt
+//

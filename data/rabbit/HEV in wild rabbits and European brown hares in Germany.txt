@@ -1,0 +1,139 @@
+Submit-block ::= {
+  contact {
+    contact {
+      name
+        name {
+          last "Vina-Rodriguez" ,
+          first "Ariel" ,
+          initials "A." } ,
+      affil
+        std {
+          affil "Friedrich-Loeffler-Institut" ,
+          div "Institute for Novel and Emerging Infectious Diseases" ,
+          city "Greifswald-Insel Riems" ,
+          sub "MV" ,
+          country "Germany" ,
+          street "Suedufer 10" ,
+          email "arielvina@yahoo.es" ,
+          postal-code "17493" } } } ,
+  cit {
+    authors {
+      names
+        std {
+          {
+            name
+              name {
+                last "Hammerschmidt" ,
+                first "Felicitas" ,
+                initials "F." } } ,
+          {
+            name
+              name {
+                last "Daehnert" ,
+                first "Lisa" ,
+                initials "L." } } ,
+          {
+            name
+              name {
+                last "Eiden" ,
+                first "Martin" ,
+                initials "M." } } ,
+          {
+            name
+              name {
+                last "Vina-Rodriguez" ,
+                first "Ariel" ,
+                initials "A." } } ,
+          {
+            name
+              name {
+                last "Gareis" ,
+                first "Manfred" ,
+                initials "M." } } ,
+          {
+            name
+              name {
+                last "Groschup" ,
+                first "Martin" ,
+                initials "M.H." } } ,
+          {
+            name
+              name {
+                last "Schwaiger" ,
+                first "Karin" ,
+                initials "K." } } } ,
+      affil
+        std {
+          affil "Friedrich-Loeffler-Institut" ,
+          div "Institute for Novel and Emerging Infectious Diseases" ,
+          city "Greifswald-Insel Riems" ,
+          sub "MV" ,
+          country "Germany" ,
+          street "Suedufer 10" ,
+          postal-code "17493" } } ,
+    date
+      std {
+        year 2016 ,
+        month 11 ,
+        day 8 } } ,
+  subtype new }
+Seqdesc ::= pub {
+  pub {
+    gen {
+      cit "unpublished" ,
+      authors {
+        names
+          std {
+            {
+              name
+                name {
+                  last "Hammerschmidt" ,
+                  first "Felicitas" ,
+                  initials "F." } } ,
+            {
+              name
+                name {
+                  last "Daehnert" ,
+                  first "Lisa" ,
+                  initials "L." } } ,
+            {
+              name
+                name {
+                  last "Eiden" ,
+                  first "Martin" ,
+                  initials "M." } } ,
+            {
+              name
+                name {
+                  last "Vina-Rodriguez" ,
+                  first "Ariel" ,
+                  initials "A." } } ,
+            {
+              name
+                name {
+                  last "Gareis" ,
+                  first "Manfred" ,
+                  initials "M." } } ,
+            {
+              name
+                name {
+                  last "Groschup" ,
+                  first "Martin" ,
+                  initials "M.H." } } ,
+            {
+              name
+                name {
+                  last "Schwaiger" ,
+                  first "Karin" ,
+                  initials "K." } } } ,
+        affil
+          std {
+            affil "Friedrich-Loeffler-Institut" ,
+            div "Institute for Novel and Emerging Infectious Diseases" ,
+            city "Greifswald-Insel Riems" ,
+            sub "MV" ,
+            country "Germany" ,
+            street "Suedufer 10" ,
+            postal-code "17493" } } ,
+      title "Hepatitis E Virus in wild rabbits and European brown hares in
+ Germany" } } }

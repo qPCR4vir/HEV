@@ -1,0 +1,1606 @@
+LOCUS       K027_HEV                 280 bp    RNA     linear       04-NOV-2016
+DEFINITION  Hepatitis E virus strain K027 RNA-directed RNA polymerase gene,
+            partial cds.
+ACCESSION
+VERSION
+KEYWORDS    .
+SOURCE      Hepatitis E virus
+  ORGANISM  Hepatitis E virus
+            Unclassified.
+REFERENCE   1  (bases 1 to 280)
+  AUTHORS   Hammerschmidt,F., Daehnert,L., Eiden,M., Vina-Rodriguez,A.,
+            Gareis,M., Groschup,M.H. and Schwaiger,K.
+  TITLE     Hepatitis E Virus in wild rabbits and European brown hares in
+            Germany
+  JOURNAL   Unpublished
+REFERENCE   2  (bases 1 to 280)
+  AUTHORS   Hammerschmidt,F., Daehnert,L., Eiden,M., Vina-Rodriguez,A.,
+            Gareis,M., Groschup,M.H. and Schwaiger,K.
+  TITLE     Direct Submission
+  JOURNAL   Submitted (04-NOV-2016) Institute for Novel and Emerging Infectious
+            Diseases, Friedrich-Loeffler-Institut, Suedufer 10,
+            Greifswald-Insel Riems, MV 17493, Germany
+COMMENT     ##Assembly-Data-START##
+            Sequencing Technology :: Sanger dideoxy sequencing
+            ##Assembly-Data-END##
+FEATURES             Location/Qualifiers
+     source          1..280
+                     /organism="Hepatitis E virus"
+                     /mol_type="genomic RNA"
+                     /strain="K027"
+                     /isolation_source="liver"
+                     /host="rabbit"
+                     /country="Germany:Schleswig-Holstein, 24806 Hohn"
+                     /collection_date="24-10-2015"
+                     /PCR_primers="fwd_name: HEV.RdRp_F1, fwd_seq:
+                     tcgcgcatcacmttyttccaraa, rev_name: HEV.RdRp_R1, rev_seq:
+                     gccatgttccagacdgtrttcca"
+                     /PCR_primers="fwd_name: HEV.RdRp_F2, fwd_seq:
+                     gtgctctgtttggcccntggttymg, rev_name: HEV.RdRp_R2, rev_seq:
+                     ccaggctcaccrgartgyttcttcca"
+                     /subtype="Rab"
+                     /genotype="Rab"
+                     /note="RNA-directed RNA polymerase gene"
+     CDS             <1..>280
+                     /note="ORF 1"
+                     /codon_start=2
+                     /product="polyprotein"
+                     /translation="AIEKQILALLPPNVFYGDAYEDSVFSAAVTGSGSSMVFENDFSE
+                     FDSTQNNFSLGLECVIMEECGMPQWLVRLYHLVRSAWILQAPKESLKGF"
+     mat_peptide     1..280
+                     /product="RNA-directed RNA polymerase"
+BASE COUNT       59 a     57 c     74 g     90 t
+ORIGIN
+        1 agccattgag aagcagatat tggccttgct cccgcctaat gtcttttatg gtgacgccta
+       61 tgaggactct gtattttctg cagctgtcac tggctcaggg tcaagtatgg tctttgagaa
+      121 cgatttttcg gaatttgaca gcactcagaa caacttttca ctcggtcttg agtgcgtgat
+      181 tatggaggaa tgtggtatgc cccagtggct agttaggtta tatcatctgg tccggtctgc
+      241 ctggattttg caggccccta aggagtcttt gaaaggattt
+//
+LOCUS       K035_HEV                 280 bp    RNA     linear       04-NOV-2016
+DEFINITION  Hepatitis E virus strain K035 RNA-directed RNA polymerase gene,
+            partial cds.
+ACCESSION
+VERSION
+KEYWORDS    .
+SOURCE      Hepatitis E virus
+  ORGANISM  Hepatitis E virus
+            Unclassified.
+REFERENCE   1  (bases 1 to 280)
+  AUTHORS   Hammerschmidt,F., Daehnert,L., Eiden,M., Vina-Rodriguez,A.,
+            Gareis,M., Groschup,M.H. and Schwaiger,K.
+  TITLE     Hepatitis E Virus in wild rabbits and European brown hares in
+            Germany
+  JOURNAL   Unpublished
+REFERENCE   2  (bases 1 to 280)
+  AUTHORS   Hammerschmidt,F., Daehnert,L., Eiden,M., Vina-Rodriguez,A.,
+            Gareis,M., Groschup,M.H. and Schwaiger,K.
+  TITLE     Direct Submission
+  JOURNAL   Submitted (04-NOV-2016) Institute for Novel and Emerging Infectious
+            Diseases, Friedrich-Loeffler-Institut, Suedufer 10,
+            Greifswald-Insel Riems, MV 17493, Germany
+COMMENT     ##Assembly-Data-START##
+            Sequencing Technology :: Sanger dideoxy sequencing
+            ##Assembly-Data-END##
+FEATURES             Location/Qualifiers
+     source          1..280
+                     /organism="Hepatitis E virus"
+                     /mol_type="genomic RNA"
+                     /strain="K035"
+                     /isolation_source="liver"
+                     /host="rabbit"
+                     /country="Germany:Schleswig-Holstein, 24806 Hohn"
+                     /collection_date="24-10-2015"
+                     /PCR_primers="fwd_name: HEV.RdRp_F1, fwd_seq:
+                     tcgcgcatcacmttyttccaraa, rev_name: HEV.RdRp_R1, rev_seq:
+                     gccatgttccagacdgtrttcca"
+                     /PCR_primers="fwd_name: HEV.RdRp_F2, fwd_seq:
+                     gtgctctgtttggcccntggttymg, rev_name: HEV.RdRp_R2, rev_seq:
+                     ccaggctcaccrgartgyttcttcca"
+                     /subtype="Rab"
+                     /genotype="Rab"
+                     /note="RNA-directed RNA polymerase gene"
+     CDS             <1..>280
+                     /note="ORF 1"
+                     /codon_start=2
+                     /product="polyprotein"
+                     /translation="AIEKQILALLPPNIFYGDAYEDSVFSAAVTGSGSSMVFENDFSE
+                     FDSTQNNFSLGLECVIMEECGMPHWLVRLYHLVRSAWILQAPKESLKGF"
+     mat_peptide     1..280
+                     /product="RNA-directed RNA polymerase"
+BASE COUNT       60 a     63 c     71 g     86 t
+ORIGIN
+        1 agccattgag aagcagatac tggctttgct cccgcctaat atcttctatg gtgacgccta
+       61 tgaggactct gtattctctg cagctgtcac tggctcgggg tcaagtatgg tctttgagaa
+      121 tgacttttcg gaatttgaca gcactcagaa caacttctca ctcggtcttg aatgcgtgat
+      181 tatggaggaa tgtggtatgc cccactggct agttagatta tatcacctgg tccggtctgc
+      241 ctggattttg caggccccta aggagtcttt gaaaggcttt
+//
+LOCUS       K048_HEV                 280 bp    RNA     linear       04-NOV-2016
+DEFINITION  Hepatitis E virus strain K048 RNA-directed RNA polymerase gene,
+            partial cds.
+ACCESSION
+VERSION
+KEYWORDS    .
+SOURCE      Hepatitis E virus
+  ORGANISM  Hepatitis E virus
+            Unclassified.
+REFERENCE   1  (bases 1 to 280)
+  AUTHORS   Hammerschmidt,F., Daehnert,L., Eiden,M., Vina-Rodriguez,A.,
+            Gareis,M., Groschup,M.H. and Schwaiger,K.
+  TITLE     Hepatitis E Virus in wild rabbits and European brown hares in
+            Germany
+  JOURNAL   Unpublished
+REFERENCE   2  (bases 1 to 280)
+  AUTHORS   Hammerschmidt,F., Daehnert,L., Eiden,M., Vina-Rodriguez,A.,
+            Gareis,M., Groschup,M.H. and Schwaiger,K.
+  TITLE     Direct Submission
+  JOURNAL   Submitted (04-NOV-2016) Institute for Novel and Emerging Infectious
+            Diseases, Friedrich-Loeffler-Institut, Suedufer 10,
+            Greifswald-Insel Riems, MV 17493, Germany
+COMMENT     ##Assembly-Data-START##
+            Sequencing Technology :: Sanger dideoxy sequencing
+            ##Assembly-Data-END##
+FEATURES             Location/Qualifiers
+     source          1..280
+                     /organism="Hepatitis E virus"
+                     /mol_type="genomic RNA"
+                     /strain="K048"
+                     /isolation_source="liver"
+                     /host="rabbit"
+                     /country="Germany:Schleswig-Holstein, 24806 Hohn"
+                     /collection_date="24-10-2015"
+                     /PCR_primers="fwd_name: HEV.RdRp_F1, fwd_seq:
+                     tcgcgcatcacmttyttccaraa, rev_name: HEV.RdRp_R1, rev_seq:
+                     gccatgttccagacdgtrttcca"
+                     /PCR_primers="fwd_name: HEV.RdRp_F2, fwd_seq:
+                     gtgctctgtttggcccntggttymg, rev_name: HEV.RdRp_R2, rev_seq:
+                     ccaggctcaccrgartgyttcttcca"
+                     /subtype="Rab"
+                     /genotype="Rab"
+                     /note="RNA-directed RNA polymerase gene"
+     CDS             <1..>280
+                     /note="ORF 1"
+                     /codon_start=2
+                     /product="polyprotein"
+                     /translation="AIEKQILALLPPNVFYGDAYEDSVFSAAVTGSGSSMVFENDFSE
+                     FDSTQNNFSLSLECVIMEECGMPQWLVRLYHLVRSAWILQAPKESLRGF"
+     mat_peptide     1..280
+                     /product="RNA-directed RNA polymerase"
+BASE COUNT       58 a     60 c     75 g     87 t
+ORIGIN
+        1 agccattgag aagcagatac tggccttgct cccgcctaat gtcttctatg gtgatgccta
+       61 tgaggactct gtattctctg cagctgtcac tggctcgggg tcaagtatgg tctttgagaa
+      121 tgatttttcg gaatttgaca gcactcagaa caacttttca ctcagtcttg agtgcgtgat
+      181 tatggaggaa tgtggtatgc cccagtggct agttaggcta tatcacctgg tccggtctgc
+      241 ctggattttg caggccccta aggagtcttt gagaggattt
+//
+LOCUS       K058_HEV                 280 bp    RNA     linear       04-NOV-2016
+DEFINITION  Hepatitis E virus strain K058 RNA-directed RNA polymerase gene,
+            partial cds.
+ACCESSION
+VERSION
+KEYWORDS    .
+SOURCE      Hepatitis E virus
+  ORGANISM  Hepatitis E virus
+            Unclassified.
+REFERENCE   1  (bases 1 to 280)
+  AUTHORS   Hammerschmidt,F., Daehnert,L., Eiden,M., Vina-Rodriguez,A.,
+            Gareis,M., Groschup,M.H. and Schwaiger,K.
+  TITLE     Hepatitis E Virus in wild rabbits and European brown hares in
+            Germany
+  JOURNAL   Unpublished
+REFERENCE   2  (bases 1 to 280)
+  AUTHORS   Hammerschmidt,F., Daehnert,L., Eiden,M., Vina-Rodriguez,A.,
+            Gareis,M., Groschup,M.H. and Schwaiger,K.
+  TITLE     Direct Submission
+  JOURNAL   Submitted (04-NOV-2016) Institute for Novel and Emerging Infectious
+            Diseases, Friedrich-Loeffler-Institut, Suedufer 10,
+            Greifswald-Insel Riems, MV 17493, Germany
+COMMENT     ##Assembly-Data-START##
+            Sequencing Technology :: Sanger dideoxy sequencing
+            ##Assembly-Data-END##
+FEATURES             Location/Qualifiers
+     source          1..280
+                     /organism="Hepatitis E virus"
+                     /mol_type="genomic RNA"
+                     /strain="K058"
+                     /isolation_source="liver"
+                     /host="rabbit"
+                     /country="Germany:Schleswig-Holstein, 23769 Fehmarn"
+                     /collection_date="9-11-2015"
+                     /PCR_primers="fwd_name: HEV.RdRp_F1, fwd_seq:
+                     tcgcgcatcacmttyttccaraa, rev_name: HEV.RdRp_R1, rev_seq:
+                     gccatgttccagacdgtrttcca"
+                     /PCR_primers="fwd_name: HEV.RdRp_F2, fwd_seq:
+                     gtgctctgtttggcccntggttymg, rev_name: HEV.RdRp_R2, rev_seq:
+                     ccaggctcaccrgartgyttcttcca"
+                     /subtype="Rab"
+                     /genotype="Rab"
+                     /note="RNA-directed RNA polymerase gene"
+     CDS             <1..>280
+                     /note="ORF 1"
+                     /codon_start=2
+                     /product="polyprotein"
+                     /translation="AIEKQILALLPPNIFYGDAYEDSVFSAAVTGAESSMVFENDFSE
+                     FDSTQNNFSLGLECVIMEECGMPQWLVRLYHLVRSAWILQAPKESLKGF"
+     mat_peptide     1..280
+                     /product="RNA-directed RNA polymerase"
+BASE COUNT       65 a     58 c     72 g     85 t
+ORIGIN
+        1 tgccattgag aaacagatat tagccttgct cccgcctaac atcttttatg gtgacgccta
+       61 tgaagactcc gtattttctg cggctgtcac tggtgcggag tcgagcatgg tgtttgagaa
+      121 tgatttttcg gaatttgaca gcacgcagaa taatttctca cttggcctcg aatgtgtgat
+      181 catggaagag tgtggtatgc cccagtggct agttagacta taccatttgg tgaggtccgc
+      241 ctggattttg caagccccga aggaatcttt aaaaggcttt
+//
+LOCUS       K059_HEV                 280 bp    RNA     linear       04-NOV-2016
+DEFINITION  Hepatitis E virus strain K059 RNA-directed RNA polymerase gene,
+            partial cds.
+ACCESSION
+VERSION
+KEYWORDS    .
+SOURCE      Hepatitis E virus
+  ORGANISM  Hepatitis E virus
+            Unclassified.
+REFERENCE   1  (bases 1 to 280)
+  AUTHORS   Hammerschmidt,F., Daehnert,L., Eiden,M., Vina-Rodriguez,A.,
+            Gareis,M., Groschup,M.H. and Schwaiger,K.
+  TITLE     Hepatitis E Virus in wild rabbits and European brown hares in
+            Germany
+  JOURNAL   Unpublished
+REFERENCE   2  (bases 1 to 280)
+  AUTHORS   Hammerschmidt,F., Daehnert,L., Eiden,M., Vina-Rodriguez,A.,
+            Gareis,M., Groschup,M.H. and Schwaiger,K.
+  TITLE     Direct Submission
+  JOURNAL   Submitted (04-NOV-2016) Institute for Novel and Emerging Infectious
+            Diseases, Friedrich-Loeffler-Institut, Suedufer 10,
+            Greifswald-Insel Riems, MV 17493, Germany
+COMMENT     ##Assembly-Data-START##
+            Sequencing Technology :: Sanger dideoxy sequencing
+            ##Assembly-Data-END##
+FEATURES             Location/Qualifiers
+     source          1..280
+                     /organism="Hepatitis E virus"
+                     /mol_type="genomic RNA"
+                     /strain="K059"
+                     /isolation_source="liver"
+                     /host="rabbit"
+                     /country="Germany:Schleswig-Holstein, 23769 Fehmarn"
+                     /collection_date="9-11-2015"
+                     /PCR_primers="fwd_name: HEV.RdRp_F1, fwd_seq:
+                     tcgcgcatcacmttyttccaraa, rev_name: HEV.RdRp_R1, rev_seq:
+                     gccatgttccagacdgtrttcca"
+                     /PCR_primers="fwd_name: HEV.RdRp_F2, fwd_seq:
+                     gtgctctgtttggcccntggttymg, rev_name: HEV.RdRp_R2, rev_seq:
+                     ccaggctcaccrgartgyttcttcca"
+                     /subtype="Rab"
+                     /genotype="Rab"
+                     /note="RNA-directed RNA polymerase gene"
+     CDS             <1..>280
+                     /note="ORF 1"
+                     /codon_start=2
+                     /product="polyprotein"
+                     /translation="AIEKQILALLPPNIFYGDAYEDSVFSAAVTGAESSMVFENDFSE
+                     FDSTQNNFSLGLECVIMEECGMPQWLVRLYHLVRSAWILQAPKESLKGF"
+     mat_peptide     1..280
+                     /product="RNA-directed RNA polymerase"
+BASE COUNT       64 a     55 c     73 g     88 t
+ORIGIN
+        1 tgccattgag aaacagatat tagccttgct cccgcctaac atcttttatg gtgacgccta
+       61 tgaggattcc gtattttctg cggctgtcac tggtgcggag tcgagcatgg tgtttgagaa
+      121 tgatttttcg gaatttgaca gcacgcagaa taatttttca cttggccttg aatgtgtgat
+      181 catggaagag tgtggtatgc cccagtggct agttagacta taccatttgg tgaggtccgc
+      241 ctggattttg caagccccga aggaatcttt aaaaggcttt
+//
+LOCUS       K062_HEV                 280 bp    RNA     linear       04-NOV-2016
+DEFINITION  Hepatitis E virus strain K062 RNA-directed RNA polymerase gene,
+            partial cds.
+ACCESSION
+VERSION
+KEYWORDS    .
+SOURCE      Hepatitis E virus
+  ORGANISM  Hepatitis E virus
+            Unclassified.
+REFERENCE   1  (bases 1 to 280)
+  AUTHORS   Hammerschmidt,F., Daehnert,L., Eiden,M., Vina-Rodriguez,A.,
+            Gareis,M., Groschup,M.H. and Schwaiger,K.
+  TITLE     Hepatitis E Virus in wild rabbits and European brown hares in
+            Germany
+  JOURNAL   Unpublished
+REFERENCE   2  (bases 1 to 280)
+  AUTHORS   Hammerschmidt,F., Daehnert,L., Eiden,M., Vina-Rodriguez,A.,
+            Gareis,M., Groschup,M.H. and Schwaiger,K.
+  TITLE     Direct Submission
+  JOURNAL   Submitted (04-NOV-2016) Institute for Novel and Emerging Infectious
+            Diseases, Friedrich-Loeffler-Institut, Suedufer 10,
+            Greifswald-Insel Riems, MV 17493, Germany
+COMMENT     ##Assembly-Data-START##
+            Sequencing Technology :: Sanger dideoxy sequencing
+            ##Assembly-Data-END##
+FEATURES             Location/Qualifiers
+     source          1..280
+                     /organism="Hepatitis E virus"
+                     /mol_type="genomic RNA"
+                     /strain="K062"
+                     /isolation_source="liver"
+                     /host="rabbit"
+                     /country="Germany:Schleswig-Holstein, 23769 Fehmarn"
+                     /collection_date="9-11-2015"
+                     /PCR_primers="fwd_name: HEV.RdRp_F1, fwd_seq:
+                     tcgcgcatcacmttyttccaraa, rev_name: HEV.RdRp_R1, rev_seq:
+                     gccatgttccagacdgtrttcca"
+                     /PCR_primers="fwd_name: HEV.RdRp_F2, fwd_seq:
+                     gtgctctgtttggcccntggttymg, rev_name: HEV.RdRp_R2, rev_seq:
+                     ccaggctcaccrgartgyttcttcca"
+                     /subtype="Rab"
+                     /genotype="Rab"
+                     /note="RNA-directed RNA polymerase gene"
+     CDS             <1..>280
+                     /note="ORF 1"
+                     /codon_start=2
+                     /product="polyprotein"
+                     /translation="AIEKQILALLPPNIFYGDAYEDSVFSAAVTGAGSSMVFENDFSE
+                     FDSTQNNFSLGLECVIMEECGMPQWLVRLYHLVRSAWILQAPKESLKGF"
+     mat_peptide     1..280
+                     /product="RNA-directed RNA polymerase"
+BASE COUNT       62 a     57 c     75 g     86 t
+ORIGIN
+        1 tgccattgag aagcagatat tagccctgct cccacctaat atcttttatg gtgacgccta
+       61 cgaggattct gtattttctg cggctgtcac tggtgcgggg tcgagcatgg tgtttgagaa
+      121 tgatttttca gagtttgaca gcacgcagaa taatttctca ctcggccttg aatgcgtgat
+      181 tatggaagaa tgtggcatgc cccagtggct ggttagacta tatcatctag tgaggtctgc
+      241 ttggattctg caagccccga aggagtcttt gaaaggcttt
+//
+LOCUS       K063_HEV                 280 bp    RNA     linear       04-NOV-2016
+DEFINITION  Hepatitis E virus strain K063 RNA-directed RNA polymerase gene,
+            partial cds.
+ACCESSION
+VERSION
+KEYWORDS    .
+SOURCE      Hepatitis E virus
+  ORGANISM  Hepatitis E virus
+            Unclassified.
+REFERENCE   1  (bases 1 to 280)
+  AUTHORS   Hammerschmidt,F., Daehnert,L., Eiden,M., Vina-Rodriguez,A.,
+            Gareis,M., Groschup,M.H. and Schwaiger,K.
+  TITLE     Hepatitis E Virus in wild rabbits and European brown hares in
+            Germany
+  JOURNAL   Unpublished
+REFERENCE   2  (bases 1 to 280)
+  AUTHORS   Hammerschmidt,F., Daehnert,L., Eiden,M., Vina-Rodriguez,A.,
+            Gareis,M., Groschup,M.H. and Schwaiger,K.
+  TITLE     Direct Submission
+  JOURNAL   Submitted (04-NOV-2016) Institute for Novel and Emerging Infectious
+            Diseases, Friedrich-Loeffler-Institut, Suedufer 10,
+            Greifswald-Insel Riems, MV 17493, Germany
+COMMENT     ##Assembly-Data-START##
+            Sequencing Technology :: Sanger dideoxy sequencing
+            ##Assembly-Data-END##
+FEATURES             Location/Qualifiers
+     source          1..280
+                     /organism="Hepatitis E virus"
+                     /mol_type="genomic RNA"
+                     /strain="K063"
+                     /isolation_source="liver"
+                     /host="rabbit"
+                     /country="Germany:Schleswig-Holstein, 23769 Fehmarn"
+                     /collection_date="9-11-2015"
+                     /PCR_primers="fwd_name: HEV.RdRp_F1, fwd_seq:
+                     tcgcgcatcacmttyttccaraa, rev_name: HEV.RdRp_R1, rev_seq:
+                     gccatgttccagacdgtrttcca"
+                     /PCR_primers="fwd_name: HEV.RdRp_F2, fwd_seq:
+                     gtgctctgtttggcccntggttymg, rev_name: HEV.RdRp_R2, rev_seq:
+                     ccaggctcaccrgartgyttcttcca"
+                     /subtype="Rab"
+                     /genotype="Rab"
+                     /note="RNA-directed RNA polymerase gene"
+     CDS             <1..>280
+                     /note="ORF 1"
+                     /codon_start=2
+                     /product="polyprotein"
+                     /translation="AIEKQILALLPPNIFYGDAYEDSVFSAAVTGAESSMVFENDFSE
+                     FDSTQNNFSLGLECVIMEECGMPQWLVRLYHLVRSAWILQAPKESLKGF"
+     mat_peptide     1..280
+                     /product="RNA-directed RNA polymerase"
+BASE COUNT       64 a     54 c     73 g     89 t
+ORIGIN
+        1 tgccattgag aaacagatat tagccttgct cccgcctaat atcttttatg gtgacgccta
+       61 tgaggattcc gtattttctg cggctgtcac tggtgcggag tcgagcatgg tgtttgagaa
+      121 tgatttttcg gaatttgaca gcacgcagaa taatttttca cttggccttg aatgtgtgat
+      181 catggaagag tgtggtatgc cccagtggct agttagacta taccatttgg tgaggtccgc
+      241 ctggattttg caagccccga aggaatcttt aaaaggcttt
+//
+LOCUS       K103_HEV                 280 bp    RNA     linear       04-NOV-2016
+DEFINITION  Hepatitis E virus strain K103 RNA-directed RNA polymerase gene,
+            partial cds.
+ACCESSION
+VERSION
+KEYWORDS    .
+SOURCE      Hepatitis E virus
+  ORGANISM  Hepatitis E virus
+            Unclassified.
+REFERENCE   1  (bases 1 to 280)
+  AUTHORS   Hammerschmidt,F., Daehnert,L., Eiden,M., Vina-Rodriguez,A.,
+            Gareis,M., Groschup,M.H. and Schwaiger,K.
+  TITLE     Hepatitis E Virus in wild rabbits and European brown hares in
+            Germany
+  JOURNAL   Unpublished
+REFERENCE   2  (bases 1 to 280)
+  AUTHORS   Hammerschmidt,F., Daehnert,L., Eiden,M., Vina-Rodriguez,A.,
+            Gareis,M., Groschup,M.H. and Schwaiger,K.
+  TITLE     Direct Submission
+  JOURNAL   Submitted (04-NOV-2016) Institute for Novel and Emerging Infectious
+            Diseases, Friedrich-Loeffler-Institut, Suedufer 10,
+            Greifswald-Insel Riems, MV 17493, Germany
+COMMENT     ##Assembly-Data-START##
+            Sequencing Technology :: Sanger dideoxy sequencing
+            ##Assembly-Data-END##
+FEATURES             Location/Qualifiers
+     source          1..280
+                     /organism="Hepatitis E virus"
+                     /mol_type="genomic RNA"
+                     /strain="K103"
+                     /isolation_source="liver"
+                     /host="rabbit"
+                     /country="Germany:Rhineland-Palatinate, 55435
+                     Gau-Algesheim"
+                     /collection_date="27-11-2015"
+                     /PCR_primers="fwd_name: HEV.RdRp_F1, fwd_seq:
+                     tcgcgcatcacmttyttccaraa, rev_name: HEV.RdRp_R1, rev_seq:
+                     gccatgttccagacdgtrttcca"
+                     /PCR_primers="fwd_name: HEV.RdRp_F2, fwd_seq:
+                     gtgctctgtttggcccntggttymg, rev_name: HEV.RdRp_R2, rev_seq:
+                     ccaggctcaccrgartgyttcttcca"
+                     /subtype="Rab"
+                     /genotype="Rab"
+                     /note="RNA-directed RNA polymerase gene"
+     CDS             <1..>280
+                     /note="ORF 1"
+                     /codon_start=2
+                     /product="polyprotein"
+                     /translation="AIEKQILALLPPNIFYGDAYEDSVFSAAVTAAESSMVFENDFSE
+                     FDSTQNNFSLGLECVIMEECGMPQWLVRLYHLVRSAWILQAPKESLKGF"
+     mat_peptide     1..280
+                     /product="RNA-directed RNA polymerase"
+BASE COUNT       65 a     61 c     70 g     84 t
+ORIGIN
+        1 agccatcgag aagcagatac tggctttgct tccaccgaat attttctatg gtgatgccta
+       61 tgaggactct gtattttctg cggctgtcac cgctgcggag tcaagcatgg tatttgagaa
+      121 cgatttctcg gagtttgaca gcacccagaa taacttttca ctaggtcttg agtgtgtgat
+      181 tatggaggaa tgcggtatgc cccagtggct agtcagatta taccacctag ttcggtctgc
+      241 ctggattctc caggctccaa aggaatctct taaaggattt
+//
+LOCUS       K106_HEV                 274 bp    RNA     linear       04-NOV-2016
+DEFINITION  Hepatitis E virus strain K106 RNA-directed RNA polymerase gene,
+            partial cds.
+ACCESSION
+VERSION
+KEYWORDS    .
+SOURCE      Hepatitis E virus
+  ORGANISM  Hepatitis E virus
+            Unclassified.
+REFERENCE   1  (bases 1 to 274)
+  AUTHORS   Hammerschmidt,F., Daehnert,L., Eiden,M., Vina-Rodriguez,A.,
+            Gareis,M., Groschup,M.H. and Schwaiger,K.
+  TITLE     Hepatitis E Virus in wild rabbits and European brown hares in
+            Germany
+  JOURNAL   Unpublished
+REFERENCE   2  (bases 1 to 274)
+  AUTHORS   Hammerschmidt,F., Daehnert,L., Eiden,M., Vina-Rodriguez,A.,
+            Gareis,M., Groschup,M.H. and Schwaiger,K.
+  TITLE     Direct Submission
+  JOURNAL   Submitted (04-NOV-2016) Institute for Novel and Emerging Infectious
+            Diseases, Friedrich-Loeffler-Institut, Suedufer 10,
+            Greifswald-Insel Riems, MV 17493, Germany
+COMMENT     ##Assembly-Data-START##
+            Sequencing Technology :: Sanger dideoxy sequencing
+            ##Assembly-Data-END##
+FEATURES             Location/Qualifiers
+     source          1..274
+                     /organism="Hepatitis E virus"
+                     /mol_type="genomic RNA"
+                     /strain="K106"
+                     /isolation_source="liver"
+                     /host="rabbit"
+                     /country="Germany:Rhineland-Palatinate, 55435
+                     Gau-Algesheim"
+                     /collection_date="27-11-2015"
+                     /PCR_primers="fwd_name: HEV.RdRp_F1, fwd_seq:
+                     tcgcgcatcacmttyttccaraa, rev_name: HEV.RdRp_R1, rev_seq:
+                     gccatgttccagacdgtrttcca"
+                     /PCR_primers="fwd_name: HEV.RdRp_F2, fwd_seq:
+                     gtgctctgtttggcccntggttymg, rev_name: HEV.RdRp_R2, rev_seq:
+                     ccaggctcaccrgartgyttcttcca"
+                     /subtype="Rab"
+                     /genotype="Rab"
+                     /note="RNA-directed RNA polymerase gene"
+     CDS             <1..>274
+                     /note="ORF 1"
+                     /codon_start=2
+                     /product="polyprotein"
+                     /translation="XIEKQMLALLPPNIFYGDAYEDSVFSAAVTGAGSSMVFENDFSE
+                     FDSTQNNFSLGLECVIMEECGMPQWLVRLYHLVRSAWILQAPKESLK"
+     mat_peptide     1..274
+                     /product="RNA-directed RNA polymerase"
+BASE COUNT       57 a     61 c     76 g     79 t      1 others
+ORIGIN
+        1 ggstattgag aagcagatgc tagccctgct ccccccaaac atcttttatg gtgacgccta
+       61 tgaggactcc gtgttctctg cggctgtcac tggtgcgggg tcaagtatgg tgtttgagaa
+      121 tgacttctcg gagtttgata gtacccagaa caatttctcg cttggccttg agtgtgtgat
+      181 tatggaggag tgtggtatgc cccagtggct agttagatta taccacctgg tccggtctgc
+      241 ctggattttg caggccccaa aggaatctct aaaa
+//
+LOCUS       K031_HEV                 280 bp    RNA     linear       04-NOV-2016
+DEFINITION  Hepatitis E virus strain K031 RNA-directed RNA polymerase gene,
+            partial cds.
+ACCESSION
+VERSION
+KEYWORDS    .
+SOURCE      Hepatitis E virus
+  ORGANISM  Hepatitis E virus
+            Unclassified.
+REFERENCE   1  (bases 1 to 280)
+  AUTHORS   Hammerschmidt,F., Daehnert,L., Eiden,M., Vina-Rodriguez,A.,
+            Gareis,M., Groschup,M.H. and Schwaiger,K.
+  TITLE     Hepatitis E Virus in wild rabbits and European brown hares in
+            Germany
+  JOURNAL   Unpublished
+REFERENCE   2  (bases 1 to 280)
+  AUTHORS   Hammerschmidt,F., Daehnert,L., Eiden,M., Vina-Rodriguez,A.,
+            Gareis,M., Groschup,M.H. and Schwaiger,K.
+  TITLE     Direct Submission
+  JOURNAL   Submitted (04-NOV-2016) Institute for Novel and Emerging Infectious
+            Diseases, Friedrich-Loeffler-Institut, Suedufer 10,
+            Greifswald-Insel Riems, MV 17493, Germany
+COMMENT     ##Assembly-Data-START##
+            Sequencing Technology :: Sanger dideoxy sequencing
+            ##Assembly-Data-END##
+FEATURES             Location/Qualifiers
+     source          1..280
+                     /organism="Hepatitis E virus"
+                     /mol_type="genomic RNA"
+                     /strain="K031"
+                     /isolation_source="liver"
+                     /host="rabbit"
+                     /country="Germany:Schleswig-Holstein, 24806 Hohn"
+                     /collection_date="24-10-2015"
+                     /PCR_primers="fwd_name: HEV.RdRp_F1, fwd_seq:
+                     tcgcgcatcacmttyttccaraa, rev_name: HEV.RdRp_R1, rev_seq:
+                     gccatgttccagacdgtrttcca"
+                     /PCR_primers="fwd_name: HEV.RdRp_F2, fwd_seq:
+                     gtgctctgtttggcccntggttymg, rev_name: HEV.RdRp_R2, rev_seq:
+                     ccaggctcaccrgartgyttcttcca"
+                     /subtype="Rab"
+                     /genotype="Rab"
+                     /note="RNA-directed RNA polymerase gene"
+     CDS             <1..>280
+                     /note="ORF 1"
+                     /codon_start=2
+                     /product="polyprotein"
+                     /translation="AIEKQILALLPPNVFYGDAYEDSVFSAAVTGSGSSMVFENDFSE
+                     FDSTQNNFSLGLECVIMEECGMPQWLVRLYHLVRSAWILQAPKESLKGF"
+     mat_peptide     1..280
+                     /product="RNA-directed RNA polymerase"
+BASE COUNT       59 a     57 c     74 g     90 t
+ORIGIN
+        1 agccattgag aagcagatac tggccttgct cccgcctaat gtcttttatg gtgatgccta
+       61 tgaggactct gtattctctg cagctgttac tggctcaggg tcaagtatgg tctttgagaa
+      121 tgatttttcg gaatttgaca gcactcagaa caacttttca ctcggtcttg agtgcgtgat
+      181 tatggaggaa tgtggtatgc cccagtggct agttaggtta tatcacctgg tccggtctgc
+      241 ctggattttg caggccccta aggagtcttt gaaaggattt
+//
+LOCUS       K051_HEV                 280 bp    RNA     linear       04-NOV-2016
+DEFINITION  Hepatitis E virus strain K051 RNA-directed RNA polymerase gene,
+            partial cds.
+ACCESSION
+VERSION
+KEYWORDS    .
+SOURCE      Hepatitis E virus
+  ORGANISM  Hepatitis E virus
+            Unclassified.
+REFERENCE   1  (bases 1 to 280)
+  AUTHORS   Hammerschmidt,F., Daehnert,L., Eiden,M., Vina-Rodriguez,A.,
+            Gareis,M., Groschup,M.H. and Schwaiger,K.
+  TITLE     Hepatitis E Virus in wild rabbits and European brown hares in
+            Germany
+  JOURNAL   Unpublished
+REFERENCE   2  (bases 1 to 280)
+  AUTHORS   Hammerschmidt,F., Daehnert,L., Eiden,M., Vina-Rodriguez,A.,
+            Gareis,M., Groschup,M.H. and Schwaiger,K.
+  TITLE     Direct Submission
+  JOURNAL   Submitted (04-NOV-2016) Institute for Novel and Emerging Infectious
+            Diseases, Friedrich-Loeffler-Institut, Suedufer 10,
+            Greifswald-Insel Riems, MV 17493, Germany
+COMMENT     ##Assembly-Data-START##
+            Sequencing Technology :: Sanger dideoxy sequencing
+            ##Assembly-Data-END##
+FEATURES             Location/Qualifiers
+     source          1..280
+                     /organism="Hepatitis E virus"
+                     /mol_type="genomic RNA"
+                     /strain="K051"
+                     /isolation_source="liver"
+                     /host="rabbit"
+                     /country="Germany:Schleswig-Holstein, 24806 Hohn"
+                     /collection_date="24-10-2015"
+                     /PCR_primers="fwd_name: HEV.RdRp_F1, fwd_seq:
+                     tcgcgcatcacmttyttccaraa, rev_name: HEV.RdRp_R1, rev_seq:
+                     gccatgttccagacdgtrttcca"
+                     /PCR_primers="fwd_name: HEV.RdRp_F2, fwd_seq:
+                     gtgctctgtttggcccntggttymg, rev_name: HEV.RdRp_R2, rev_seq:
+                     ccaggctcaccrgartgyttcttcca"
+                     /subtype="Rab"
+                     /genotype="Rab"
+                     /note="RNA-directed RNA polymerase gene"
+     CDS             <1..>280
+                     /note="ORF 1"
+                     /codon_start=2
+                     /product="polyprotein"
+                     /translation="AIEKQILALLPPNVFYGDAYEDSVFSAAVTGSGSSMVFENDFSE
+                     FDSTQNNFSLGLECVIMEECGMPQWLVRLYHLVRSAWILQAPKESLKGF"
+     mat_peptide     1..280
+                     /product="RNA-directed RNA polymerase"
+BASE COUNT       58 a     58 c     75 g     89 t
+ORIGIN
+        1 agccattgag aagcagatac tggccttgct cccgcctaat gttttttatg gtgacgccta
+       61 tgaggactct gtattctctg cagctgtcac tggctcgggg tcaagtatgg tctttgagaa
+      121 tgatttttcg gaatttgaca gcactcagaa caacttttca ctcggtcttg agtgcgtgat
+      181 tatggaggaa tgtggtatgc cccagtggct agttaggtta tatcatctgg tccggtctgc
+      241 ctggattttg caggccccta aggagtctct gaaaggattt
+//
+LOCUS       K052_HEV                 280 bp    RNA     linear       04-NOV-2016
+DEFINITION  Hepatitis E virus strain K052 RNA-directed RNA polymerase gene,
+            partial cds.
+ACCESSION
+VERSION
+KEYWORDS    .
+SOURCE      Hepatitis E virus
+  ORGANISM  Hepatitis E virus
+            Unclassified.
+REFERENCE   1  (bases 1 to 280)
+  AUTHORS   Hammerschmidt,F., Daehnert,L., Eiden,M., Vina-Rodriguez,A.,
+            Gareis,M., Groschup,M.H. and Schwaiger,K.
+  TITLE     Hepatitis E Virus in wild rabbits and European brown hares in
+            Germany
+  JOURNAL   Unpublished
+REFERENCE   2  (bases 1 to 280)
+  AUTHORS   Hammerschmidt,F., Daehnert,L., Eiden,M., Vina-Rodriguez,A.,
+            Gareis,M., Groschup,M.H. and Schwaiger,K.
+  TITLE     Direct Submission
+  JOURNAL   Submitted (04-NOV-2016) Institute for Novel and Emerging Infectious
+            Diseases, Friedrich-Loeffler-Institut, Suedufer 10,
+            Greifswald-Insel Riems, MV 17493, Germany
+COMMENT     ##Assembly-Data-START##
+            Sequencing Technology :: Sanger dideoxy sequencing
+            ##Assembly-Data-END##
+FEATURES             Location/Qualifiers
+     source          1..280
+                     /organism="Hepatitis E virus"
+                     /mol_type="genomic RNA"
+                     /strain="K052"
+                     /isolation_source="liver"
+                     /host="rabbit"
+                     /country="Germany:Schleswig-Holstein, 24806 Hohn"
+                     /collection_date="24-10-2015"
+                     /PCR_primers="fwd_name: HEV.RdRp_F1, fwd_seq:
+                     tcgcgcatcacmttyttccaraa, rev_name: HEV.RdRp_R1, rev_seq:
+                     gccatgttccagacdgtrttcca"
+                     /PCR_primers="fwd_name: HEV.RdRp_F2, fwd_seq:
+                     gtgctctgtttggcccntggttymg, rev_name: HEV.RdRp_R2, rev_seq:
+                     ccaggctcaccrgartgyttcttcca"
+                     /subtype="Rab"
+                     /genotype="Rab"
+                     /note="RNA-directed RNA polymerase gene"
+     CDS             <1..>280
+                     /note="ORF 1"
+                     /codon_start=2
+                     /product="polyprotein"
+                     /translation="AIEKQILALLPPNVFYGDAYEDSVFSAAVTGSGSSMVFENDFSE
+                     FDSTQNNFSLGLECVIMEECGMPQWLVRLYHLVRSAWILQAPKESLKGF"
+     mat_peptide     1..280
+                     /product="RNA-directed RNA polymerase"
+BASE COUNT       58 a     58 c     75 g     89 t
+ORIGIN
+        1 agccattgag aagcagatac tggccttgct cccgcctaat gttttttatg gcgacgccta
+       61 tgaggactct gtattctctg cagctgtcac tggctcgggg tcaagtatgg tctttgagaa
+      121 tgatttttcg gaatttgaca gcactcagaa caacttttca ctcggtcttg agtgcgtgat
+      181 tatggaggaa tgtggtatgc cccagtggct agttaggtta tatcatctgg tccggtctgc
+      241 ctggattttg caggccccta aggagtcttt gaaaggattt
+//
+LOCUS       K067_HEV                 280 bp    RNA     linear       04-NOV-2016
+DEFINITION  Hepatitis E virus strain K067 RNA-directed RNA polymerase gene,
+            partial cds.
+ACCESSION
+VERSION
+KEYWORDS    .
+SOURCE      Hepatitis E virus
+  ORGANISM  Hepatitis E virus
+            Unclassified.
+REFERENCE   1  (bases 1 to 280)
+  AUTHORS   Hammerschmidt,F., Daehnert,L., Eiden,M., Vina-Rodriguez,A.,
+            Gareis,M., Groschup,M.H. and Schwaiger,K.
+  TITLE     Hepatitis E Virus in wild rabbits and European brown hares in
+            Germany
+  JOURNAL   Unpublished
+REFERENCE   2  (bases 1 to 280)
+  AUTHORS   Hammerschmidt,F., Daehnert,L., Eiden,M., Vina-Rodriguez,A.,
+            Gareis,M., Groschup,M.H. and Schwaiger,K.
+  TITLE     Direct Submission
+  JOURNAL   Submitted (04-NOV-2016) Institute for Novel and Emerging Infectious
+            Diseases, Friedrich-Loeffler-Institut, Suedufer 10,
+            Greifswald-Insel Riems, MV 17493, Germany
+COMMENT     ##Assembly-Data-START##
+            Sequencing Technology :: Sanger dideoxy sequencing
+            ##Assembly-Data-END##
+FEATURES             Location/Qualifiers
+     source          1..280
+                     /organism="Hepatitis E virus"
+                     /mol_type="genomic RNA"
+                     /strain="K067"
+                     /isolation_source="liver"
+                     /host="rabbit"
+                     /country="Germany:Schleswig-Holstein, 23769 Fehmarn"
+                     /collection_date="9-11-2015"
+                     /PCR_primers="fwd_name: HEV.RdRp_F1, fwd_seq:
+                     tcgcgcatcacmttyttccaraa, rev_name: HEV.RdRp_R1, rev_seq:
+                     gccatgttccagacdgtrttcca"
+                     /PCR_primers="fwd_name: HEV.RdRp_F2, fwd_seq:
+                     gtgctctgtttggcccntggttymg, rev_name: HEV.RdRp_R2, rev_seq:
+                     ccaggctcaccrgartgyttcttcca"
+                     /subtype="Rab"
+                     /genotype="Rab"
+                     /note="RNA-directed RNA polymerase gene"
+     CDS             <1..>280
+                     /note="ORF 1"
+                     /codon_start=2
+                     /product="polyprotein"
+                     /translation="AIEKQILALLPPNIFYGDAYEDSVFFAAVTGAGSSMVFENDFSE
+                     FDSTQNNFSLGLECVIMEECGMPQWLVRLYHLVRSAWILQAPKESLKGF"
+     mat_peptide     1..280
+                     /product="RNA-directed RNA polymerase"
+BASE COUNT       63 a     59 c     74 g     84 t
+ORIGIN
+        1 tgctattgag aaacagatat tagccctgct cccgcctaac atcttttatg gtgacgccta
+       61 cgaggattct gtattttttg cggctgtcac tggtgcgggg tcgagcatgg tatttgagaa
+      121 tgatttttcg gaatttgaca gcacgcagaa caacttctca cttggtcttg aatgcgtgat
+      181 tatggaggag tgtggcatgc cccagtggct ggttagacta taccacctgg tgagatctgc
+      241 ctggattctg caagccccga aggaatcttt aaaaggcttt
+//
+LOCUS       K081_HEV                 280 bp    RNA     linear       04-NOV-2016
+DEFINITION  Hepatitis E virus strain K081 RNA-directed RNA polymerase gene,
+            partial cds.
+ACCESSION
+VERSION
+KEYWORDS    .
+SOURCE      Hepatitis E virus
+  ORGANISM  Hepatitis E virus
+            Unclassified.
+REFERENCE   1  (bases 1 to 280)
+  AUTHORS   Hammerschmidt,F., Daehnert,L., Eiden,M., Vina-Rodriguez,A.,
+            Gareis,M., Groschup,M.H. and Schwaiger,K.
+  TITLE     Hepatitis E Virus in wild rabbits and European brown hares in
+            Germany
+  JOURNAL   Unpublished
+REFERENCE   2  (bases 1 to 280)
+  AUTHORS   Hammerschmidt,F., Daehnert,L., Eiden,M., Vina-Rodriguez,A.,
+            Gareis,M., Groschup,M.H. and Schwaiger,K.
+  TITLE     Direct Submission
+  JOURNAL   Submitted (04-NOV-2016) Institute for Novel and Emerging Infectious
+            Diseases, Friedrich-Loeffler-Institut, Suedufer 10,
+            Greifswald-Insel Riems, MV 17493, Germany
+COMMENT     ##Assembly-Data-START##
+            Sequencing Technology :: Sanger dideoxy sequencing
+            ##Assembly-Data-END##
+FEATURES             Location/Qualifiers
+     source          1..280
+                     /organism="Hepatitis E virus"
+                     /mol_type="genomic RNA"
+                     /strain="K081"
+                     /isolation_source="liver"
+                     /host="rabbit"
+                     /country="Germany:North Rhine-Westphalia, 48485
+                     Neuenkirchen"
+                     /collection_date="14-11-2015"
+                     /PCR_primers="fwd_name: HEV.RdRp_F1, fwd_seq:
+                     tcgcgcatcacmttyttccaraa, rev_name: HEV.RdRp_R1, rev_seq:
+                     gccatgttccagacdgtrttcca"
+                     /PCR_primers="fwd_name: HEV.RdRp_F2, fwd_seq:
+                     gtgctctgtttggcccntggttymg, rev_name: HEV.RdRp_R2, rev_seq:
+                     ccaggctcaccrgartgyttcttcca"
+                     /subtype="3g"
+                     /genotype="3"
+                     /note="RNA-directed RNA polymerase gene"
+     CDS             <1..>280
+                     /note="ORF 1"
+                     /codon_start=2
+                     /product="polyprotein"
+                     /translation="AIEKEILTLLPPNVFYGDAYDESVFSAAVSGAGSSMVFENDFSE
+                     FDSTQNNFSLGLECAIMEECGMPQWLVRLYHLVRSSWILQAPKESLKGF"
+     mat_peptide     1..280
+                     /product="RNA-directed RNA polymerase"
+BASE COUNT       57 a     64 c     70 g     89 t
+ORIGIN
+        1 tgccattgaa aaggagatct tgaccctgct acctcctaat gtcttctacg gtgatgctta
+       61 tgatgaatcg gtattctctg ctgcagtctc gggagctggc tctagcatgg tttttgagaa
+      121 tgacttctcc gaatttgata gtacccaaaa taatttctcc cttggtctcg aatgtgctat
+      181 tatggaggag tgtggtatgc cgcagtggct tgttcggctg taccacctgg tccgctcatc
+      241 ttggatcttg caagccccta aggagtcgct gaaaggcttt
+//
+LOCUS       K096_HEV                 280 bp    RNA     linear       04-NOV-2016
+DEFINITION  Hepatitis E virus strain K096 RNA-directed RNA polymerase gene,
+            partial cds.
+ACCESSION
+VERSION
+KEYWORDS    .
+SOURCE      Hepatitis E virus
+  ORGANISM  Hepatitis E virus
+            Unclassified.
+REFERENCE   1  (bases 1 to 280)
+  AUTHORS   Hammerschmidt,F., Daehnert,L., Eiden,M., Vina-Rodriguez,A.,
+            Gareis,M., Groschup,M.H. and Schwaiger,K.
+  TITLE     Hepatitis E Virus in wild rabbits and European brown hares in
+            Germany
+  JOURNAL   Unpublished
+REFERENCE   2  (bases 1 to 280)
+  AUTHORS   Hammerschmidt,F., Daehnert,L., Eiden,M., Vina-Rodriguez,A.,
+            Gareis,M., Groschup,M.H. and Schwaiger,K.
+  TITLE     Direct Submission
+  JOURNAL   Submitted (04-NOV-2016) Institute for Novel and Emerging Infectious
+            Diseases, Friedrich-Loeffler-Institut, Suedufer 10,
+            Greifswald-Insel Riems, MV 17493, Germany
+COMMENT     ##Assembly-Data-START##
+            Sequencing Technology :: Sanger dideoxy sequencing
+            ##Assembly-Data-END##
+FEATURES             Location/Qualifiers
+     source          1..280
+                     /organism="Hepatitis E virus"
+                     /mol_type="genomic RNA"
+                     /strain="K096"
+                     /isolation_source="liver"
+                     /host="rabbit"
+                     /country="Germany:Rhineland-Palatinate, 55435
+                     Gau-Algesheim"
+                     /collection_date="27-11-2015"
+                     /PCR_primers="fwd_name: HEV.RdRp_F1, fwd_seq:
+                     tcgcgcatcacmttyttccaraa, rev_name: HEV.RdRp_R1, rev_seq:
+                     gccatgttccagacdgtrttcca"
+                     /PCR_primers="fwd_name: HEV.RdRp_F2, fwd_seq:
+                     gtgctctgtttggcccntggttymg, rev_name: HEV.RdRp_R2, rev_seq:
+                     ccaggctcaccrgartgyttcttcca"
+                     /subtype="Rab"
+                     /genotype="Rab"
+                     /note="RNA-directed RNA polymerase gene"
+     CDS             <1..>280
+                     /note="ORF 1"
+                     /codon_start=2
+                     /product="polyprotein"
+                     /translation="AIEKQILALLPPNIFYGDAYEDSVFSAAVTAAESSMVFENDFSE
+                     FDSTQNNFSLGLECVIMEECGMPQWLVRLYHLVRSAWILQAPKESLKGF"
+     mat_peptide     1..280
+                     /product="RNA-directed RNA polymerase"
+BASE COUNT       65 a     60 c     70 g     85 t
+ORIGIN
+        1 agccatcgag aagcagatac tggctttgct tccaccgaat attttctatg gtgatgccta
+       61 tgaggactct gtattttctg cggctgtcac cgctgcggag tcaagcatgg tatttgagaa
+      121 cgatttctcg gagtttgata gcacccagaa taacttttca ctaggtcttg agtgtgtgat
+      181 tatggaggaa tgcggtatgc cccagtggct agtcagatta taccacctag ttcggtccgc
+      241 ctggattctt caggctccaa aggaatctct taaaggattt
+//
+LOCUS       K109_HEV                 280 bp    RNA     linear       04-NOV-2016
+DEFINITION  Hepatitis E virus strain K109 RNA-directed RNA polymerase gene,
+            partial cds.
+ACCESSION
+VERSION
+KEYWORDS    .
+SOURCE      Hepatitis E virus
+  ORGANISM  Hepatitis E virus
+            Unclassified.
+REFERENCE   1  (bases 1 to 280)
+  AUTHORS   Hammerschmidt,F., Daehnert,L., Eiden,M., Vina-Rodriguez,A.,
+            Gareis,M., Groschup,M.H. and Schwaiger,K.
+  TITLE     Hepatitis E Virus in wild rabbits and European brown hares in
+            Germany
+  JOURNAL   Unpublished
+REFERENCE   2  (bases 1 to 280)
+  AUTHORS   Hammerschmidt,F., Daehnert,L., Eiden,M., Vina-Rodriguez,A.,
+            Gareis,M., Groschup,M.H. and Schwaiger,K.
+  TITLE     Direct Submission
+  JOURNAL   Submitted (04-NOV-2016) Institute for Novel and Emerging Infectious
+            Diseases, Friedrich-Loeffler-Institut, Suedufer 10,
+            Greifswald-Insel Riems, MV 17493, Germany
+COMMENT     ##Assembly-Data-START##
+            Sequencing Technology :: Sanger dideoxy sequencing
+            ##Assembly-Data-END##
+FEATURES             Location/Qualifiers
+     source          1..280
+                     /organism="Hepatitis E virus"
+                     /mol_type="genomic RNA"
+                     /strain="K109"
+                     /isolation_source="liver"
+                     /host="rabbit"
+                     /country="Germany:Rhineland-Palatinate, 55435
+                     Gau-Algesheim"
+                     /collection_date="27-11-2015"
+                     /PCR_primers="fwd_name: HEV.RdRp_F1, fwd_seq:
+                     tcgcgcatcacmttyttccaraa, rev_name: HEV.RdRp_R1, rev_seq:
+                     gccatgttccagacdgtrttcca"
+                     /PCR_primers="fwd_name: HEV.RdRp_F2, fwd_seq:
+                     gtgctctgtttggcccntggttymg, rev_name: HEV.RdRp_R2, rev_seq:
+                     ccaggctcaccrgartgyttcttcca"
+                     /subtype="Rab"
+                     /genotype="Rab"
+                     /note="RNA-directed RNA polymerase gene"
+     CDS             <1..>280
+                     /note="ORF 1"
+                     /codon_start=2
+                     /product="polyprotein"
+                     /translation="AIEKQMLALLPPNIFYGDAYEDSVFSAAVTGAGSSMVFENDFSE
+                     FDSTQNNFSLGLECVIMEECGMPQWLVRLYHLVRSAWILQAPKESLKGF"
+     mat_peptide     1..280
+                     /product="RNA-directed RNA polymerase"
+BASE COUNT       61 a     64 c     78 g     77 t
+ORIGIN
+        1 ggccattgag aagcagatgc tagccctgct accgcccaac atcttctatg gagacgccta
+       61 tgaggactcc gtgttctccg cggctgtcac tggtgcgggg tcaagtatgg tatttgagaa
+      121 tgacttctcg gagtttgata gcacccagaa taatttctcg ctgggccttg agtgtgtgat
+      181 catggaagag tgtggtatgc cccagtggtt agttagatta taccacctgg tccggtctgc
+      241 ctggatctta caggccccaa aggaatcttt aaaagggttt
+//
+LOCUS       K126_HEV                 280 bp    RNA     linear       04-NOV-2016
+DEFINITION  Hepatitis E virus strain K126 RNA-directed RNA polymerase gene,
+            partial cds.
+ACCESSION
+VERSION
+KEYWORDS    .
+SOURCE      Hepatitis E virus
+  ORGANISM  Hepatitis E virus
+            Unclassified.
+REFERENCE   1  (bases 1 to 280)
+  AUTHORS   Hammerschmidt,F., Daehnert,L., Eiden,M., Vina-Rodriguez,A.,
+            Gareis,M., Groschup,M.H. and Schwaiger,K.
+  TITLE     Hepatitis E Virus in wild rabbits and European brown hares in
+            Germany
+  JOURNAL   Unpublished
+REFERENCE   2  (bases 1 to 280)
+  AUTHORS   Hammerschmidt,F., Daehnert,L., Eiden,M., Vina-Rodriguez,A.,
+            Gareis,M., Groschup,M.H. and Schwaiger,K.
+  TITLE     Direct Submission
+  JOURNAL   Submitted (04-NOV-2016) Institute for Novel and Emerging Infectious
+            Diseases, Friedrich-Loeffler-Institut, Suedufer 10,
+            Greifswald-Insel Riems, MV 17493, Germany
+COMMENT     ##Assembly-Data-START##
+            Sequencing Technology :: Sanger dideoxy sequencing
+            ##Assembly-Data-END##
+FEATURES             Location/Qualifiers
+     source          1..280
+                     /organism="Hepatitis E virus"
+                     /mol_type="genomic RNA"
+                     /strain="K126"
+                     /isolation_source="liver"
+                     /host="rabbit"
+                     /country="Germany:Lower Saxony, 38442 Wolfsburg Mae\nrse"
+                     /collection_date="18-1-2015"
+                     /PCR_primers="fwd_name: HEV.RdRp_F1, fwd_seq:
+                     tcgcgcatcacmttyttccaraa, rev_name: HEV.RdRp_R1, rev_seq:
+                     gccatgttccagacdgtrttcca"
+                     /PCR_primers="fwd_name: HEV.RdRp_F2, fwd_seq:
+                     gtgctctgtttggcccntggttymg, rev_name: HEV.RdRp_R2, rev_seq:
+                     ccaggctcaccrgartgyttcttcca"
+                     /subtype="Rab"
+                     /genotype="Rab"
+                     /note="RNA-directed RNA polymerase gene"
+     CDS             <1..>280
+                     /note="ORF 1"
+                     /codon_start=2
+                     /product="polyprotein"
+                     /translation="AIEKQILALLPPNIFYGDAYEDSVFSAAVTGAGSSMVFENDFSE
+                     FDSTQNNFSLGLECVIMEECGMPQWLVRLYHLVRSAWILQAPKESLKGF"
+     mat_peptide     1..280
+                     /product="RNA-directed RNA polymerase"
+BASE COUNT       62 a     61 c     72 g     85 t
+ORIGIN
+        1 agctatagag aaacagatcc tagccttgct cccgcctaac attttctacg gtgatgctta
+       61 tgaggactct gtgttctctg cggctgtcac cggcgcgggg tcaagtatgg tatttgagaa
+      121 cgatttttcc gagtttgaca gtactcagaa caatttttca ctcggccttg agtgcgtgat
+      181 tatggaagaa tgcggcatgc cccagtggct agttagatta tatcacctgg ttcgttctgc
+      241 ttggatccta caggctccaa aggagtcttt gaagggattt
+//
+LOCUS       K145_HEV                 280 bp    RNA     linear       04-NOV-2016
+DEFINITION  Hepatitis E virus strain K145 RNA-directed RNA polymerase gene,
+            partial cds.
+ACCESSION
+VERSION
+KEYWORDS    .
+SOURCE      Hepatitis E virus
+  ORGANISM  Hepatitis E virus
+            Unclassified.
+REFERENCE   1  (bases 1 to 280)
+  AUTHORS   Hammerschmidt,F., Daehnert,L., Eiden,M., Vina-Rodriguez,A.,
+            Gareis,M., Groschup,M.H. and Schwaiger,K.
+  TITLE     Hepatitis E Virus in wild rabbits and European brown hares in
+            Germany
+  JOURNAL   Unpublished
+REFERENCE   2  (bases 1 to 280)
+  AUTHORS   Hammerschmidt,F., Daehnert,L., Eiden,M., Vina-Rodriguez,A.,
+            Gareis,M., Groschup,M.H. and Schwaiger,K.
+  TITLE     Direct Submission
+  JOURNAL   Submitted (04-NOV-2016) Institute for Novel and Emerging Infectious
+            Diseases, Friedrich-Loeffler-Institut, Suedufer 10,
+            Greifswald-Insel Riems, MV 17493, Germany
+COMMENT     ##Assembly-Data-START##
+            Sequencing Technology :: Sanger dideoxy sequencing
+            ##Assembly-Data-END##
+FEATURES             Location/Qualifiers
+     source          1..280
+                     /organism="Hepatitis E virus"
+                     /mol_type="genomic RNA"
+                     /strain="K145"
+                     /isolation_source="liver"
+                     /host="rabbit"
+                     /country="Germany:Lower Saxony, 38442 Wolfsburg Mae\nrse"
+                     /collection_date="18-1-2015"
+                     /PCR_primers="fwd_name: HEV.RdRp_F1, fwd_seq:
+                     tcgcgcatcacmttyttccaraa, rev_name: HEV.RdRp_R1, rev_seq:
+                     gccatgttccagacdgtrttcca"
+                     /PCR_primers="fwd_name: HEV.RdRp_F2, fwd_seq:
+                     gtgctctgtttggcccntggttymg, rev_name: HEV.RdRp_R2, rev_seq:
+                     ccaggctcaccrgartgyttcttcca"
+                     /subtype="Rab"
+                     /genotype="Rab"
+                     /note="RNA-directed RNA polymerase gene"
+     CDS             <1..>280
+                     /note="ORF 1"
+                     /codon_start=2
+                     /product="polyprotein"
+                     /translation="AIEKQILALLPPNIFYGDAYEDSVFSAAVTGAGSSMVFENDFSE
+                     FDSTQNNFSLGLECVIMEECGMPQWLVRLYHLVRSAWILQAPKESLKGF"
+     mat_peptide     1..280
+                     /product="RNA-directed RNA polymerase"
+BASE COUNT       62 a     62 c     72 g     84 t
+ORIGIN
+        1 agctatagag aaacagatcc tagccttgct cccgcctaac atcttttacg gtgatgctta
+       61 tgaggactct gtgttctctg cggctgtcac cggcgcgggg tcaagtatgg tatttgagaa
+      121 cgatttctcc gagtttgaca gtacccagaa caatttttca ctcggccttg agtgcgtgat
+      181 tatggaagaa tgcggcatgc cccagtggct agttagatta tatcacctgg ttcgttctgc
+      241 ttggattcta caggctccaa aggagtcttt gaagggattt
+//
+LOCUS       K147_HEV                 280 bp    RNA     linear       04-NOV-2016
+DEFINITION  Hepatitis E virus strain K147 RNA-directed RNA polymerase gene,
+            partial cds.
+ACCESSION
+VERSION
+KEYWORDS    .
+SOURCE      Hepatitis E virus
+  ORGANISM  Hepatitis E virus
+            Unclassified.
+REFERENCE   1  (bases 1 to 280)
+  AUTHORS   Hammerschmidt,F., Daehnert,L., Eiden,M., Vina-Rodriguez,A.,
+            Gareis,M., Groschup,M.H. and Schwaiger,K.
+  TITLE     Hepatitis E Virus in wild rabbits and European brown hares in
+            Germany
+  JOURNAL   Unpublished
+REFERENCE   2  (bases 1 to 280)
+  AUTHORS   Hammerschmidt,F., Daehnert,L., Eiden,M., Vina-Rodriguez,A.,
+            Gareis,M., Groschup,M.H. and Schwaiger,K.
+  TITLE     Direct Submission
+  JOURNAL   Submitted (04-NOV-2016) Institute for Novel and Emerging Infectious
+            Diseases, Friedrich-Loeffler-Institut, Suedufer 10,
+            Greifswald-Insel Riems, MV 17493, Germany
+COMMENT     ##Assembly-Data-START##
+            Sequencing Technology :: Sanger dideoxy sequencing
+            ##Assembly-Data-END##
+FEATURES             Location/Qualifiers
+     source          1..280
+                     /organism="Hepatitis E virus"
+                     /mol_type="genomic RNA"
+                     /strain="K147"
+                     /isolation_source="liver"
+                     /host="rabbit"
+                     /country="Germany:Lower Saxony, 38442 Wolfsburg Mae\nrse"
+                     /collection_date="18-1-2015"
+                     /PCR_primers="fwd_name: HEV.RdRp_F1, fwd_seq:
+                     tcgcgcatcacmttyttccaraa, rev_name: HEV.RdRp_R1, rev_seq:
+                     gccatgttccagacdgtrttcca"
+                     /PCR_primers="fwd_name: HEV.RdRp_F2, fwd_seq:
+                     gtgctctgtttggcccntggttymg, rev_name: HEV.RdRp_R2, rev_seq:
+                     ccaggctcaccrgartgyttcttcca"
+                     /subtype="Rab"
+                     /genotype="Rab"
+                     /note="RNA-directed RNA polymerase gene"
+     CDS             <1..>280
+                     /note="ORF 1"
+                     /codon_start=2
+                     /product="polyprotein"
+                     /translation="AIEKQILALLPPNIFYGDAYEDSVFSAAVTGAGSSMVFENDFSE
+                     FDSTQNNFSLGLECVIMEECGMPQWLVRLYHLVRSAWILQAPKESLKGF"
+     mat_peptide     1..280
+                     /product="RNA-directed RNA polymerase"
+BASE COUNT       65 a     60 c     70 g     85 t
+ORIGIN
+        1 agctatagag aaacagatct tagccttgct cccgcctaac atcttttatg gcgatgccta
+       61 tgaggactct gtgttctctg cagctgtcac cggtgcgggg tcaagtatgg tatttgagaa
+      121 tgacttttcg gaatttgaca gtacccagaa taatttttca ctcggccttg agtgcgtgat
+      181 tatggaagaa tgcggcatgc cccagtggct agttagatta tatcacctgg ttcgctctgc
+      241 ttggatccta caggctccaa aggaatcttt gaagggattt
+//
+LOCUS       K149_HEV                 280 bp    RNA     linear       04-NOV-2016
+DEFINITION  Hepatitis E virus strain K149 RNA-directed RNA polymerase gene,
+            partial cds.
+ACCESSION
+VERSION
+KEYWORDS    .
+SOURCE      Hepatitis E virus
+  ORGANISM  Hepatitis E virus
+            Unclassified.
+REFERENCE   1  (bases 1 to 280)
+  AUTHORS   Hammerschmidt,F., Daehnert,L., Eiden,M., Vina-Rodriguez,A.,
+            Gareis,M., Groschup,M.H. and Schwaiger,K.
+  TITLE     Hepatitis E Virus in wild rabbits and European brown hares in
+            Germany
+  JOURNAL   Unpublished
+REFERENCE   2  (bases 1 to 280)
+  AUTHORS   Hammerschmidt,F., Daehnert,L., Eiden,M., Vina-Rodriguez,A.,
+            Gareis,M., Groschup,M.H. and Schwaiger,K.
+  TITLE     Direct Submission
+  JOURNAL   Submitted (04-NOV-2016) Institute for Novel and Emerging Infectious
+            Diseases, Friedrich-Loeffler-Institut, Suedufer 10,
+            Greifswald-Insel Riems, MV 17493, Germany
+COMMENT     ##Assembly-Data-START##
+            Sequencing Technology :: Sanger dideoxy sequencing
+            ##Assembly-Data-END##
+FEATURES             Location/Qualifiers
+     source          1..280
+                     /organism="Hepatitis E virus"
+                     /mol_type="genomic RNA"
+                     /strain="K149"
+                     /isolation_source="liver"
+                     /host="rabbit"
+                     /country="Germany:Rhineland-Palatinate, 55435
+                     Gau-Algesheim"
+                     /collection_date="5-2-2016"
+                     /PCR_primers="fwd_name: HEV.RdRp_F1, fwd_seq:
+                     tcgcgcatcacmttyttccaraa, rev_name: HEV.RdRp_R1, rev_seq:
+                     gccatgttccagacdgtrttcca"
+                     /PCR_primers="fwd_name: HEV.RdRp_F2, fwd_seq:
+                     gtgctctgtttggcccntggttymg, rev_name: HEV.RdRp_R2, rev_seq:
+                     ccaggctcaccrgartgyttcttcca"
+                     /subtype="Rab"
+                     /genotype="Rab"
+                     /note="RNA-directed RNA polymerase gene"
+     CDS             <1..>280
+                     /note="ORF 1"
+                     /codon_start=2
+                     /product="polyprotein"
+                     /translation="AIEKQILALLPPNIFYGDAYEDSVFSAAVTAAESSMVFENDFSE
+                     FDSTQNNFSLGLECVIMEECGMPQWLVRLYHLVRSAWILQAPKESLKGF"
+     mat_peptide     1..280
+                     /product="RNA-directed RNA polymerase"
+BASE COUNT       65 a     59 c     70 g     86 t
+ORIGIN
+        1 agccatcgag aagcagatat tggctttgct tccaccgaat attttctatg gtgatgccta
+       61 tgaggactct gtattttctg cggctgtcac cgctgcggag tcaagcatgg tatttgagaa
+      121 cgatttctcg gagtttgaca gcacccagaa taacttttca ctaggtcttg agtgtgtgat
+      181 tatggaggaa tgcggtatgc cccagtggct agtcagatta taccacctag ttcggtctgc
+      241 ctggattctt caggctccaa aggaatctct taaaggattt
+//
+LOCUS       K151_HEV                 280 bp    RNA     linear       04-NOV-2016
+DEFINITION  Hepatitis E virus strain K151 RNA-directed RNA polymerase gene,
+            partial cds.
+ACCESSION
+VERSION
+KEYWORDS    .
+SOURCE      Hepatitis E virus
+  ORGANISM  Hepatitis E virus
+            Unclassified.
+REFERENCE   1  (bases 1 to 280)
+  AUTHORS   Hammerschmidt,F., Daehnert,L., Eiden,M., Vina-Rodriguez,A.,
+            Gareis,M., Groschup,M.H. and Schwaiger,K.
+  TITLE     Hepatitis E Virus in wild rabbits and European brown hares in
+            Germany
+  JOURNAL   Unpublished
+REFERENCE   2  (bases 1 to 280)
+  AUTHORS   Hammerschmidt,F., Daehnert,L., Eiden,M., Vina-Rodriguez,A.,
+            Gareis,M., Groschup,M.H. and Schwaiger,K.
+  TITLE     Direct Submission
+  JOURNAL   Submitted (04-NOV-2016) Institute for Novel and Emerging Infectious
+            Diseases, Friedrich-Loeffler-Institut, Suedufer 10,
+            Greifswald-Insel Riems, MV 17493, Germany
+COMMENT     ##Assembly-Data-START##
+            Sequencing Technology :: Sanger dideoxy sequencing
+            ##Assembly-Data-END##
+FEATURES             Location/Qualifiers
+     source          1..280
+                     /organism="Hepatitis E virus"
+                     /mol_type="genomic RNA"
+                     /strain="K151"
+                     /isolation_source="liver"
+                     /host="rabbit"
+                     /country="Germany:Rhineland-Palatinate, 55435
+                     Gau-Algesheim"
+                     /collection_date="5-2-2016"
+                     /PCR_primers="fwd_name: HEV.RdRp_F1, fwd_seq:
+                     tcgcgcatcacmttyttccaraa, rev_name: HEV.RdRp_R1, rev_seq:
+                     gccatgttccagacdgtrttcca"
+                     /PCR_primers="fwd_name: HEV.RdRp_F2, fwd_seq:
+                     gtgctctgtttggcccntggttymg, rev_name: HEV.RdRp_R2, rev_seq:
+                     ccaggctcaccrgartgyttcttcca"
+                     /subtype="Rab"
+                     /genotype="Rab"
+                     /note="RNA-directed RNA polymerase gene"
+     CDS             <1..>280
+                     /note="ORF 1"
+                     /codon_start=2
+                     /product="polyprotein"
+                     /translation="AIEKQMLALLPPNIFYGDVYEDSVFSAAVTGAGSSMVFENDFSE
+                     FDSTQNNFSLGLECVIMEECGMPQWLVRLYHLVRSAWILQAPKESLKGF"
+     mat_peptide     1..280
+                     /product="RNA-directed RNA polymerase"
+BASE COUNT       57 a     61 c     80 g     82 t
+ORIGIN
+        1 ggccattgag aagcagatgt tagccctgct cccgcccaac atcttctatg gtgacgtcta
+       61 tgaggactcc gtgttctctg cggctgtcac tggtgcgggg tcaagtatgg tatttgagaa
+      121 tgacttctcg gagtttgata gcactcagaa taatttctcg ctgggccttg agtgtgtgat
+      181 tatggaagag tgtggtatgc cccagtggct agtcagatta taccacctgg tccggtctgc
+      241 ctggatttta caggctccaa aggagtctct gaaagggttt
+//
+LOCUS       K153_HEV                 280 bp    RNA     linear       04-NOV-2016
+DEFINITION  Hepatitis E virus strain K153 RNA-directed RNA polymerase gene,
+            partial cds.
+ACCESSION
+VERSION
+KEYWORDS    .
+SOURCE      Hepatitis E virus
+  ORGANISM  Hepatitis E virus
+            Unclassified.
+REFERENCE   1  (bases 1 to 280)
+  AUTHORS   Hammerschmidt,F., Daehnert,L., Eiden,M., Vina-Rodriguez,A.,
+            Gareis,M., Groschup,M.H. and Schwaiger,K.
+  TITLE     Hepatitis E Virus in wild rabbits and European brown hares in
+            Germany
+  JOURNAL   Unpublished
+REFERENCE   2  (bases 1 to 280)
+  AUTHORS   Hammerschmidt,F., Daehnert,L., Eiden,M., Vina-Rodriguez,A.,
+            Gareis,M., Groschup,M.H. and Schwaiger,K.
+  TITLE     Direct Submission
+  JOURNAL   Submitted (04-NOV-2016) Institute for Novel and Emerging Infectious
+            Diseases, Friedrich-Loeffler-Institut, Suedufer 10,
+            Greifswald-Insel Riems, MV 17493, Germany
+COMMENT     ##Assembly-Data-START##
+            Sequencing Technology :: Sanger dideoxy sequencing
+            ##Assembly-Data-END##
+FEATURES             Location/Qualifiers
+     source          1..280
+                     /organism="Hepatitis E virus"
+                     /mol_type="genomic RNA"
+                     /strain="K153"
+                     /isolation_source="liver"
+                     /host="rabbit"
+                     /country="Germany:Rhineland-Palatinate, 55435
+                     Gau-Algesheim"
+                     /collection_date="5-2-2016"
+                     /PCR_primers="fwd_name: HEV.RdRp_F1, fwd_seq:
+                     tcgcgcatcacmttyttccaraa, rev_name: HEV.RdRp_R1, rev_seq:
+                     gccatgttccagacdgtrttcca"
+                     /PCR_primers="fwd_name: HEV.RdRp_F2, fwd_seq:
+                     gtgctctgtttggcccntggttymg, rev_name: HEV.RdRp_R2, rev_seq:
+                     ccaggctcaccrgartgyttcttcca"
+                     /subtype="Rab"
+                     /genotype="Rab"
+                     /note="RNA-directed RNA polymerase gene"
+     CDS             <1..>280
+                     /note="ORF 1"
+                     /codon_start=2
+                     /product="polyprotein"
+                     /translation="AIEKQLLALLPPNIFYGDAYEDSVFSAAVTGAGSSMVFENDFSE
+                     FDSTQNNFSLGLECVIMEECGMPQWLVRLYHLVRSAWILQAPKESLKGF"
+     mat_peptide     1..280
+                     /product="RNA-directed RNA polymerase"
+BASE COUNT       59 a     61 c     75 g     85 t
+ORIGIN
+        1 ggctattgag aagcaactgc tagccctgct cccccccaac atcttttatg gtgacgccta
+       61 tgaggactct gtgttctctg cggctgtcac tggtgcgggg tcaagtatgg tattcgagaa
+      121 tgacttttcg gagtttgata gcactcagaa taacttctcg cttggtcttg agtgtgtgat
+      181 tatggaggaa tgtggtatgc cccagtggct agttagatta taccacttgg tccggtctgc
+      241 ctggattttg caagccccaa aggaatctct aaaagggttt
+//
+LOCUS       K154_HEV                 280 bp    RNA     linear       04-NOV-2016
+DEFINITION  Hepatitis E virus strain K154 RNA-directed RNA polymerase gene,
+            partial cds.
+ACCESSION
+VERSION
+KEYWORDS    .
+SOURCE      Hepatitis E virus
+  ORGANISM  Hepatitis E virus
+            Unclassified.
+REFERENCE   1  (bases 1 to 280)
+  AUTHORS   Hammerschmidt,F., Daehnert,L., Eiden,M., Vina-Rodriguez,A.,
+            Gareis,M., Groschup,M.H. and Schwaiger,K.
+  TITLE     Hepatitis E Virus in wild rabbits and European brown hares in
+            Germany
+  JOURNAL   Unpublished
+REFERENCE   2  (bases 1 to 280)
+  AUTHORS   Hammerschmidt,F., Daehnert,L., Eiden,M., Vina-Rodriguez,A.,
+            Gareis,M., Groschup,M.H. and Schwaiger,K.
+  TITLE     Direct Submission
+  JOURNAL   Submitted (04-NOV-2016) Institute for Novel and Emerging Infectious
+            Diseases, Friedrich-Loeffler-Institut, Suedufer 10,
+            Greifswald-Insel Riems, MV 17493, Germany
+COMMENT     ##Assembly-Data-START##
+            Sequencing Technology :: Sanger dideoxy sequencing
+            ##Assembly-Data-END##
+FEATURES             Location/Qualifiers
+     source          1..280
+                     /organism="Hepatitis E virus"
+                     /mol_type="genomic RNA"
+                     /strain="K154"
+                     /isolation_source="liver"
+                     /host="rabbit"
+                     /country="Germany:Rhineland-Palatinate, 55435
+                     Gau-Algesheim"
+                     /collection_date="5-2-2016"
+                     /PCR_primers="fwd_name: HEV.RdRp_F1, fwd_seq:
+                     tcgcgcatcacmttyttccaraa, rev_name: HEV.RdRp_R1, rev_seq:
+                     gccatgttccagacdgtrttcca"
+                     /PCR_primers="fwd_name: HEV.RdRp_F2, fwd_seq:
+                     gtgctctgtttggcccntggttymg, rev_name: HEV.RdRp_R2, rev_seq:
+                     ccaggctcaccrgartgyttcttcca"
+                     /subtype="Rab"
+                     /genotype="Rab"
+                     /note="RNA-directed RNA polymerase gene"
+     CDS             <1..>280
+                     /note="ORF 1"
+                     /codon_start=2
+                     /product="polyprotein"
+                     /translation="AIEKQLLALLPPNIFYGDAYEDSVFSAAVTGAGSSMVFENDFSE
+                     FDSTQNNFSLGLECVIMEECGMPQWLVRLYHLVRSAWILQAPKESLKGF"
+     mat_peptide     1..280
+                     /product="RNA-directed RNA polymerase"
+BASE COUNT       58 a     61 c     76 g     85 t
+ORIGIN
+        1 ggctattgag aagcagctgc tagccctgct cccccccaac atcttttatg gtgacgccta
+       61 tgaggactct gtgttctctg cggctgtcac tggtgcgggg tcaagtatgg tatttgagaa
+      121 tgacttttcg gagtttgata gcactcagaa taacttctcg cttggccttg agtgtgtgat
+      181 tatggaggaa tgtggtatgc cccagtggct agttagatta taccacttgg tccggtctgc
+      241 ctggattttg caagccccaa aggaatctct aaaagggttt
+//
+LOCUS       K155_HEV_RdRp            280 bp    RNA     linear       04-NOV-2016
+DEFINITION  Hepatitis E virus strain K155 RNA-directed RNA polymerase gene,
+            partial cds.
+ACCESSION
+VERSION
+KEYWORDS    .
+SOURCE      Hepatitis E virus
+  ORGANISM  Hepatitis E virus
+            Unclassified.
+REFERENCE   1  (bases 1 to 280)
+  AUTHORS   Hammerschmidt,F., Daehnert,L., Eiden,M., Vina-Rodriguez,A.,
+            Gareis,M., Groschup,M.H. and Schwaiger,K.
+  TITLE     Hepatitis E Virus in wild rabbits and European brown hares in
+            Germany
+  JOURNAL   Unpublished
+REFERENCE   2  (bases 1 to 280)
+  AUTHORS   Hammerschmidt,F., Daehnert,L., Eiden,M., Vina-Rodriguez,A.,
+            Gareis,M., Groschup,M.H. and Schwaiger,K.
+  TITLE     Direct Submission
+  JOURNAL   Submitted (04-NOV-2016) Institute for Novel and Emerging Infectious
+            Diseases, Friedrich-Loeffler-Institut, Suedufer 10,
+            Greifswald-Insel Riems, MV 17493, Germany
+COMMENT     ##Assembly-Data-START##
+            Sequencing Technology :: Sanger dideoxy sequencing
+            ##Assembly-Data-END##
+FEATURES             Location/Qualifiers
+     source          1..280
+                     /organism="Hepatitis E virus"
+                     /mol_type="genomic RNA"
+                     /strain="K155"
+                     /isolation_source="liver"
+                     /host="rabbit"
+                     /country="Germany:Rhineland-Palatinate, 55435
+                     Gau-Algesheim"
+                     /collection_date="5-2-2016"
+                     /PCR_primers="fwd_name: HEV.RdRp_F1, fwd_seq:
+                     tcgcgcatcacmttyttccaraa, rev_name: HEV.RdRp_R1, rev_seq:
+                     gccatgttccagacdgtrttcca"
+                     /PCR_primers="fwd_name: HEV.RdRp_F2, fwd_seq:
+                     gtgctctgtttggcccntggttymg, rev_name: HEV.RdRp_R2, rev_seq:
+                     ccaggctcaccrgartgyttcttcca"
+                     /subtype="Rab"
+                     /genotype="Rab"
+                     /note="RNA-directed RNA polymerase gene"
+     CDS             <1..>280
+                     /note="ORF 1"
+                     /codon_start=2
+                     /product="polyprotein"
+                     /translation="AIEKQLLALLPPNIFYGDAYEDSVFSAAVTGAGSSMVFENDFSE
+                     FDSTQNNFSLGLECVIMEECGMPQWLVRLYHLVRSAWILQAPKESLKGF"
+     mat_peptide     1..280
+                     /product="RNA-directed RNA polymerase"
+BASE COUNT       58 a     61 c     76 g     85 t
+ORIGIN
+        1 ggctattgag aagcagctgc tagccctgct cccccccaac atcttttatg gtgacgccta
+       61 tgaggactct gtgttctctg cggctgtcac tggtgcgggg tcaagtatgg tatttgagaa
+      121 tgacttttcg gagtttgata gcactcagaa taacttctcg cttggccttg agtgtgtgat
+      181 tatggaggaa tgtggtatgc cccagtggct agttagatta taccacttgg tccggtctgc
+      241 ctggattttg caagccccaa aggaatctct aaaagggttt
+//
+LOCUS       K158_HEV_RdRp            280 bp    RNA     linear       04-NOV-2016
+DEFINITION  Hepatitis E virus strain K158 RNA-directed RNA polymerase gene,
+            partial cds.
+ACCESSION
+VERSION
+KEYWORDS    .
+SOURCE      Hepatitis E virus
+  ORGANISM  Hepatitis E virus
+            Unclassified.
+REFERENCE   1  (bases 1 to 280)
+  AUTHORS   Hammerschmidt,F., Daehnert,L., Eiden,M., Vina-Rodriguez,A.,
+            Gareis,M., Groschup,M.H. and Schwaiger,K.
+  TITLE     Hepatitis E Virus in wild rabbits and European brown hares in
+            Germany
+  JOURNAL   Unpublished
+REFERENCE   2  (bases 1 to 280)
+  AUTHORS   Hammerschmidt,F., Daehnert,L., Eiden,M., Vina-Rodriguez,A.,
+            Gareis,M., Groschup,M.H. and Schwaiger,K.
+  TITLE     Direct Submission
+  JOURNAL   Submitted (04-NOV-2016) Institute for Novel and Emerging Infectious
+            Diseases, Friedrich-Loeffler-Institut, Suedufer 10,
+            Greifswald-Insel Riems, MV 17493, Germany
+COMMENT     ##Assembly-Data-START##
+            Sequencing Technology :: Sanger dideoxy sequencing
+            ##Assembly-Data-END##
+FEATURES             Location/Qualifiers
+     source          1..280
+                     /organism="Hepatitis E virus"
+                     /mol_type="genomic RNA"
+                     /strain="K158"
+                     /isolation_source="liver"
+                     /host="rabbit"
+                     /country="Germany:Rhineland-Palatinate, 55435
+                     Gau-Algesheim"
+                     /collection_date="5-2-2016"
+                     /PCR_primers="fwd_name: HEV.RdRp_F1, fwd_seq:
+                     tcgcgcatcacmttyttccaraa, rev_name: HEV.RdRp_R1, rev_seq:
+                     gccatgttccagacdgtrttcca"
+                     /PCR_primers="fwd_name: HEV.RdRp_F2, fwd_seq:
+                     gtgctctgtttggcccntggttymg, rev_name: HEV.RdRp_R2, rev_seq:
+                     ccaggctcaccrgartgyttcttcca"
+                     /subtype="Rab"
+                     /genotype="Rab"
+                     /note="RNA-directed RNA polymerase gene"
+     CDS             <1..>280
+                     /note="ORF 1"
+                     /codon_start=2
+                     /product="polyprotein"
+                     /translation="AIEKQMLALLPPNIFYGDAYEDSVFSAAVTGAGSSMVFENDFSE
+                     FDSTQNNFSLGLECAIMEECGMPQWLVRLYHLVRSAWILQAPKESLKGF"
+     mat_peptide     1..280
+                     /product="RNA-directed RNA polymerase"
+BASE COUNT       63 a     64 c     74 g     79 t
+ORIGIN
+        1 ggccattgag aagcagatgc tagccctgct cccgcccaac attttctatg gtgatgccta
+       61 tgaggactcc gtgttctctg cggctgtcac tggtgcaggg tcaagtatgg tatttgagaa
+      121 tgacttctcg gaatttgaca gtactcagaa taacttctcg ctgggccttg agtgtgcaat
+      181 tatggaagaa tgtggtatgc cccagtggct agttagatta taccacctgg tccggtccgc
+      241 ctggattttg caagccccaa aggaatctct aaaagggttt
+//
+LOCUS       K164_HEV_RdRp            280 bp    RNA     linear       04-NOV-2016
+DEFINITION  Hepatitis E virus strain K164 RNA-directed RNA polymerase gene,
+            partial cds.
+ACCESSION
+VERSION
+KEYWORDS    .
+SOURCE      Hepatitis E virus
+  ORGANISM  Hepatitis E virus
+            Unclassified.
+REFERENCE   1  (bases 1 to 280)
+  AUTHORS   Hammerschmidt,F., Daehnert,L., Eiden,M., Vina-Rodriguez,A.,
+            Gareis,M., Groschup,M.H. and Schwaiger,K.
+  TITLE     Hepatitis E Virus in wild rabbits and European brown hares in
+            Germany
+  JOURNAL   Unpublished
+REFERENCE   2  (bases 1 to 280)
+  AUTHORS   Hammerschmidt,F., Daehnert,L., Eiden,M., Vina-Rodriguez,A.,
+            Gareis,M., Groschup,M.H. and Schwaiger,K.
+  TITLE     Direct Submission
+  JOURNAL   Submitted (04-NOV-2016) Institute for Novel and Emerging Infectious
+            Diseases, Friedrich-Loeffler-Institut, Suedufer 10,
+            Greifswald-Insel Riems, MV 17493, Germany
+COMMENT     ##Assembly-Data-START##
+            Sequencing Technology :: Sanger dideoxy sequencing
+            ##Assembly-Data-END##
+FEATURES             Location/Qualifiers
+     source          1..280
+                     /organism="Hepatitis E virus"
+                     /mol_type="genomic RNA"
+                     /strain="K164"
+                     /isolation_source="liver"
+                     /host="rabbit"
+                     /country="Germany:Rhineland-Palatinate, 55435
+                     Gau-Algesheim"
+                     /collection_date="5-2-2016"
+                     /PCR_primers="fwd_name: HEV.RdRp_F1, fwd_seq:
+                     tcgcgcatcacmttyttccaraa, rev_name: HEV.RdRp_R1, rev_seq:
+                     gccatgttccagacdgtrttcca"
+                     /PCR_primers="fwd_name: HEV.RdRp_F2, fwd_seq:
+                     gtgctctgtttggcccntggttymg, rev_name: HEV.RdRp_R2, rev_seq:
+                     ccaggctcaccrgartgyttcttcca"
+                     /subtype="Rab"
+                     /genotype="Rab"
+                     /note="RNA-directed RNA polymerase gene"
+     CDS             <1..>280
+                     /note="ORF 1"
+                     /codon_start=2
+                     /product="polyprotein"
+                     /translation="AIEKQMLALLPPNIFYGDAYEDSVFSAAVTGAGSSMVFENDFSE
+                     FDSTQNNFSLGLECAIMEECGMPQWLVRLYHLVRSAWILQAPKESLKGF"
+     mat_peptide     1..280
+                     /product="RNA-directed RNA polymerase"
+BASE COUNT       64 a     65 c     73 g     78 t
+ORIGIN
+        1 ggccattgag aagcaaatgc tagccctgct cccgcccaac attttctatg gtgatgccta
+       61 tgaggactcc gtgttctctg cggctgtcac tggtgcaggg tcaagtatgg tatttgagaa
+      121 tgacttctcg gaatttgaca gtactcagaa caacttctcg ctgggccttg agtgtgcaat
+      181 tatggaagaa tgtggtatgc cccagtggct agttagatta taccacctgg tccggtccgc
+      241 ctggattttg caagccccaa aggaatctct aaaagggttt
+//
+LOCUS       K159_HEV_RdRp            280 bp    RNA     linear       04-NOV-2016
+DEFINITION  Hepatitis E virus strain K159 RNA-directed RNA polymerase gene,
+            partial cds.
+ACCESSION
+VERSION
+KEYWORDS    .
+SOURCE      Hepatitis E virus
+  ORGANISM  Hepatitis E virus
+            Unclassified.
+REFERENCE   1  (bases 1 to 280)
+  AUTHORS   Hammerschmidt,F., Daehnert,L., Eiden,M., Vina-Rodriguez,A.,
+            Gareis,M., Groschup,M.H. and Schwaiger,K.
+  TITLE     Hepatitis E Virus in wild rabbits and European brown hares in
+            Germany
+  JOURNAL   Unpublished
+REFERENCE   2  (bases 1 to 280)
+  AUTHORS   Hammerschmidt,F., Daehnert,L., Eiden,M., Vina-Rodriguez,A.,
+            Gareis,M., Groschup,M.H. and Schwaiger,K.
+  TITLE     Direct Submission
+  JOURNAL   Submitted (04-NOV-2016) Institute for Novel and Emerging Infectious
+            Diseases, Friedrich-Loeffler-Institut, Suedufer 10,
+            Greifswald-Insel Riems, MV 17493, Germany
+COMMENT     ##Assembly-Data-START##
+            Sequencing Technology :: Sanger dideoxy sequencing
+            ##Assembly-Data-END##
+FEATURES             Location/Qualifiers
+     source          1..280
+                     /organism="Hepatitis E virus"
+                     /mol_type="genomic RNA"
+                     /strain="K159"
+                     /isolation_source="liver"
+                     /host="rabbit"
+                     /country="Germany:Rhineland-Palatinate, 55435
+                     Gau-Algesheim"
+                     /collection_date="5-2-2016"
+                     /PCR_primers="fwd_name: HEV.RdRp_F1, fwd_seq:
+                     tcgcgcatcacmttyttccaraa, rev_name: HEV.RdRp_R1, rev_seq:
+                     gccatgttccagacdgtrttcca"
+                     /PCR_primers="fwd_name: HEV.RdRp_F2, fwd_seq:
+                     gtgctctgtttggcccntggttymg, rev_name: HEV.RdRp_R2, rev_seq:
+                     ccaggctcaccrgartgyttcttcca"
+                     /subtype="Rab"
+                     /genotype="Rab"
+                     /note="RNA-directed RNA polymerase gene"
+     CDS             <1..>280
+                     /note="ORF 1"
+                     /codon_start=2
+                     /product="polyprotein"
+                     /translation="AIEKQLLALLPPNIFYGDAYEDSVFSAAVTGAGSSMVFENDFSE
+                     FDSTQNNFSLGLECVIMEECGMPQWLVRLYHLVRSAWILQAPKESLKGF"
+     mat_peptide     1..280
+                     /product="RNA-directed RNA polymerase"
+BASE COUNT       59 a     59 c     76 g     86 t
+ORIGIN
+        1 ggctattgag aagcagttgc tagccctgct ccccccaaac atcttttatg gtgacgccta
+       61 tgaagactct gtgttctctg cggctgtcac tggtgcgggg tcaagtatgg tatttgagaa
+      121 tgatttttcg gagtttgata gcactcagaa taacttctcg cttggcctcg agtgtgtgat
+      181 tatggaggaa tgtggtatgc cccagtggct agttagatta taccatctgg tccggtctgc
+      241 ctggattttg caggccccaa aggaatctct aaaagggttt
+//

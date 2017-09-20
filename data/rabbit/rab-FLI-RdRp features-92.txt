@@ -1,0 +1,3 @@
+Seq_ID	organism	molecule	moltype	specific-host	fwd-pcr-primer-name	fwd-pcr-primer-seq	rev-pcr-primer-name	rev-pcr-primer-seq	note	strain	isolate	country	collection-date	isolation-source	genotype	subtype	name
+FJ705359	Hepatitis E virus	RNA	genomic RNA	wild boar						wbGER27		Germany:Brandenburg	2006		3	3c	Hepatitis E virus strain wbGER27 , partial cds
+K092_HEV_RdRp	Hepatitis E virus	RNA	genomic RNA	rabbit	HEV.RdRp_F1, HEV.RdRp_F2	TCGCGCATCACMTTYTTCCARAA, GTGCTCTGTTTGGCCCNTGGTTYMG	HEV.RdRp_R1, HEV.RdRp_R2	GCCATGTTCCAGACDGTRTTCCA, CCAGGCTCACCRGARTGYTTCTTCCA	RNA-directed RNA polymerase gene	K092		Germany:Rhineland-Palatinate, 55435 Gau-Algesheim	27-11-2015	liver	Rab	Rab	Hepatitis E virus strain K092 RNA-directed RNA polymerase gene, partial cds

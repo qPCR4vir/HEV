@@ -1,0 +1,351 @@
+Seq-submit ::= {
+  sub {
+    contact {
+      contact {
+        name
+          name {
+            last "Vina-Rodriguez" ,
+            first "Ariel" ,
+            initials "A." } ,
+        affil
+          std {
+            affil "Friedrich-Loeffler-Institut" ,
+            div "Institute for Novel and Emerging Infectious Diseases" ,
+            city "Greifswald-Insel Riems" ,
+            sub "MV" ,
+            country "Germany" ,
+            street "Suedufer 10" ,
+            email "arielvina@yahoo.es" ,
+            postal-code "17493" } } } ,
+    cit {
+      authors {
+        names
+          std {
+            {
+              name
+                name {
+                  last "Hammerschmidt" ,
+                  first "Felicitas" ,
+                  initials "F." } } ,
+            {
+              name
+                name {
+                  last "Daehnert" ,
+                  first "Lisa" ,
+                  initials "L." } } ,
+            {
+              name
+                name {
+                  last "Eiden" ,
+                  first "Martin" ,
+                  initials "M." } } ,
+            {
+              name
+                name {
+                  last "Vina-Rodriguez" ,
+                  first "Ariel" ,
+                  initials "A." } } ,
+            {
+              name
+                name {
+                  last "Gareis" ,
+                  first "Manfred" ,
+                  initials "M." } } ,
+            {
+              name
+                name {
+                  last "Groschup" ,
+                  first "Martin" ,
+                  initials "M.H." } } ,
+            {
+              name
+                name {
+                  last "Schwaiger" ,
+                  first "Karin" ,
+                  initials "K." } } } ,
+        affil
+          std {
+            affil "Friedrich-Loeffler-Institut" ,
+            div "Institute for Novel and Emerging Infectious Diseases" ,
+            city "Greifswald-Insel Riems" ,
+            sub "MV" ,
+            country "Germany" ,
+            street "Suedufer 10" ,
+            postal-code "17493" } } ,
+      date
+        std {
+          year 2016 ,
+          month 11 ,
+          day 8 } } ,
+    subtype new ,
+    tool "Sequin 15.10 - MS WINDOWS VISTA" } ,
+  data
+    entrys {
+      set {
+        class phy-set ,
+        descr {
+          pub {
+            pub {
+              gen {
+                cit "Unpublished" ,
+                authors {
+                  names
+                    std {
+                      {
+                        name
+                          name {
+                            last "Hammerschmidt" ,
+                            first "Felicitas" ,
+                            initials "F." } } ,
+                      {
+                        name
+                          name {
+                            last "Daehnert" ,
+                            first "Lisa" ,
+                            initials "L." } } ,
+                      {
+                        name
+                          name {
+                            last "Eiden" ,
+                            first "Martin" ,
+                            initials "M." } } ,
+                      {
+                        name
+                          name {
+                            last "Vina-Rodriguez" ,
+                            first "Ariel" ,
+                            initials "A." } } ,
+                      {
+                        name
+                          name {
+                            last "Gareis" ,
+                            first "Manfred" ,
+                            initials "M." } } ,
+                      {
+                        name
+                          name {
+                            last "Groschup" ,
+                            first "Martin" ,
+                            initials "M.H." } } ,
+                      {
+                        name
+                          name {
+                            last "Schwaiger" ,
+                            first "Karin" ,
+                            initials "K." } } } ,
+                  affil
+                    std {
+                      affil "Friedrich-Loeffler-Institut" ,
+                      div "Institute for Novel and Emerging Infectious
+ Diseases" ,
+                      city "Greifswald-Insel Riems" ,
+                      sub "MV" ,
+                      country "Germany" ,
+                      street "Suedufer 10" ,
+                      postal-code "17493" } } ,
+                title "Hepatitis E Virus in wild rabbits and European brown
+ hares in Germany" } } } ,
+          user {
+            type
+              str "NcbiCleanup" ,
+            data {
+              {
+                label
+                  str "method" ,
+                data
+                  str "SequinCleanup" } ,
+              {
+                label
+                  str "version" ,
+                data
+                  int 8 } ,
+              {
+                label
+                  str "month" ,
+                data
+                  int 11 } ,
+              {
+                label
+                  str "day" ,
+                data
+                  int 8 } ,
+              {
+                label
+                  str "year" ,
+                data
+                  int 2016 } } } ,
+          create-date
+            std {
+              year 2016 ,
+              month 11 ,
+              day 8 } } ,
+        seq-set {
+          set {
+            class nuc-prot ,
+            descr {
+              source {
+                genome genomic ,
+                org {
+                  taxname "Hepatitis E virus" ,
+                  orgname {
+                    mod {
+                      {
+                        subtype strain ,
+                        subname "K092" } ,
+                      {
+                        subtype subtype ,
+                        subname "Rab" } ,
+                      {
+                        subtype nat-host ,
+                        subname "rabbit" } } ,
+                    gcode 1 } } ,
+                subtype {
+                  {
+                    subtype genotype ,
+                    name "Rab" } ,
+                  {
+                    subtype country ,
+                    name "Germany:Rhineland-Palatinate, 55435 Gau-Algesheim" } ,
+                  {
+                    subtype isolation-source ,
+                    name "liver" } ,
+                  {
+                    subtype collection-date ,
+                    name "27-11-2015" } ,
+                  {
+                    subtype other ,
+                    name "RNA-directed RNA polymerase gene" } } ,
+                pcr-primers {
+                  {
+                    forward {
+                      {
+                        seq "tcgcgcatcacmttyttccaraa" ,
+                        name "HEV.RdRp_F1" } } ,
+                    reverse {
+                      {
+                        seq "gccatgttccagacdgtrttcca" ,
+                        name "HEV.RdRp_R1" } } } ,
+                  {
+                    forward {
+                      {
+                        seq "gtgctctgtttggcccntggttymg" ,
+                        name "HEV.RdRp_F2" } } ,
+                    reverse {
+                      {
+                        seq "ccaggctcaccrgartgyttcttcca" ,
+                        name "HEV.RdRp_R2" } } } } } } ,
+            seq-set {
+              seq {
+                id {
+                  local
+                    str "K092_HEV_RdRp" } ,
+                descr {
+                  title "Hepatitis E virus strain K092 RNA-directed RNA
+ polymerase gene, partial cds" ,
+                  molinfo {
+                    biomol genomic } ,
+                  user {
+                    type
+                      str "StructuredComment" ,
+                    data {
+                      {
+                        label
+                          str "StructuredCommentPrefix" ,
+                        data
+                          str "##Assembly-Data-START##" } ,
+                      {
+                        label
+                          str "StructuredCommentSuffix" ,
+                        data
+                          str "##Assembly-Data-END##" } ,
+                      {
+                        label
+                          str "Sequencing Technology" ,
+                        data
+                          str "Sanger dideoxy sequencing" } } } } ,
+                inst {
+                  repr raw ,
+                  mol rna ,
+                  length 280 ,
+                  seq-data
+                    ncbi2na 'A53E209239C95E7565413FDCEB8E5CE2877BBDDE49ED1EB92
+AD0B3ACFE20E1F7683F8491D20C1F767A97E2EE43CE8A0EEB3954BA72F23CC517AD6B597A3FE42
+5502837780ABF'H } ,
+                annot {
+                  {
+                    data
+                      ftable {
+                        {
+                          data
+                            cdregion {
+                              frame two ,
+                              code {
+                                id 1 } } ,
+                          partial TRUE ,
+                          comment "ORF 1" ,
+                          product
+                            whole
+                              local
+                                str "K092_HEV_RdRp_1" ,
+                          location
+                            int {
+                              from 0 ,
+                              to 279 ,
+                              strand plus ,
+                              id
+                                local
+                                  str "K092_HEV_RdRp" ,
+                              fuzz-from
+                                lim lt ,
+                              fuzz-to
+                                lim gt } } } } } } ,
+              seq {
+                id {
+                  local
+                    str "K092_HEV_RdRp_1" } ,
+                descr {
+                  molinfo {
+                    biomol peptide ,
+                    tech concept-trans ,
+                    completeness no-ends } } ,
+                inst {
+                  repr raw ,
+                  mol aa ,
+                  length 93 ,
+                  seq-data
+                    ncbieaa "AIEKQMLALLPPNIFYGDAYEDSVFSAAVTGAGSSMVFENDFSEFDSTQ
+NNFSLGLECAIMEECGMPQWLVRLYHLVRSAWILQAPKESLKGF" } ,
+                annot {
+                  {
+                    data
+                      ftable {
+                        {
+                          data
+                            prot {
+                              name {
+                                "polyprotein" } } ,
+                          partial TRUE ,
+                          location
+                            int {
+                              from 0 ,
+                              to 92 ,
+                              id
+                                local
+                                  str "K092_HEV_RdRp_1" ,
+                              fuzz-from
+                                lim lt ,
+                              fuzz-to
+                                lim gt } } ,
+                        {
+                          data
+                            prot {
+                              name {
+                                "RNA-directed RNA polymerase" } ,
+                              processed mature } ,
+                          location
+                            int {
+                              from 0 ,
+                              to 92 ,
+                              id
+                                local
+                                  str "K092_HEV_RdRp_1" } } } } } } } } } } } }
