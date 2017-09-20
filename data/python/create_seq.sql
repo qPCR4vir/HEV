@@ -80,7 +80,9 @@
                      (
                        Id_align  INTEGER PRIMARY KEY AUTOINCREMENT,
                        Name      TEXT,
-                       Id_file   INTEGER          REFERENCES seq_file
+                       Id_file   INTEGER          REFERENCES seq_file,
+                       Al_len    integer ,
+                       Ref       text        -- if not NULL, the segested reference sequence
                      );
           
     -- aligned_seq
