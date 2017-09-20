@@ -2,6 +2,9 @@
 ~$*.*
 .idea/*
 .idea/
+temp/*
+data/temp/*
+data\temp\*
 
 #ignore thumbnails created by windows
 Thumbs.db
