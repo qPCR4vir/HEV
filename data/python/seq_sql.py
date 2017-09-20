@@ -1,13 +1,11 @@
-import tkinter
 from tkinter import filedialog
 import sqlite3
-sdb = None
+from Bio import SeqIO
+
+# import tkinter
 
 
-
-def create() -> sqlite3.Connection:
-    global sdb
-    sdb = sqlite3.connect("../seq.db")
+def execute_create(sdb):
     c = sdb.cursor()
 
     # seq_file
@@ -251,10 +249,20 @@ def create() -> sqlite3.Connection:
     # to_doc
 
 
+def read_create(sdb):
+    with open("create_seq.sql") as dbcreate:
+        sql_create = dbcreate.read()
+    c = sdb.cursor()
+    c.executescript(sql_create)
+
+
+def create() -> sqlite3.Connection:
+    sdb = sqlite3.connect("../seq.db")
+    read_create(sdb)           # or:  execute_create(sdb)
     return sdb
 
 
-def parse_full_Align( file_name=None):
+def parse_full_fasta_Align( sdb, file_name=None):
     """Will parse an alignment and insert it into the tables:
         files: the file path ,
         align:
