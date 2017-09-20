@@ -279,44 +279,52 @@ def parse_full_fasta_Align( sdb, file_name=None):
 
     # self.refSeq.clear()
     print(file_name)
-    c = sdb.cursor()
-    c.execute("INSERT INTO seq_file (path) VALUES (?)", (file_name,))
-    Id_file = c.lastrowid()
-    c.execute("INSERT INTO align (Id_file, Name) VALUES (?, ?)", (Id_file, file_name))
-    Id_align = c.lastrowid()
 
-    with open(file_name) as align_file:
-        seq_name = ''
-        seq_num = 0
-        for line in align_file.readlines():
-            # print(line)
-            if line[0] == '>':
-                # todo: end previous seq !?
-                seq_num += 1
-                seq_name = line[1:].rstrip()
-            else:
-                ln = len(line)
-                #self.refLen = max(ln, self.refLen)
+    c = sdb.cursor()
+    c.execute("INSERT INTO seq_file (path, format) VALUES (?, 'fasta')", (file_name,))
+
+    Id_file = c.lastrowid
+    c.execute("INSERT INTO align (Id_file, Name) VALUES (?, ?)", (Id_file, file_name))
+
+    Id_align = c.lastrowid
+
+    for seq_record in SeqIO.parse(file_name, "fasta"):
+        # print(seq_record.id, len(seq_record) )
+
+        ln = len(seq_record.seq)
                 seq_beg = 0
-                seq_end = ln - 2
+        seq_end = ln - 1
                 while seq_beg < ln:
-                    if line[seq_beg] == '-':
+            if seq_record.seq[seq_beg] == '-':
                         seq_beg += 1
                     else:
                         break  # todo :  check it is a valid base not line end???
                 while seq_end > seq_beg:
-                    if line[seq_end] == '-':
+            if seq_record.seq[seq_end] == '-':
                         seq_end -= 1
                     else:
                         break  # todo :  check it is a valid base not line end???
-                seq = line[seq_beg: seq_end+1]
+
+        seq = seq_record.seq[seq_beg: seq_end + 1]
+
+        exp_seq = ''.join([base for base in seq if base != '-'])
+
+        c.execute("INSERT INTO seq (Name, Seq, Len) VALUES (?,?,?)",
+                  (str(seq_record.id), exp_seq, len(exp_seq)))
+        Id_part = c.lastrowid
+
+        c.execute("INSERT INTO aligned_seq (Id_align, Id_part,Seq, beg, end) VALUES (?,?,?,?,?)",
+                                           (Id_align, Id_part, str(seq), seq_beg, seq_end ))
+    """
+
                 print('Seq: ' + seq_name + str((seq_beg, seq_end)) + ": " + seq)
 
                 # CREATE TABLE seq(                            Id INT, Name TEXT, Seq TEXT, Len INT)")
                 c.execute("INSERT INTO seq (Id, Name, Seq, Len) VALUES (?,?,?,?)", (seq_num, seq_name, seq, len(seq)))
-
+    """
                 # self.refSeq[seq_name] = Seq_pos(seq_beg, seq_end)
     sdb.commit()
+    return Id_align
     #self.ID_original.clear()
     #self.ID_original.add('\n'.join(self.refSeq.keys()))
 
