@@ -292,18 +292,18 @@ def parse_full_fasta_Align( sdb, file_name=None):
         # print(seq_record.id, len(seq_record) )
 
         ln = len(seq_record.seq)
-                seq_beg = 0
+        seq_beg = 0
         seq_end = ln - 1
-                while seq_beg < ln:
+        while seq_beg < ln:
             if seq_record.seq[seq_beg] == '-':
-                        seq_beg += 1
-                    else:
-                        break  # todo :  check it is a valid base not line end???
-                while seq_end > seq_beg:
+                seq_beg += 1
+            else:
+                break  # todo :  check it is a valid base not line end???
+        while seq_end > seq_beg:
             if seq_record.seq[seq_end] == '-':
-                        seq_end -= 1
-                    else:
-                        break  # todo :  check it is a valid base not line end???
+                seq_end -= 1
+            else:
+                break  # todo :  check it is a valid base not line end???
 
         seq = seq_record.seq[seq_beg: seq_end + 1]
 
@@ -329,7 +329,23 @@ def parse_full_fasta_Align( sdb, file_name=None):
     #self.ID_original.add('\n'.join(self.refSeq.keys()))
 
 
-if __name__=='__main__':
-    create()
-    parseAlign()
+def ref_pos(sdb, ID_align, seq_name):
+    c = sdb.cursor()
+    c.execute("SELECT aligned_seq.Seq, beg, end FROM aligned_seq, Seq ON Id_part=Id_seq WHERE Id_align=? AND Name=?", (ID_align, seq_name))
+    Seq, beg, end = c.fetchone()
+    sr=0
+    ref = [sr]*beg
+    for b in Seq:
+        if (b != '-'): sr+=1
+        ref.append(sr)
+    return ref
+
+
+
+if __name__ == '__main__':
+    sdb = create()
+    ID_align = parse_full_fasta_Align(sdb)
+    ref_name = "M73218"
+    ref = ref_pos(sdb, ID_align, ref_name)
+    # print(ref)
     sdb.close()
