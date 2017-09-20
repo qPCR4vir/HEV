@@ -12,12 +12,12 @@ Entrez.email = "ArielVina.Rodriguez@fli.bund.de"
 # http://biopython.org/DIST/docs/api/Bio.SeqRecord.SeqRecord-class.html
 # http://biopython.org/DIST/docs/api/Bio.SeqFeature.SeqFeature-class.html
 # http://biopython.org/DIST/docs/tutorial/Tutorial.html#htoc16
-#from Bio import SeqIO
+# from Bio import SeqIO
 from Bio import GenBank
 # http://tkinter.unpythonic.net/wiki/tkFileDialog
 from tkinter import filedialog
 from tkinter import scrolledtext
-align_file_name = None # '../alignment/HEV.fas'  # or None to ask first
+align_file_name = None  # '../alignment/HEV.fas'  # or None to ask first
 
 
 class Seq_pos:
@@ -391,6 +391,7 @@ class App(tkinter.Frame):
             seq.sort(key=lambda s : s[1])
             for s in seq:
                 fasta.write(s[0])
+
 
 class ID_list(tkinter.Frame):
     def __init__(self, root, load_titel, width=15, height=40):
