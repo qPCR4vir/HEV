@@ -1,0 +1,18 @@
+
+
+- Comparacion de las versiones de alineamientos HEV.
+
+    HEV.fas - base, en la publicacion AVR-2015, Viruses?
+	
+	HEVplus.fas - anade miles de secuencias, pseudo alineadas con el nuevo GUI.py para anadir seq al alineamiento. 
+	              Anade algunos --- al final de las secuencias.
+				  
+	HEVplus_rab2015.fas - anade solo cientos de sequencias a HEV.fas pseudo? alineadas. 
+						- anade muuuchos --- al final de las secuencias.
+						- anade 27 secuencias de rabbit FLI - 2015
+						- erroneament eliminada insercion en EF570133(linea 493)
+						TGGCTTT------------------TGCTC       new
+						TGGCTTTTGCTCTGTGCATGGGTTAGAGTGTATAA  old
+						
+	HEVplus_rab2015_wbSax.fas	- tiene 1979 sequencias
+								- anade 				
