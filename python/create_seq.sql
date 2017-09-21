@@ -109,7 +109,7 @@
              Id_isolate  INTEGER PRIMARY KEY AUTOINCREMENT,
              Name        TEXT,
              Id_strain   INTEGER NOT NULL REFERENCES strain,
-             idate        TEXT,
+             idate       TEXT,                -- ?
              year        INT,
              month       INT,
              day         INT,
@@ -203,19 +203,21 @@
              Id_taxa     INTEGER PRIMARY KEY AUTOINCREMENT,
              Name        TEXT    ,
              vulgar      TEXT ,
-             parent      INTEGER NOT NULL,
-             Id_category INTEGER NOT NULL,
-             NCBI        TEXT
+             parent      INTEGER,     -- NOT NULL,
+             Id_rank     INTEGER NOT NULL REFERENCES taxa_rank, -- referees taxa_rank.Id_rank
+             NCBI_TaxID  TEXT
            );
 
     -- taxa_category
-    CREATE TABLE IF NOT EXISTS  taxa_category
+    CREATE TABLE IF NOT EXISTS  taxa_rank
            (
-             Id_category   INTEGER PRIMARY KEY AUTOINCREMENT,
+             Id_rank       INTEGER PRIMARY KEY AUTOINCREMENT,
              Name          TEXT    UNIQUE,
-             parent        INTEGER NOT NULL,
-             NCBI          TEXT
+             parent        INTEGER ,            -- referees taxa_rank.Id_rank
+             NCBI          TEXT                 -- superkingdom, ...
            );
+
+
 
     -- to_excel  VIEW
     CREATE VIEW  files AS SELECT  path, format FROM seq_file;

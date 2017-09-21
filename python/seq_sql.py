@@ -4,6 +4,12 @@ from Bio import SeqIO
 
 # import tkinter
 
+def create() -> sqlite3.Connection:
+    sdb = sqlite3.connect("../data/temp/seq.db")
+    read_create(sdb)
+    return sdb
+
+
 def read_create(sdb):
     with open("create_seq.sql") as dbcreate:
         sql_create = dbcreate.read()
@@ -11,10 +17,182 @@ def read_create(sdb):
     c.executescript(sql_create)
 
 
-def create() -> sqlite3.Connection:
-    sdb = sqlite3.connect("../data/temp/seq.db")
-    read_create(sdb)
-    return sdb
+def add_def_taxa(sdb):
+    c = sdb.cursor()
+    #  ----------------------------------------------------------------------------------------------------
+    c.execute("INSERT INTO taxa_rank (Name,           NCBI          )"     
+              "               VALUES ('superkingdom', 'superkingdom')"   )
+    parent_rank = c.lastrowid
+
+    c.execute("INSERT INTO taxa      (Name     ,  vulgar  , Id_rank   , NCBI_TaxID   )"
+              "               VALUES ('Viridae', 'viruses', ?         , '10239'      )",
+                                     (                     parent_rank,              ) )
+    parent_taxa = c.lastrowid
+
+    #  ----------------------------------------------------------------------------------------------------
+
+    c.execute("INSERT INTO taxa_rank (Name     , parent    , NCBI          )"
+              "               VALUES ('no rank', ?         ,'no rank'      )"   ,
+                                     (          parent_rank,               )    )
+    parent_rank = c.lastrowid
+
+    c.execute("INSERT INTO taxa      (Name           ,  vulgar  , Id_rank    , parent,  NCBI_TaxID   )"
+              "               VALUES ('ssRNA viruses', 'viruses', ?          , ?     , '439488'      )",
+                                     (                            parent_rank, parent_taxa           ) )
+    parent_taxa = c.lastrowid
+    #  ----------------------------------------------------------------------------------------------------
+
+    c.execute("INSERT INTO taxa_rank (Name     , parent    , NCBI          )"
+              "               VALUES (NULL, ?         ,'no rank'      )"   ,
+                                     (          parent_rank,               )    )
+    parent_rank = c.lastrowid
+
+    c.execute("INSERT INTO taxa      (Name                                         ,  vulgar  , Id_rank, parent , NCBI_TaxID )"
+              "               VALUES ('ssRNA positive-strand viruses, no DNA stage', 'viruses', ?       , ?     , '35278'    )",
+                                     (                                                       parent_rank, parent_taxa            ) )
+    parent_taxa = c.lastrowid
+    #  ----------------------------------------------------------------------------------------------------
+
+    c.execute("INSERT INTO taxa_rank (Name     , parent    , NCBI          )"
+              "               VALUES ('family', ?          ,'family'       )"   ,
+                                     (          parent_rank,               )    )
+    parent_rank = c.lastrowid
+
+    c.execute("INSERT INTO taxa      (Name         ,  vulgar , Id_rank    , parent,  NCBI_TaxID   )"
+              "               VALUES ('Hepeviridae', 'HEV'   , ?          , ?     , '291484'      )",
+                                     (                        parent_rank , parent_taxa           ) )
+    parent_taxa = c.lastrowid
+    #  ----------------------------------------------------------------------------------------------------
+
+    c.execute("INSERT INTO taxa_rank (Name     , parent    , NCBI          )"
+              "               VALUES ('genus'  , ?         ,'genus'        )"   ,
+                                     (          parent_rank,               )    )
+    parent_rank = c.lastrowid
+
+    c.execute("INSERT INTO taxa      (Name            ,  vulgar          , Id_rank     , parent ,  NCBI_TaxID   )"
+              "               VALUES ('Orthohepevirus', 'Orthohepevirus' , ?           , ?      , '1678141'     )",
+                                     (                                     parent_rank , parent_taxa            ) )
+    parent_taxa = c.lastrowid
+    #  ----------------------------------------------------------------------------------------------------
+
+    c.execute("INSERT INTO taxa_rank (Name     , parent    , NCBI          )"
+              "               VALUES ('species', ?         ,'species'      )"   ,
+                                     (          parent_rank,               )    )
+    parent_rank_s = c.lastrowid
+
+    c.execute("INSERT INTO taxa      (Name              ,  vulgar            , Id_rank     , parent ,  NCBI_TaxID   )"
+              "               VALUES ('Orthohepevirus A', 'Orthohepevirus A' , ?           , ?      , '1678143'     )",
+                                     (                                         parent_rank_s , parent_taxa            ) )
+    parent_taxa_A = c.lastrowid
+    #  ----------------------------------------------------------------------------------------------------
+
+    c.execute("INSERT INTO taxa_rank (Name      , parent    , NCBI          )"
+              "               VALUES ('genotype', ?         ,'no rank'      )"   ,
+                                     (          parent_rank_s,               )    )
+    parent_rank_g = c.lastrowid
+
+    c.execute("INSERT INTO taxa      (Name ,  vulgar  , Id_rank     , parent ,  NCBI_TaxID   )"
+              "               VALUES ('1'  , 'HEV-g1' , ?           , ?      , '185579'     )",
+                                     (                 parent_rank_g , parent_taxa_A         ) )
+    parent_taxa = c.lastrowid
+    #  ----------------------------------------------------------------------------------------------------
+
+    c.execute("INSERT INTO taxa      (Name ,  vulgar  , Id_rank     , parent ,  NCBI_TaxID   )"
+              "               VALUES ('2'  , 'HEV-g2' , ?           , ?      , ''     )",
+                                     (                 parent_rank_g , parent_taxa_A         ) )
+    parent_taxa = c.lastrowid
+    #  ----------------------------------------------------------------------------------------------------
+
+    c.execute("INSERT INTO taxa      (Name ,  vulgar  , Id_rank     , parent ,  NCBI_TaxID   )"
+              "               VALUES ('3'  , 'HEV-g3' , ?           , ?      , '509628'     )",
+                                     (                 parent_rank_g , parent_taxa_A         ) )
+    taxa_g3 = c.lastrowid
+    #  ----------------------------------------------------------------------------------------------------
+
+    c.execute("INSERT INTO taxa      (Name ,  vulgar  , Id_rank     , parent ,  NCBI_TaxID   )"
+              "               VALUES ('4'  , 'HEV-g4' , ?           , ?      , '185580'     )",
+                                     (                 parent_rank_g , parent_taxa_A         ) )
+    parent_taxa = c.lastrowid
+    #  ----------------------------------------------------------------------------------------------------
+
+    c.execute("INSERT INTO taxa      (Name ,  vulgar  , Id_rank     , parent ,  NCBI_TaxID   )"
+              "               VALUES ('5'  , 'HEV-g5' , ?           , ?      , ''     )",
+                                     (                 parent_rank_g , parent_taxa_A         ) )
+    parent_taxa = c.lastrowid
+    #  ----------------------------------------------------------------------------------------------------
+
+    c.execute("INSERT INTO taxa_rank (Name      , parent    , NCBI          )"
+              "               VALUES ('subtype' , ?         ,'no rank'      )"   ,
+                                     (          parent_rank_g,               )    )
+    rank_subtype = c.lastrowid
+
+
+    c.execute("INSERT INTO taxa      (Name ,  vulgar    , Id_rank      , parent ,  NCBI_TaxID   )"
+              "               VALUES ('3a'  , 'HEV-g3a' , ?            , ?      , ''     )",
+                                     (                    rank_subtype , taxa_g3         ) )
+    taxa_g3a = c.lastrowid
+    #  ----------------------------------------------------------------------------------------------------
+
+    c.execute("INSERT INTO taxa      (Name ,  vulgar    , Id_rank      , parent ,  NCBI_TaxID   )"
+              "               VALUES ('3b'  , 'HEV-g3b' , ?            , ?      , ''     )",
+                                     (                    rank_subtype , taxa_g3         ) )
+    taxa_g3b = c.lastrowid
+    #  ----------------------------------------------------------------------------------------------------
+
+    c.execute("INSERT INTO taxa      (Name ,  vulgar    , Id_rank      , parent ,  NCBI_TaxID   )"
+              "               VALUES ('3c'  , 'HEV-g3c' , ?            , ?      , ''     )",
+                                     (                    rank_subtype , taxa_g3         ) )
+    taxa_g3c = c.lastrowid
+    #  ----------------------------------------------------------------------------------------------------
+
+    c.execute("INSERT INTO taxa      (Name ,  vulgar    , Id_rank      , parent ,  NCBI_TaxID   )"
+              "               VALUES ('3d'  , 'HEV-g3d' , ?            , ?      , ''     )",
+                                     (                    rank_subtype , taxa_g3         ) )
+    taxa_g3d = c.lastrowid
+    #  ----------------------------------------------------------------------------------------------------
+
+    c.execute("INSERT INTO taxa      (Name ,  vulgar    , Id_rank      , parent ,  NCBI_TaxID   )"
+              "               VALUES ('3e'  , 'HEV-g3e' , ?            , ?      , ''     )",
+                                     (                    rank_subtype , taxa_g3         ) )
+    taxa_g3e = c.lastrowid
+    #  ----------------------------------------------------------------------------------------------------
+
+    c.execute("INSERT INTO taxa      (Name ,  vulgar    , Id_rank      , parent ,  NCBI_TaxID   )"
+              "               VALUES ('3f'  , 'HEV-g3f' , ?            , ?      , ''     )",
+                                     (                    rank_subtype , taxa_g3         ) )
+    taxa_g3f = c.lastrowid
+    #  ----------------------------------------------------------------------------------------------------
+
+    c.execute("INSERT INTO taxa      (Name ,  vulgar    , Id_rank      , parent ,  NCBI_TaxID   )"
+              "               VALUES ('3g'  , 'HEV-g3g' , ?            , ?      , ''     )",
+                                     (                    rank_subtype , taxa_g3         ) )
+    taxa_g3g = c.lastrowid
+    #  ----------------------------------------------------------------------------------------------------
+
+    c.execute("INSERT INTO taxa      (Name ,  vulgar    , Id_rank      , parent ,  NCBI_TaxID   )"
+              "               VALUES ('3h'  , 'HEV-g3h' , ?            , ?      , ''     )",
+                                     (                    rank_subtype , taxa_g3         ) )
+    taxa_g3h = c.lastrowid
+    #  ----------------------------------------------------------------------------------------------------
+
+    c.execute("INSERT INTO taxa      (Name ,  vulgar    , Id_rank      , parent ,  NCBI_TaxID   )"
+              "               VALUES ('3i'  , 'HEV-g3i' , ?            , ?      , ''     )",
+                                     (                    rank_subtype , taxa_g3         ) )
+    taxa_g3i = c.lastrowid
+    #  ----------------------------------------------------------------------------------------------------
+
+    c.execute("INSERT INTO taxa      (Name ,  vulgar    , Id_rank      , parent ,  NCBI_TaxID   )"
+              "               VALUES ('3j'  , 'HEV-g3j' , ?            , ?      , ''     )",
+                                     (                    rank_subtype , taxa_g3         ) )
+    taxa_g3j = c.lastrowid
+    #  ----------------------------------------------------------------------------------------------------
+
+    c.execute("INSERT INTO taxa      (Name ,  vulgar    , Id_rank      , parent ,  NCBI_TaxID   )"
+              "               VALUES ('3k'  , 'HEV-g3k' , ?            , ?      , ''     )",
+                                     (                    rank_subtype , taxa_g3         ) )
+    taxa_g3k = c.lastrowid
+    #  ----------------------------------------------------------------------------------------------------
+
 
 
 def parse_full_fasta_Align( sdb, ref_seq = None, file_name=None):
@@ -108,6 +286,7 @@ def ref_pos(sdb, ID_align, seq_name=None):
 
 if __name__ == '__main__':
     sdb = create()
+    add_def_taxa(sdb)
     ref_name = "M73218"
     ID_align, ref = parse_full_fasta_Align(sdb, ref_name)
     print(ref)
