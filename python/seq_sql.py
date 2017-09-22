@@ -226,8 +226,14 @@ def abnormal_row(c, row):
         Id_taxa = None
     else:
         c.execute("SELECT Id_taxa FROM taxa WHERE taxa.Name=?", (subtype, ))
-        Id_taxa = None if c.rowcount <1 else c.fetchone()[0]
-    print('Taxa_ID:', Id_taxa)
+        Id_taxa =  c.fetchone()
+        print('Taxa_ID:', Id_taxa)
+        print('Count:',  c.rowcount)
+        Id_taxa = Id_taxa[0]
+        print('Taxa_ID:', Id_taxa)
+
+    # c.execute("SELECT Id_taxa FROM taxa WHERE taxa.Name=?", (subtype, ))
+    # Id_taxa = None if c.rowcount <1 else c.fetchone()[0]
 
     c.execute("SELECT Id_seq FROM seq WHERE seq.Name=? ", ( MEGA_name,))
     Id_seq = None if c.rowcount <1 else c.fetchone()[0]
@@ -243,7 +249,7 @@ def abnormal_row(c, row):
         c.execute("INSERT INTO pending_seq (Id_taxa, Name,      Id_seq) VALUES (?,?,?)",
                                            (Id_taxa, MEGA_name, Id_seq))
 
-    print("Taxa:{}, Alseq:{}, Seq:{}".format( Id_taxa, Id_algseq, Id_seq))
+    print("-------> Taxa:{}, Alseq:{}, Seq:{}".format( Id_taxa, Id_algseq, Id_seq))
     if Id_algseq : return False
     return True
 
