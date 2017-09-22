@@ -229,12 +229,13 @@ def abnormal_row(c, row):
     Id_taxa = Id_taxa[0] if Id_taxa else Id_taxa
 
     c.execute("SELECT Id_seq FROM seq WHERE seq.Name=? ", ( MEGA_name,))
-    Id_seq = None if c.rowcount <1 else c.fetchone()[0]
-    if c.rowcount == 0:
-        Id_algseq=None
-    else:
-        c.execute("SELECT Id_algseq FROM aligned_seq WHERE Id_part=?", (Id_seq,))
-        Id_algseq=None if c.rowcount <1 else (c.fetchone())[0]
+    Id_seq = c.fetchone()
+    Id_seq = Id_seq[0] if Id_seq else Id_seq
+
+    c.execute("SELECT Id_algseq FROM aligned_seq WHERE Id_part=?", (Id_seq,))
+    Id_algseq= c.fetchone()
+    Id_algseq = Id_algseq[0] if Id_algseq else Id_algseq
+
     if Id_algseq is not None:
         c.execute("INSERT INTO classified_seq (Id_taxa, Id_algseq) VALUES (?,?) "
                                             , (Id_taxa, Id_algseq)                 )
@@ -242,7 +243,7 @@ def abnormal_row(c, row):
         c.execute("INSERT INTO pending_seq (Id_taxa, Name,      Id_seq) VALUES (?,?,?)",
                                            (Id_taxa, MEGA_name, Id_seq))
 
-    print("-------> Taxa:{}, Alseq:{}, Seq:{}".format( Id_taxa, Id_algseq, Id_seq))
+    print("-------> Taxa:{0}, Alseq:{1}, Seq:{2}".format( Id_taxa, Id_algseq, Id_seq))
     if Id_algseq : return False
     return True
 
