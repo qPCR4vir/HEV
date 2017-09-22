@@ -222,18 +222,11 @@ def abnormal_row(c, row):
     Str_name  = row[5].value          # 'F ' 5 - Str.name
 
     if not subtype: subtype   = row[2].value          # 'C' - genotype
-    if not subtype:
-        Id_taxa = None
-    else:
-        c.execute("SELECT Id_taxa FROM taxa WHERE taxa.Name=?", (subtype, ))
-        Id_taxa =  c.fetchone()
-        print('Taxa_ID:', Id_taxa)
-        print('Count:',  c.rowcount)
-        Id_taxa = Id_taxa[0] if Id_taxa else Id_taxa
-        print('Taxa_ID:', Id_taxa)
+    #if not subtype:         Id_taxa = None     else:
 
-    # c.execute("SELECT Id_taxa FROM taxa WHERE taxa.Name=?", (subtype, ))
-    # Id_taxa = None if c.rowcount <1 else c.fetchone()[0]
+    c.execute("SELECT Id_taxa FROM taxa WHERE taxa.Name=?", (subtype, ))
+    Id_taxa = c.fetchone()
+    Id_taxa = Id_taxa[0] if Id_taxa else Id_taxa
 
     c.execute("SELECT Id_seq FROM seq WHERE seq.Name=? ", ( MEGA_name,))
     Id_seq = None if c.rowcount <1 else c.fetchone()[0]
