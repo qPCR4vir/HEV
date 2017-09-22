@@ -84,7 +84,17 @@ def add_def_taxa(db):
     g6  = ct.taxa('6', 'HEV-g6'  , rg, tA )
     g7  = ct.taxa('7', 'HEV-g7'  , rg, tA )
 
-    rsubt = ct.rank('subtype', rg)
+    rmc  = ct.rank('major clade', rg)
+    maI  = ct.taxa('I'  , 'HEV-g3-I'     , rmc, g3)
+    maII = ct.taxa('II' , 'HEV-g3-II'    , rmc, g3)
+    Rab  = ct.taxa('Rab', 'HEV-g3-rabbit', rmc, g3)
+
+    rgr  = ct.rank('group', rmc)
+    grchi  = ct.taxa('3chi'  , 'HEV-g3chi'     , rgr, maI)
+    grjab  = ct.taxa('3jab'  , 'HEV-g3jab'     , rgr, maI)
+    grfeg  = ct.taxa('3feg'  , 'HEV-g3feg'     , rgr, maII)
+
+    rsubt = ct.rank('subtype', rgr)
     
     g1a   = ct.taxa('1a', 'HEV-g1a'  , rsubt, g1)
     g1b   = ct.taxa('1b', 'HEV-g1b'  , rsubt, g1)
@@ -98,17 +108,19 @@ def add_def_taxa(db):
     g1j   = ct.taxa('1j', 'HEV-g1j'  , rsubt, g1)
     g1k   = ct.taxa('1k', 'HEV-g1k'  , rsubt, g1)
 
-    g3a   = ct.taxa('3a', 'HEV-g3a'  , rsubt, g3)
-    g3b   = ct.taxa('3b', 'HEV-g3b'  , rsubt, g3)
-    g3c   = ct.taxa('3c', 'HEV-g3c'  , rsubt, g3)
+    g3a   = ct.taxa('3a', 'HEV-g3a'  , rsubt, grjab)
+    g3b   = ct.taxa('3b', 'HEV-g3b'  , rsubt, grjab)
+    g3c   = ct.taxa('3c', 'HEV-g3c'  , rsubt, grchi)
     g3d   = ct.taxa('3d', 'HEV-g3d'  , rsubt, g3)
-    g3e   = ct.taxa('3e', 'HEV-g3e'  , rsubt, g3)
-    g3f   = ct.taxa('3f', 'HEV-g3f'  , rsubt, g3)
-    g3g   = ct.taxa('3g', 'HEV-g3g'  , rsubt, g3)
-    g3h   = ct.taxa('3h', 'HEV-g3h'  , rsubt, g3)
-    g3i   = ct.taxa('3i', 'HEV-g3i'  , rsubt, g3)
-    g3j   = ct.taxa('3j', 'HEV-g3j'  , rsubt, g3)
+    g3e   = ct.taxa('3e', 'HEV-g3e'  , rsubt, grfeg)
+    g3ef  = ct.taxa('3ef', 'HEV-g3ef', rsubt, grfeg)
+    g3f   = ct.taxa('3f', 'HEV-g3f'  , rsubt, grfeg)
+    g3g   = ct.taxa('3g', 'HEV-g3g'  , rsubt, grfeg)
+    g3h   = ct.taxa('3h', 'HEV-g3h'  , rsubt, grchi)
+    g3i   = ct.taxa('3i', 'HEV-g3i'  , rsubt, grchi)
+    g3j   = ct.taxa('3j', 'HEV-g3j'  , rsubt, grjab)
     g3k   = ct.taxa('3k', 'HEV-g3k'  , rsubt, g3)
+    g3l   = ct.taxa('3l', 'HEV-g3l'  , rsubt, g3)
 
     g4a   = ct.taxa('4a', 'HEV-g4a'  , rsubt, g4)
     g4b   = ct.taxa('4b', 'HEV-g4b'  , rsubt, g4)
@@ -214,15 +226,10 @@ def ref_pos(sdb, ID_align, seq_name=None):
 
 
 def abnormal_row(c, row):
-    print ("Abnormal row !!!!!!!!!!!!!!!")
-    error = False
-
     MEGA_name = row[0].value          # 'A' - MEGA name
     subtype   = row[3].value          # 'D' - subtype
     Str_name  = row[5].value          # 'F ' 5 - Str.name
-
     if not subtype: subtype   = row[2].value          # 'C' - genotype
-    #if not subtype:         Id_taxa = None     else:
 
     c.execute("SELECT Id_taxa FROM taxa WHERE taxa.Name=?", (subtype, ))
     Id_taxa = c.fetchone()
@@ -243,17 +250,20 @@ def abnormal_row(c, row):
         c.execute("INSERT INTO pending_seq (Id_taxa, Name,      Id_seq) VALUES (?,?,?)",
                                            (Id_taxa, MEGA_name, Id_seq))
 
-    print("-------> Taxa:{0}, Alseq:{1}, Seq:{2}".format( Id_taxa, Id_algseq, Id_seq))
+    print("Abnormal row !!!!! ", MEGA_name, subtype, Str_name,"-------> Taxa:{0}, Alseq:{1}, Seq:{2}".format( Id_taxa, Id_algseq, Id_seq))
     if Id_algseq : return False
     return True
 
 def parse_row(db,row):
     MEGA_name = row[0].value          # 'A' - MEGA name. How to avoid hard coding this?
+    genotype  = row[2].value          # c - genotype
     subtype   = row[3].value          # 'D' - subtype
+    grupe     = row[4].value          # 'e' - grupe
     Str_name  = row[5].value          # 'F ' 5 - Str.name
 
-    if not subtype: subtype   = row[2].value          # 'C' - genotype
-    print(MEGA_name, subtype, Str_name)            # debug only
+    if not subtype: subtype   = grupe
+    if not subtype: subtype   = genotype
+
     c = sdb.cursor()
     #if not subtype: return abnormal_row(c, row)
 
