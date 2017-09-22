@@ -42,7 +42,17 @@
              Id_seq           INTEGER   REFERENCES seq
            );
 
-    -- GB_seq  -- a simplified view of a GenBank entry sequence: todo use BioSQL
+     CREATE TABLE IF NOT EXISTS  classified_seq
+           (
+             Id_clas_seq      INTEGER PRIMARY KEY AUTOINCREMENT,
+             Id_taxa          INTEGER   REFERENCES taxa,          -- the finest available classification
+             description      TEXT,                               --  ??
+             Id_isolate       INTEGER   REFERENCES isolate    ,
+             Id_algseq        INTEGER   REFERENCES aligned_seq
+           );
+
+
+   -- GB_seq  -- a simplified view of a GenBank entry sequence: todo use BioSQL
     CREATE TABLE IF NOT EXISTS  GB_seq
            (
              Id_GB_seq        INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -92,8 +102,8 @@
                        Id_align   INTEGER NOT NULL REFERENCES align,
                        Id_part    INTEGER NOT NULL REFERENCES seq, -- partial_seq,
                        Seq        TEXT,            -- The aligned sequence, with internal gaps
-                       beg        INT,             -- relative to the alignment
-                       end        INT
+                       pbeg        INT,             -- relative to the alignment
+                       pend        INT
                      );
           
     -- strain
@@ -221,12 +231,20 @@
 
     -- to_excel  VIEW
     CREATE VIEW  files AS SELECT  path, format FROM seq_file;
-    CREATE VIEW  to_excel AS SELECT  Name, Len FROM seq;
-    CREATE VIEW  all_frag AS SELECT  Name, Len, beg, end FROM seq, aligned_seq ON seq.Id_seq = aligned_seq.Id_part ;
+    CREATE VIEW  to_excel AS SELECT  Seq.Name, Len FROM seq;
+    CREATE VIEW  all_frag AS SELECT  Name, Len, pbeg, pend FROM seq, aligned_seq
+             ON seq.Id_seq = aligned_seq.Id_part ;
             /*
              Seq_Name  ,
              parent ,
              NCBI
-           )*/
+           )
+CREATE VIEW  exl AS SELECT  seq.Name,
+                            taxa.Name,
+                            seq.Len,
+							aligned_seq.pbeg ,
+							aligned_seq.pend
+					FROM classified_seq, seq, aligned_seq,  taxa
+					USING (Id_algseq, aligned_seq.Id_part , Id_taxa)		       ;
 
-
+*/
