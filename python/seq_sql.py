@@ -1,7 +1,7 @@
 from tkinter import filedialog
 import sqlite3
 from Bio import SeqIO
-
+import openpyxl
 # import tkinter
 
 
@@ -209,8 +209,64 @@ def ref_pos(sdb, ID_align, seq_name=None):
     return ref
 
 
+def parse_row(db,row):
+    MEGA_name = row[0].value          # 'A' - MEGA name
+    subtype   = row[3].value          # 'D' - subtype
+    Str_name  = row[5].value          # 'F ' 5 - Str.name
+
+    if not subtype: subtype   = row[2].value          # 'C' - genotype
+    print(MEGA_name, subtype, Str_name)
+
+    if not subtype: return
+
+    c = sdb.cursor()
+    c.execute("SELECT Id_taxa, Id_algseq FROM taxa, aligned_seq, seq"
+              "            ON aligned_seq.Id_part=seq.Id_seq                   "
+              "			  WHERE taxa.Name=?  AND seq.Name=? ",
+              (subtype, MEGA_name))
+    if not c.rowcount  : return
+
+    Id_taxa, Id_algseq= c.fetchone()
+    print (Id_taxa, Id_algseq)
+
+    c.execute("INSERT INTO classified_seq (Id_taxa, Id_algseq)                 "
+              "           SELECT Id_taxa, Id_algseq FROM taxa, aligned_seq, seq" 
+              "            ON aligned_seq.Id_part=seq.Id_seq                   "
+			  "			  WHERE taxa.Name=?  AND seq.Name=? ",
+              (                  subtype,         MEGA_name))
+
+    db.commit()
+
+
+def parse_HEV_xlsm(db, file_name=None):
+    if not file_name:
+        file_name = filedialog.askopenfilename(filetypes=(("Excel files", "*.xlsm"), ("All files", "*.*")),
+                                               defaultextension='fas',
+                                               title='Select HEV isolate subtyping deta')
+        if not file_name:
+            return
+
+    # self.refSeq.clear()
+    print(file_name)
+
+    wb=openpyxl.load_workbook(file_name)
+    print(wb.sheetnames)
+
+    ws=wb.worksheets[2]   #('Seq-class')
+    first = not None
+
+    for r in ws.iter_rows() :
+        if first:
+            first = None
+        else:
+            parse_row(db,r)
+
 
 if __name__ == '__main__':
+
+    # exit(0)
+
+    # """
     sdb = create()
     add_def_taxa(sdb)
     ref_name = "M73218"
@@ -219,4 +275,9 @@ if __name__ == '__main__':
 
     ref = ref_pos(sdb, ID_align, ref_name) # , ref_name
     print(ref)
+
+    parse_HEV_xlsm(sdb, 'C:/Prog/HEV/data/temp/HEVsubtypingMEGAut - Kopie.xlsm')
+
     sdb.close()
+
+    # """
