@@ -229,7 +229,7 @@ def abnormal_row(c, row):
         Id_taxa =  c.fetchone()
         print('Taxa_ID:', Id_taxa)
         print('Count:',  c.rowcount)
-        Id_taxa = Id_taxa[0]
+        Id_taxa = Id_taxa[0] if Id_taxa else Id_taxa
         print('Taxa_ID:', Id_taxa)
 
     # c.execute("SELECT Id_taxa FROM taxa WHERE taxa.Name=?", (subtype, ))
