@@ -184,11 +184,11 @@ def parse_full_fasta_Align(db, ref_seq = None, file_name=None):
                                    (str(seq_record.id), exp_seq, len(exp_seq))    )
         Id_part = c.lastrowid
 
-        c.execute("INSERT INTO aligned_seq (Id_align, Id_part, Seq,      beg,     end  ) "
+        c.execute("INSERT INTO aligned_seq (Id_align, Id_part, Seq,      pbeg,     pend  ) "
                   "                 VALUES (?,        ?,       ?,        ?,       ?    )",
                                            (Id_align, Id_part, str(seq), seq_beg, seq_end )    )
 
-    sdb.commit()
+    db.commit()
     return Id_align , ref
 
 
@@ -198,7 +198,7 @@ def ref_pos(sdb, ID_align, seq_name=None):
     Al_len, Ref = c.fetchone()
     if not seq_name: seq_name = Ref
 
-    c.execute("SELECT aligned_seq.Seq, beg, end FROM aligned_seq, Seq ON Id_part=Id_seq WHERE Id_align=? AND Name=?", (ID_align, seq_name))
+    c.execute("SELECT aligned_seq.Seq, pbeg, pend FROM aligned_seq, Seq ON Id_part=Id_seq WHERE Id_align=? AND Name=?", (ID_align, seq_name))
     Seq, beg, end = c.fetchone()
     sr=0
     ref = [sr]*beg
@@ -270,7 +270,7 @@ if __name__ == '__main__':
     sdb = create()
     add_def_taxa(sdb)
     ref_name = "M73218"
-    ID_align, ref = parse_full_fasta_Align(sdb, ref_name)
+    ID_align, ref = parse_full_fasta_Align(sdb, ref_name,'C:/Prog/HEV/alignment/HEV.fas')
     print(ref)
 
     ref = ref_pos(sdb, ID_align, ref_name) # , ref_name
