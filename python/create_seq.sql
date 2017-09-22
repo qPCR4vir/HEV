@@ -48,9 +48,20 @@
              Id_taxa          INTEGER   REFERENCES taxa,          -- the finest available classification
              description      TEXT,                               --  ??
              Id_isolate       INTEGER   REFERENCES isolate    ,
-             Id_algseq        INTEGER   REFERENCES aligned_seq
+             Id_algseq        INTEGER  NOT NULL REFERENCES aligned_seq
            );
 
+
+    CREATE TABLE IF NOT EXISTS  pending_seq
+           (
+             Id_pend_seq      INTEGER   PRIMARY KEY AUTOINCREMENT,
+             Name             TEXT,
+             Id_taxa          INTEGER   REFERENCES taxa,          -- the finest available classification
+             description      TEXT,                               --  ??
+             Id_isolate       INTEGER   REFERENCES isolate    ,
+             Id_algseq        INTEGER   REFERENCES aligned_seq,
+             Id_seq           INTEGER   REFERENCES seq
+           );
 
    -- GB_seq  -- a simplified view of a GenBank entry sequence: todo use BioSQL
     CREATE TABLE IF NOT EXISTS  GB_seq
@@ -68,8 +79,8 @@
                      (
                        Id_frag INTEGER PRIMARY KEY NOT NULL,
                        Id_seq  INTEGER REFERENCES seq,
-                       beg     INT,             -- relative to the original
-                       end     INT
+                       pbeg     INT,             -- relative to the original
+                       pend     INT
                      );
           
     -- partial_seq  -- Usually a temporal information construct containing the seq text,

@@ -1,6 +1,10 @@
+print('tk...')
 from tkinter import filedialog
+print('sqlite3...')
 import sqlite3
+print('Bio...')
 from Bio import SeqIO
+print('openpyxl...')
 import openpyxl
 # import tkinter
 
@@ -209,34 +213,58 @@ def ref_pos(sdb, ID_align, seq_name=None):
     return ref
 
 
-def parse_row(db,row):
+def abnormal_row(c, row):
+    print ("Abnormal row !!!!!!!!!!!!!!!")
+    error = False
+
     MEGA_name = row[0].value          # 'A' - MEGA name
     subtype   = row[3].value          # 'D' - subtype
     Str_name  = row[5].value          # 'F ' 5 - Str.name
 
     if not subtype: subtype   = row[2].value          # 'C' - genotype
-    print(MEGA_name, subtype, Str_name)
+    if not subtype:
+        Id_taxa = None
+    else:
+        c.execute("SELECT Id_taxa FROM taxa WHERE taxa.Name=?", (subtype, ))
+        Id_taxa = None if c.rowcount <1 else c.fetchone()[0]
+    print('Taxa_ID:', Id_taxa)
 
-    if not subtype: return
+    c.execute("SELECT Id_seq FROM seq WHERE seq.Name=? ", ( MEGA_name,))
+    Id_seq = None if c.rowcount <1 else c.fetchone()[0]
+    if c.rowcount == 0:
+        Id_algseq=None
+    else:
+        c.execute("SELECT Id_algseq FROM aligned_seq WHERE Id_part=?", (Id_seq,))
+        Id_algseq=None if c.rowcount <1 else (c.fetchone())[0]
+    if Id_algseq is not None:
+        c.execute("INSERT INTO classified_seq (Id_taxa, Id_algseq) VALUES (?,?) "
+                                            , (Id_taxa, Id_algseq)                 )
+    else:
+        c.execute("INSERT INTO pending_seq (Id_taxa, Name,      Id_seq) VALUES (?,?,?)",
+                                           (Id_taxa, MEGA_name, Id_seq))
 
+    print("Taxa:{}, Alseq:{}, Seq:{}".format( Id_taxa, Id_algseq, Id_seq))
+    if Id_algseq : return False
+    return True
+
+def parse_row(db,row):
+    MEGA_name = row[0].value          # 'A' - MEGA name. How to avoid hard coding this?
+    subtype   = row[3].value          # 'D' - subtype
+    Str_name  = row[5].value          # 'F ' 5 - Str.name
+
+    if not subtype: subtype   = row[2].value          # 'C' - genotype
+    print(MEGA_name, subtype, Str_name)            # debug only
     c = sdb.cursor()
-    c.execute("SELECT Id_taxa, Id_algseq FROM taxa, aligned_seq, seq"
-              "            ON aligned_seq.Id_part=seq.Id_seq                   "
-              "			  WHERE taxa.Name=?  AND seq.Name=? ",
-              (subtype, MEGA_name))
-    if not c.rowcount  : return
-
-    Id_taxa, Id_algseq= c.fetchone()
-    print (Id_taxa, Id_algseq)
+    #if not subtype: return abnormal_row(c, row)
 
     c.execute("INSERT INTO classified_seq (Id_taxa, Id_algseq)                 "
               "           SELECT Id_taxa, Id_algseq FROM taxa, aligned_seq, seq" 
               "            ON aligned_seq.Id_part=seq.Id_seq                   "
 			  "			  WHERE taxa.Name=?  AND seq.Name=? ",
               (                  subtype,         MEGA_name))
-
+    if c.rowcount == 0: return abnormal_row(c, row)
     db.commit()
-
+    return True
 
 def parse_HEV_xlsm(db, file_name=None):
     if not file_name:
@@ -253,31 +281,41 @@ def parse_HEV_xlsm(db, file_name=None):
     print(wb.sheetnames)
 
     ws=wb.worksheets[2]   #('Seq-class')
-    first = not None
+    first = True
+    error = False
 
     for r in ws.iter_rows() :
         if first:
-            first = None
+            first = False
         else:
-            parse_row(db,r)
-
+            error |= parse_row(db,r)
+    if error:
+        print('There were errors during parsing the Excel file !!!!!!!!!!!!!!')
 
 if __name__ == '__main__':
 
     # exit(0)
-
     # """
+
+    print('Creating db...')
     sdb = create()
+
+    print('Adding default taxas...')
     add_def_taxa(sdb)
+
+    print('Parsing the big alignment...')
     ref_name = "M73218"
     ID_align, ref = parse_full_fasta_Align(sdb, ref_name,'C:/Prog/HEV/alignment/HEV.fas')
     print(ref)
 
+    print('Calcule reference positions...')
     ref = ref_pos(sdb, ID_align, ref_name) # , ref_name
     print(ref)
 
+    print('Parse the Excel file table...')
     parse_HEV_xlsm(sdb, 'C:/Prog/HEV/data/temp/HEVsubtypingMEGAut - Kopie.xlsm')
 
+    print('Done !!!')
     sdb.close()
 
     # """
