@@ -6,28 +6,31 @@ import openpyxl
 
 
 class CreateTaxa:
-    def __init__(self, db):
+    def __init__(self, db, kingdom, root_taxa, NCBI_TaxID  = None):
         self.db=db
         self.c = sdb.cursor()
+        self.kingdom = kingdom
+        self._root_rank('superkingdom', kingdom)
+        self._root_taxa(root_taxa, root_taxa, NCBI_TaxID)
 
-    def root_rank (self, name, NCBI = None):        #  todo: NCBI ? add kingdom ! determine type of rank.
-        self.c.execute("INSERT INTO taxa_rank (Name, NCBI )"
-                       "               VALUES (?   , ?    )",
-                       (                       name, NCBI )   )
+    def _root_rank (self, name, kingdom):        #  todo: NCBI ? add kingdom ! determine type of rank.
+        self.c.execute("INSERT INTO taxa_rank (Name, kingdom )"
+                       "               VALUES (?   , ?       )",
+                       (                       name, kingdom )   )
         self.r_rank = self.c.lastrowid
         return self.r_rank
 
-    def root_taxa (self, Name ,  vulgar, NCBI_TaxID):
+    def _root_taxa (self, Name ,  vulgar, NCBI_TaxID):
         self.c.execute("INSERT INTO taxa      (Name , vulgar, Id_rank    , NCBI_TaxID  )"
                        "               VALUES ( ?   , ?     , ?          , ?           )",
                                               (Name , vulgar, self.r_rank, NCBI_TaxID  ) )
         self.r_taxa = self.c.lastrowid
         return self.r_taxa
 
-    def rank (self, name, parent_rank  , NCBI = None):
-        self.c.execute("INSERT INTO taxa_rank (Name, parent      , NCBI )"
-                       "               VALUES (?   , ?           , ?    )",
-                       (                       name, parent_rank , NCBI )   )
+    def rank (self, name, parent_rank):
+        self.c.execute("INSERT INTO taxa_rank (Name, kingdom     , parent      )"
+                       "               VALUES (?   , ?           , ?           )",
+                       (                       name, self.kingdom, parent_rank )   )
         return self.c.lastrowid
 
     def taxa (self, Name, vulgar, rank    , parent_taxa,  NCBI_TaxID  = None):
@@ -51,27 +54,24 @@ def read_create(sdb):
 
 
 def add_def_taxa(db):
-    ct= CreateTaxa(db)
+    ct= CreateTaxa(db, 'viruses', 'Viridae', '10239')
 
-    ct.root_rank('superkingdom', 'superkingdom')
-    ct.root_taxa('Viridae', 'viruses', '10239')
-
-    r   = ct.rank('no rank', ct.r_rank, 'no rank')
+    r   = ct.rank('no rank', ct.r_rank)
     t   = ct.taxa('ssRNA viruses', 'viruses', r, ct.r_taxa, '439488')
 
-    r   = ct.rank('', r, 'no rank')
+    r   = ct.rank('', r)
     t   = ct.taxa('ssRNA positive-strand viruses, no DNA stage', 'viruses', r, t, '35278')
 
-    r   = ct.rank('family', r, 'family')
+    r   = ct.rank('family', r)
     t   = ct.taxa('Hepeviridae', 'HEV'  , r, t, '291484')
 
-    rG  = ct.rank('genus', r, 'genus')
+    rG  = ct.rank('genus', r)
     tO  = ct.taxa('Orthohepevirus', 'Orthohepevirus'  , rG, t, '1678141')
 
-    rs  = ct.rank('species', rG, 'species')
+    rs  = ct.rank('species', rG)
     tA  = ct.taxa('Orthohepevirus A', 'Orthohepevirus A'  , rs, tO, '1678143')
 
-    rg  = ct.rank('genotype', rs, 'genotype')
+    rg  = ct.rank('genotype', rs)
     g1  = ct.taxa('1', 'HEV-g1'  , rg, tA, '185579')
     g2  = ct.taxa('2', 'HEV-g2'  , rg, tA )
     g3  = ct.taxa('3', 'HEV-g3'  , rg, tA, '509628')
@@ -80,7 +80,7 @@ def add_def_taxa(db):
     g6  = ct.taxa('6', 'HEV-g6'  , rg, tA )
     g7  = ct.taxa('7', 'HEV-g7'  , rg, tA )
 
-    rsubt = ct.rank('subtype', rg, 'no rank')
+    rsubt = ct.rank('subtype', rg)
     
     g1a   = ct.taxa('1a', 'HEV-g1a'  , rsubt, g1)
     g1b   = ct.taxa('1b', 'HEV-g1b'  , rsubt, g1)

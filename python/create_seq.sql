@@ -222,9 +222,10 @@
     CREATE TABLE IF NOT EXISTS  taxa_rank
            (
              Id_rank       INTEGER PRIMARY KEY AUTOINCREMENT,
-             Name          TEXT    UNIQUE,
-             parent        INTEGER ,            -- referees taxa_rank.Id_rank
-             NCBI          TEXT                 -- superkingdom, ...
+             Name          TEXT,
+             kingdom       TEXT,
+             parent        INTEGER             -- referees taxa_rank.Id_rank
+             -- NCBI          TEXT                 -- superkingdom, ...
            );
 
 
