@@ -43,19 +43,19 @@ class CreateTaxa:
                        (                  Name, vulgar , rank   , parent_taxa, NCBI_TaxID )   )
         return self.c.lastrowid
 
-
-def create() -> sqlite3.Connection:
+def create(newly) -> sqlite3.Connection:
     sdb = sqlite3.connect("../data/temp/seq.db")
-    read_create(sdb)
+    if newly:
+       read_create(sdb)
+       print('Adding default taxas...')
+       add_def_taxa(sdb)
     return sdb
-
 
 def read_create(sdb):
     with open("create_seq.sql") as dbcreate:
         sql_create = dbcreate.read()
     c = sdb.cursor()
     c.executescript(sql_create)
-
 
 def add_def_taxa(db):
     ct= CreateTaxa(db, 'viruses', 'Viridae', '10239')
@@ -136,7 +136,6 @@ def add_def_taxa(db):
 
     db.commit()
 
-
 def parse_full_fasta_Align(db, ref_seq = None, file_name=None):
     """Will parse an alignment and insert it into the tables:
         files: the file path ,
@@ -207,7 +206,6 @@ def parse_full_fasta_Align(db, ref_seq = None, file_name=None):
     db.commit()
     return Id_align , ref
 
-
 def ref_pos(sdb, ID_align, seq_name=None):
     c = sdb.cursor()
     c.execute("SELECT Al_len, Ref FROM align WHERE Id_align=? ", (ID_align,  ))
@@ -223,7 +221,6 @@ def ref_pos(sdb, ID_align, seq_name=None):
         ref.append(sr)
     ref += [sr]*(Al_len - end-1)
     return ref
-
 
 def abnormal_row(c, row):
     MEGA_name = row[0].value          # 'A' - MEGA name
@@ -255,6 +252,7 @@ def abnormal_row(c, row):
     return True
 
 def parse_row(db,row):
+    success = True
     MEGA_name = row[0].value          # 'A' - MEGA name. How to avoid hard coding this?
     genotype  = row[2].value          # c - genotype
     subtype   = row[3].value          # 'D' - subtype
@@ -344,21 +342,34 @@ def parse_HEV_xlsm(db, file_name=None):
     if error:
         print('There were errors during parsing the Excel file !!!!!!!!!!!!!!')
 
+def clean_parsed_Excel(db):
+    c = db.cursor()
+    c.execute("DELETE FROM strain")   # ??
+    c.execute("DELETE FROM isolate")   # ??
+    c.execute("DELETE FROM isolate_seq")   # ??
+    c.execute("DELETE FROM pending_seq")   # ??
+    c.execute("DELETE FROM classified_seq")   # ??
+    db.commit()
+
 if __name__ == '__main__':
 
     # exit(0)
     # """
 
+    newly=False
+
     print('Creating db...')
-    sdb = create()
+    sdb = create(newly)
 
-    print('Adding default taxas...')
-    add_def_taxa(sdb)
-
-    print('Parsing the big alignment...')
     ref_name = "M73218"
-    ID_align, ref = parse_full_fasta_Align(sdb, ref_name,'C:/Prog/HEV/alignment/HEV.fas')
-    print(ref)
+    if newly:
+        print('Parsing the big alignment...')
+        ID_align, ref = parse_full_fasta_Align(sdb, ref_name,'C:/Prog/HEV/alignment/HEV.fas')
+        print(ref)
+    else:
+        print('Cleaning parsed Excel...')
+        clean_parsed_Excel(sdb)
+        ID_align=1      # ??
 
     print('Calcule reference positions...')
     ref = ref_pos(sdb, ID_align, ref_name) # , ref_name
