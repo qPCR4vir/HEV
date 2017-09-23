@@ -46,8 +46,8 @@
            (
              Id_clas_seq      INTEGER PRIMARY KEY AUTOINCREMENT,
              Id_taxa          INTEGER   REFERENCES taxa,          -- the finest available classification
-             description      TEXT,                               --  ??
-             Id_isolate       INTEGER   REFERENCES isolate    ,
+             -- description      TEXT,                               --  ??
+             -- Id_isolate       INTEGER   REFERENCES isolate    ,
              Id_algseq        INTEGER  NOT NULL REFERENCES aligned_seq
            );
 
@@ -134,11 +134,11 @@
              year        INT,
              month       INT,
              day         INT,
-             Id_host     INTEGER NOT NULL,     -- original taxa
-             Id_source   INTEGER NOT NULL,
-             Id_author   INTEGER NOT NULL,
-             Id_institution INTEGER NOT NULL,
-             Id_location    INTEGER NOT NULL,
+             Id_host     INTEGER, --NOT NULL,     -- original taxa
+             Id_source   INTEGER, --NOT NULL,
+             Id_author   INTEGER, --NOT NULL,
+             Id_institution INTEGER, --NOT NULL,
+             Id_location    INTEGER, -- NOT NULL,
              coordinate  TEXT
            );
 
