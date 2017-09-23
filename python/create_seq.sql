@@ -42,7 +42,14 @@
              Id_seq           INTEGER   REFERENCES seq
            );
 
-     CREATE TABLE IF NOT EXISTS  classified_seq
+    CREATE TABLE IF NOT EXISTS  isolate_seq
+           (
+             Id_isolate_seq   INTEGER   PRIMARY KEY AUTOINCREMENT,
+             Id_isolate       INTEGER   REFERENCES isolate,
+             Id_seq           INTEGER   REFERENCES seq
+           );
+
+    CREATE TABLE IF NOT EXISTS  classified_seq
            (
              Id_clas_seq      INTEGER PRIMARY KEY AUTOINCREMENT,
              Id_taxa          INTEGER   REFERENCES taxa,          -- the finest available classification
