@@ -260,21 +260,63 @@ def parse_row(db,row):
     subtype   = row[3].value          # 'D' - subtype
     grupe     = row[4].value          # 'e' - grupe
     Str_name  = row[5].value          # 'F ' 5 - Str.name
+    Isolate   = row[6].value          # 'G ' Isolate
 
     if not subtype: subtype   = grupe
     if not subtype: subtype   = genotype
 
-    c = sdb.cursor()
-    #if not subtype: return abnormal_row(c, row)
+    if not Isolate: Isolate   = Str_name
 
-    c.execute("INSERT INTO classified_seq (Id_taxa, Id_algseq)                 "
-              "           SELECT Id_taxa, Id_algseq FROM taxa, aligned_seq, seq" 
-              "            ON aligned_seq.Id_part=seq.Id_seq                   "
-			  "			  WHERE taxa.Name=?  AND seq.Name=? ",
-              (                  subtype,         MEGA_name))
-    if c.rowcount == 0: return abnormal_row(c, row)
+    c = sdb.cursor()
+    c.execute("SELECT Id_strain FROM strain WHERE Name=?", (Str_name, ))
+    Id_strain = c.fetchone()
+    if Id_strain:
+        print('Existing Strain:', Str_name, Id_strain)
+        Id_strain = Id_strain[0]
+    else:
+        print('New Strain:', Str_name, Id_strain)
+        c.execute("INSERT INTO strain (Name) VALUES (?) ", (Str_name,))
+        Id_strain = c.lastrowid
+        print('New Strain ID:', Id_strain)
+
+    c.execute("SELECT Id_taxa FROM taxa WHERE taxa.Name=?", (subtype, ))
+    Id_taxa = c.fetchone()
+    Id_taxa = Id_taxa[0] if Id_taxa else Id_taxa
+
+    c.execute("SELECT Id_seq FROM seq WHERE seq.Name=? ", ( MEGA_name,))
+    Id_seq = c.fetchone()
+    Id_seq = Id_seq[0] if Id_seq else Id_seq
+
+    # revise this. Is general??
+    c.execute("SELECT Id_algseq FROM aligned_seq WHERE Id_part=?", (Id_seq,))
+    Id_algseq= c.fetchone()
+    Id_algseq = Id_algseq[0] if Id_algseq else Id_algseq
+
+    c.execute("INSERT INTO isolate (Name   , Id_strain) VALUES (?,?) "
+                                 , (Isolate, Id_strain))
+    Id_isolate= c.fetchone()
+    Id_isolate = Id_isolate[0] if Id_isolate else Id_isolate
+
+    c.execute("INSERT INTO isolate_seq (Id_isolate   , Id_seq) VALUES (?,?) "
+                                     , (Id_isolate   , Id_seq))
+    Id_isolate_seq= c.fetchone()
+    Id_isolate_seq = Id_isolate_seq[0] if Id_isolate_seq else Id_isolate_seq
+
+    if Id_algseq is None:
+        #success = abnormal_row(c, row)
+        c.execute("INSERT INTO pending_seq (Id_taxa, Name,      Id_seq) VALUES (?,?,?)",
+                  (Id_taxa, MEGA_name, Id_seq))
+
+        print("Abnormal row !!!!! ", MEGA_name, subtype, Str_name,
+          "-------> Taxa:{0}, Alseq:{1}, Seq:{2}".format(Id_taxa, Id_algseq, Id_seq))
+        success = False
+    else:
+        c.execute("INSERT INTO classified_seq (Id_taxa, Id_algseq) VALUES (?,?) "
+                                            , (Id_taxa, Id_algseq)                 )
+        # if c.rowcount == 0: return abnormal_row(c, row)
+
     db.commit()
-    return True
+    return success
 
 def parse_HEV_xlsm(db, file_name=None):
     if not file_name:
