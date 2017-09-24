@@ -253,6 +253,9 @@
     CREATE VIEW  to_excel AS SELECT  Seq.Name, Len FROM seq;
     CREATE VIEW  all_frag AS SELECT  Name, Len, pbeg, pend FROM seq, aligned_seq
              ON seq.Id_seq = aligned_seq.Id_part ;
+    CREATE VIEW  strains_with_duplicate_isolates AS SELECT strain.Name, count(isolate.Id_strain)
+                 FROM strain, isolate  where strain.Id_strain=isolate.Id_strain
+                 GROUP BY isolate.Id_strain HAVING count(isolate.Id_strain) >1 ORDER BY -count(isolate.Id_strain)
             /*
              Seq_Name  ,
              parent ,
