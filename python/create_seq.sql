@@ -215,15 +215,25 @@
              FAX       TEXT
            );
 
+    /*
     -- country
+    CREATE TABLE IF NOT EXISTS  country_cod
+           (
+             Id_country_cod INTEGER PRIMARY KEY AUTOINCREMENT,
+             cod3           TEXT  UNIQUE ,
+             cod2           TEXT  UNIQUE ,
+             region         TEXT,
+             continent      TEXT
+           );
+
     CREATE TABLE IF NOT EXISTS  country
            (
-             Id_country INTEGER PRIMARY KEY AUTOINCREMENT,
-             Name       TEXT  UNIQUE  ,
-             idx        TEXT  UNIQUE ,
-             region     TEXT,
-             continent  TEXT
+             Id_country      INTEGER PRIMARY KEY AUTOINCREMENT,
+             Id_country_cod  INTEGER REFERENCES country_cod(Id_country_cod) ,
+             Name            TEXT,
+             language        TEXT
            );
+    */
 
     -- taxa
     CREATE TABLE IF NOT EXISTS  taxa
