@@ -24,8 +24,8 @@
     CREATE TABLE IF NOT EXISTS  seq_file_pos
                      (
                        Id_filep INTEGER PRIMARY KEY AUTOINCREMENT,
-                       Id_seq   INTEGER REFERENCES seq,
-                       Id_file  INTEGER REFERENCES seq_file,
+                       Id_seq   INTEGER REFERENCES seq(Id_seq),
+                       Id_file  INTEGER REFERENCES seq_file(Id_file),
                        file_beg INT,
                        file_end INT,      -- optional
                        time     INT       -- format ??
@@ -36,17 +36,17 @@
     CREATE TABLE IF NOT EXISTS  bio_seq
            (
              Id_bio_seq       INTEGER PRIMARY KEY AUTOINCREMENT,
-             Id_taxa          TEXT    UNIQUE,
+             Id_taxa          INTEGER   REFERENCES taxa(Id_taxa),
              description      TEXT,
              locus            TEXT,
-             Id_seq           INTEGER   REFERENCES seq
+             Id_seq           INTEGER   REFERENCES seq(Id_seq)
            );
 
     CREATE TABLE IF NOT EXISTS  isolate_seq
            (
              Id_isolate_seq   INTEGER   PRIMARY KEY AUTOINCREMENT,
-             Id_isolate       INTEGER   REFERENCES isolate,
-             Id_seq           INTEGER   REFERENCES seq
+             Id_isolate       INTEGER   REFERENCES isolate(Id_isolate),
+             Id_seq           INTEGER   REFERENCES seq(Id_seq)
            );
 
     CREATE TABLE IF NOT EXISTS  classified_seq
@@ -55,7 +55,8 @@
              Id_taxa          INTEGER   REFERENCES taxa,          -- the finest available classification
              -- description      TEXT,                               --  ??
              -- Id_isolate       INTEGER   REFERENCES isolate    ,
-             Id_algseq        INTEGER  NOT NULL REFERENCES aligned_seq
+             Id_algseq        INTEGER  NOT NULL REFERENCES aligned_seq(Id_algseq)
+           );
            );
 
 
@@ -63,11 +64,11 @@
            (
              Id_pend_seq      INTEGER   PRIMARY KEY AUTOINCREMENT,
              Name             TEXT,
-             Id_taxa          INTEGER   REFERENCES taxa,          -- the finest available classification
+             Id_taxa          INTEGER   REFERENCES taxa(Id_taxa),          -- the finest available classification
              description      TEXT,                               --  ??
-             Id_isolate       INTEGER   REFERENCES isolate    ,
-             Id_algseq        INTEGER   REFERENCES aligned_seq,
-             Id_seq           INTEGER   REFERENCES seq
+             Id_isolate       INTEGER   REFERENCES isolate(Id_isolate)    ,
+             Id_algseq        INTEGER   REFERENCES aligned_seq(Id_algseq),
+             Id_seq           INTEGER   REFERENCES seq(Id_seq)
            );
 
    -- GB_seq  -- a simplified view of a GenBank entry sequence: todo use BioSQL
@@ -77,7 +78,7 @@
              Acc              TEXT    UNIQUE,
              description      TEXT,
              locus            TEXT,
-             Id_seq           INTEGER   REFERENCES seq
+             Id_seq           INTEGER   REFERENCES seq(Id_seq)
            );
 
     -- seq_fragment  -- an arbitrary fragment from some seq, for example: a BLAST  hit for which the
@@ -85,7 +86,7 @@
     CREATE TABLE IF NOT EXISTS  seq_fragment
                      (
                        Id_frag INTEGER PRIMARY KEY NOT NULL,
-                       Id_seq  INTEGER REFERENCES seq,
+                       Id_seq  INTEGER REFERENCES seq(Id_seq),
                        pbeg     INT,             -- relative to the original
                        pend     INT
                      );
@@ -96,7 +97,7 @@
     CREATE TABLE IF NOT EXISTS  partial_seq
                      (
                        Id_part INTEGER PRIMARY KEY NOT NULL,
-                       Id_seq  INTEGER REFERENCES seq,  -- if known
+                       Id_seq  INTEGER REFERENCES seq(Id_seq),  -- if known
                        beg     INT,             -- relative to the original
                        end     INT,
                        seq     TEXT              -- The aligned sequence, with internal gaps -, but without external
@@ -108,9 +109,9 @@
                      (
                        Id_align  INTEGER PRIMARY KEY AUTOINCREMENT,
                        Name      TEXT,
-                       Id_file   INTEGER          REFERENCES seq_file,
+                       Id_file   INTEGER          REFERENCES seq_file(Id_file),
                        Al_len    integer ,
-                       Ref       text        -- if not NULL, the segested reference sequence
+                       Ref       text        -- if not NULL, the suggested reference sequence
                      );
           
     -- aligned_seq
@@ -118,7 +119,7 @@
                      (
                        Id_algseq  INTEGER PRIMARY KEY NOT NULL,
                        Id_align   INTEGER NOT NULL REFERENCES align,
-                       Id_part    INTEGER NOT NULL REFERENCES seq, -- partial_seq,
+                       Id_part    INTEGER NOT NULL REFERENCES seq(Id_seq), -- partial_seq,
                        Seq        TEXT,            -- The aligned sequence, with internal gaps
                        pbeg        INT,             -- relative to the alignment
                        pend        INT
@@ -136,8 +137,8 @@
            (
              Id_isolate  INTEGER PRIMARY KEY AUTOINCREMENT,
              Name        TEXT,
-             Id_strain   INTEGER NOT NULL REFERENCES strain,
-             idate       TEXT,                -- ?
+             Id_strain   INTEGER NOT NULL REFERENCES strain(Id_strain),
+             -- idate       TEXT,                -- ?
              year        INT,
              month       INT,
              day         INT,
@@ -158,7 +159,7 @@
              surname    TEXT ,
              title      TEXT,
              genre      TEXT,
-             Id_contact INTEGER NOT NULL
+             Id_contact INTEGER NOT NULL REFERENCES contact(Id_contact)
            );
 
     -- institution
@@ -167,8 +168,8 @@
              Id_institution  INTEGER PRIMARY KEY AUTOINCREMENT,
              Name            TEXT    ,
              category        TEXT ,                    -- Institute, Department, University, Laboratory, Center, etc.
-             parent          INTEGER NOT NULL,
-             Id_contact      INTEGER NOT NULL
+             parent          INTEGER REFERENCES institution(Id_institution),
+             Id_contact      INTEGER NOT NULL REFERENCES contact(Id_contact)   --  ???
            );
 
     -- affiliation
@@ -180,7 +181,7 @@
              beg_month     INT,
              end_year      INT,
              end_month     INT,
-             Id_contact    INTEGER NOT NULL,
+             Id_contact    INTEGER NOT NULL REFERENCES contact(Id_contact)  ,
              position      TEXT
            );
 
@@ -189,10 +190,10 @@
            (
              Id_gen   INTEGER PRIMARY KEY AUTOINCREMENT,
              Name     TEXT    ,
-             Id_taxa  INTEGER NOT NULL REFERENCES taxa,
+             Id_taxa  INTEGER NOT NULL REFERENCES taxa(Id_taxa),
              beg      INT,
              end      INT,
-             Id_seq   INTEGER   REFERENCES seq   -- just to map the positions, preferably a bio_seq
+             Id_seq   INTEGER   REFERENCES seq(Id_seq)   -- just to map the positions, preferably a bio_seq
            );
 
     -- source
@@ -241,8 +242,8 @@
              Id_taxa     INTEGER PRIMARY KEY AUTOINCREMENT,
              Name        TEXT    ,
              vulgar      TEXT ,
-             parent      INTEGER,     -- NOT NULL,
-             Id_rank     INTEGER NOT NULL REFERENCES taxa_rank, -- referees taxa_rank.Id_rank
+             parent      INTEGER REFERENCES taxa(Id_taxa),               -- NULL = Root
+             Id_rank     INTEGER NOT NULL REFERENCES taxa_rank(Id_rank),
              NCBI_TaxID  TEXT
            );
 
@@ -252,7 +253,7 @@
              Id_rank       INTEGER PRIMARY KEY AUTOINCREMENT,
              Name          TEXT,
              kingdom       TEXT,
-             parent        INTEGER             -- referees taxa_rank.Id_rank
+             parent        INTEGER REFERENCES taxa_rank(Id_rank)        -- NULL = Root
              -- NCBI          TEXT                 -- superkingdom, ...
            );
 
