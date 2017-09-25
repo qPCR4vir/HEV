@@ -12,7 +12,7 @@ import openpyxl
 class CreateTaxa:
     def __init__(self, db, kingdom, root_taxa, NCBI_TaxID  = None):
         self.db=db
-        self.c = sdb.cursor()
+        self.c = db.cursor()
         self.kingdom = kingdom
         self._root_rank('superkingdom', kingdom)
         self._root_taxa(root_taxa, root_taxa, NCBI_TaxID)
@@ -44,17 +44,17 @@ class CreateTaxa:
         return self.c.lastrowid
 
 def create(newly) -> sqlite3.Connection:
-    sdb = sqlite3.connect("../data/temp/seq.db")
+    db = sqlite3.connect("../data/temp/seq.db")
     if newly:
-       read_create(sdb)
+       read_create(db)
        print('Adding default taxas...')
-       add_def_taxa(sdb)
-    return sdb
+       add_def_taxa(db)
+    return db
 
-def read_create(sdb):
+def read_create(db):
     with open("create_seq.sql") as dbcreate:
         sql_create = dbcreate.read()
-    c = sdb.cursor()
+    c = db.cursor()
     c.executescript(sql_create)
 
 def add_def_taxa(db):
