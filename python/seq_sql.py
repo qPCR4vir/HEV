@@ -142,6 +142,15 @@ def add_def_taxa(db):
 
     db.commit()
 
+def build_ref_pos(Seq, beg, end, Al_len):
+    sr=0
+    ref = [sr]*beg
+    for b in Seq:
+        if (b != '-'): sr+=1
+        ref.append(sr)
+    ref += [sr]*(Al_len - end-1)
+    return ref
+
 def parse_full_fasta_Align(db, ref_seq = None, file_name=None):
     """Will parse an alignment and insert it into the tables:
         files: the file path ,
@@ -170,35 +179,32 @@ def parse_full_fasta_Align(db, ref_seq = None, file_name=None):
 
     Id_align = c.lastrowid
     max_len = 0
-    ref = None
     for seq_record in SeqIO.parse(file_name, "fasta"):
         # print(seq_record.id, len(seq_record) )
-        if ref_seq == seq_record.id :
-            sr = 0
-            ref = []
-            for b in seq_record.seq:
-                if (b != '-'): sr += 1
-                ref.append(sr)
-        ln = len(seq_record.seq)
+        seq = str(seq_record.seq)
+        if ref_seq is None:      # set first seq as reference
+            ref_seq = seq_record.id
+            al_ref_seq = seq
+        else:
+            if ref_seq == seq_record.id:
+                al_ref_seq = seq
+        ln = len( seq)
         if max_len < ln: max_len = ln
         seq_beg = 0
         seq_end = ln - 1
         while seq_beg < ln:
-            if seq_record.seq[seq_beg] == '-':
+            if  seq[seq_beg] == '-':
                 seq_beg += 1
             else:
                 break  # todo :  check it is a valid base not line end???
         while seq_end > seq_beg:
-            if seq_record.seq[seq_end] == '-':
+            if seq[seq_end] == '-':
                 seq_end -= 1
             else:
                 break  # todo :  check it is a valid base not line end???
 
-        seq = seq_record.seq[seq_beg: seq_end + 1]
-
-        exp_seq = ''.join([base for base in seq if base != '-'])
-
-        c.execute("UPDATE align SET Al_len = ? WHERE Id_align=?", (max_len, Id_align) )
+        seq = str( seq[seq_beg: seq_end + 1])
+        exp_seq = seq.replace('-','')  #''.join([base for base in seq if base != '-'])
 
         c.execute("INSERT INTO seq (Name,               Seq,     Len  ) "
                   "         VALUES (?,                  ?,       ?    )",
@@ -207,10 +213,12 @@ def parse_full_fasta_Align(db, ref_seq = None, file_name=None):
 
         c.execute("INSERT INTO aligned_seq (Id_align, Id_part, Seq,      pbeg,     pend  ) "
                   "                 VALUES (?,        ?,       ?,        ?,       ?    )",
-                                           (Id_align, Id_part, str(seq), seq_beg, seq_end )    )
+                                           (Id_align, Id_part, seq, seq_beg, seq_end )    )
 
+    c.execute("UPDATE align SET Al_len = ?, Ref=?    WHERE Id_align=?",
+                            (   max_len   , ref_seq,        Id_align ) )
     db.commit()
-    return Id_align , ref
+    return Id_align , build_ref_pos(al_ref_seq,0,len(al_ref_seq)-1, max_len)
 
 def ref_pos(sdb, ID_align, seq_name=None):
     c = sdb.cursor()
@@ -221,13 +229,7 @@ def ref_pos(sdb, ID_align, seq_name=None):
               "ON Id_part=Id_seq WHERE Name=? AND Id_align=?",
                                      (seq_name,     ID_align ))
     Seq, beg, end = c.fetchone()
-    sr=0
-    ref = [sr]*beg
-    for b in Seq:
-        if (b != '-'): sr+=1
-        ref.append(sr)
-    ref += [sr]*(Al_len - end-1)
-    return ref
+    return build_ref_pos(Seq, beg, end, Al_len)
 
 def abnormal_row(c, row):
     MEGA_name = row[0].value          # 'A' - MEGA name
