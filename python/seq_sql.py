@@ -217,8 +217,9 @@ def ref_pos(sdb, ID_align, seq_name=None):
     c.execute("SELECT Al_len, Ref FROM align WHERE Id_align=? ", (ID_align,  ))
     Al_len, Ref = c.fetchone()
     if not seq_name: seq_name = Ref
-
-    c.execute("SELECT aligned_seq.Seq, pbeg, pend FROM aligned_seq, Seq ON Id_part=Id_seq WHERE Id_align=? AND Name=?", (ID_align, seq_name))
+    c.execute("SELECT aligned_seq.Seq, pbeg, pend FROM aligned_seq, Seq "
+              "ON Id_part=Id_seq WHERE Name=? AND Id_align=?",
+                                     (seq_name,     ID_align ))
     Seq, beg, end = c.fetchone()
     sr=0
     ref = [sr]*beg
