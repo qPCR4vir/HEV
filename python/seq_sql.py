@@ -259,6 +259,19 @@ def parse_row(db,row):
     grupe     = row[4].value          # 'e' - grupe
     Str_name  = row[5].value          # 'F ' 5 - Str.name
     Isolate   = row[6].value          # 'G ' Isolate
+    Country   = row[7].value          # 'H ' Country       todo: deduced
+    Country_cod3=row[8].value          # 'i ' Country cod
+    Region     =row[10].value         # 'H ' Country       todo: deduced
+    Region_full=row[11].value         # 'k ' Country cod
+    Host       =row[12].value         # 'M' Host
+    Source     =row[13].value         # 'N' Host
+    Year       =row[14].value         # 'O' Host
+    Month      =row[15].value         # 'P' Host
+    Day        =row[16].value         # 'Q' Host
+    Institut   =row[17].value         # 'R' Host
+    # Month      =row[15].value         # 'P' Host
+    # Day        =row[16].value         # 'Q' Host
+
 
     if not subtype: subtype   = grupe
     if not subtype: subtype   = genotype
@@ -269,13 +282,13 @@ def parse_row(db,row):
     c.execute("SELECT Id_strain FROM strain WHERE Name=?", (Str_name, ))
     Id_strain = c.fetchone()
     if Id_strain:
-        print('Existing Strain:', Str_name, Id_strain)
+        # print('Existing Strain:', Str_name, Id_strain)
         Id_strain = Id_strain[0]
     else:
-        print('New Strain:', Str_name, Id_strain)
+        # print('New Strain:', Str_name, Id_strain)
         c.execute("INSERT INTO strain (Name) VALUES (?) ", (Str_name,))
         Id_strain = c.lastrowid
-        print('New Strain ID:', Id_strain)
+        # print('New Strain ID:', Id_strain)
 
     c.execute("SELECT Id_taxa FROM taxa WHERE taxa.Name=?", (subtype, ))
     Id_taxa = c.fetchone()
@@ -290,15 +303,16 @@ def parse_row(db,row):
     Id_algseq= c.fetchone()
     Id_algseq = Id_algseq[0] if Id_algseq else Id_algseq
 
-    c.execute("INSERT INTO isolate (Name   , Id_strain) VALUES (?,?) "
-                                 , (Isolate, Id_strain))
+    c.execute("INSERT INTO isolate (Name   , Id_strain, year, month, day, host, source, institution, Id_country_cod ) "
+              "             VALUES (?      , ?        , ?   , ?    , ?  , ?   , ?     , ?          , ?              ) "
+                                 , (Isolate, Id_strain, Year, Month, Day, Host, Source, Institut   , Country_cod3 ))
     Id_isolate= c.fetchone()
     Id_isolate = Id_isolate[0] if Id_isolate else Id_isolate
 
     c.execute("INSERT INTO isolate_seq (Id_isolate   , Id_seq) VALUES (?,?) "
                                      , (Id_isolate   , Id_seq))
-    Id_isolate_seq= c.fetchone()
-    Id_isolate_seq = Id_isolate_seq[0] if Id_isolate_seq else Id_isolate_seq
+    # Id_isolate_seq= c.fetchone()
+    # Id_isolate_seq = Id_isolate_seq[0] if Id_isolate_seq else Id_isolate_seq
 
     if Id_algseq is None:
         #success = abnormal_row(c, row)

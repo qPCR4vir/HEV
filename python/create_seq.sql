@@ -142,13 +142,22 @@
              year        INT,
              month       INT,
              day         INT,
-             Id_host     INTEGER, --NOT NULL,     -- original taxa
-             Id_source   INTEGER, --NOT NULL,
-             Id_author   INTEGER, --NOT NULL,
-             Id_institution INTEGER, --NOT NULL,
-             Id_location    INTEGER, -- NOT NULL,
-             coordinate  TEXT
+             host            TEXT,      -- todo: Id_host     INTEGER, --NOT NULL,     -- original taxa
+             source          TEXT,      -- todo: Id_source   INTEGER, --NOT NULL,
+             Id_author       INTEGER,   -- NOT NULL,
+             institution     TEXT,      -- todo: Id_institution  INTEGER, --NOT NULL,
+             Id_location     INTEGER REFERENCES location(Id_location), -- NOT NULL,
+             Id_country_cod  TEXT REFERENCES countries(iso3)
            );
+
+    CREATE TABLE IF NOT EXISTS location
+        (
+            Id_location INTEGER PRIMARY KEY AUTOINCREMENT,
+            region      TEXT,
+            region_full TEXT,
+            city        TEXT,
+            coordinate  TEXT
+        );
 
     -- author
     CREATE TABLE IF NOT EXISTS  author
@@ -199,7 +208,7 @@
     -- source
     CREATE TABLE IF NOT EXISTS   source
            (
-             Id_host        INTEGER NOT NULL,     -- original taxa
+             Id_source      INTEGER NOT NULL,     -- original taxa
              artificial     TEXT ,                -- NULL, clone, cell, patent, etc.
              organ          TEXT,                 -- lever, serum, faces, etc.
              environment    TEXT                  -- NULL, seawater,  etc.
@@ -212,7 +221,7 @@
              URL       TEXT,
              mail      TEXT,
              telephone TEXT,
-             country   INTEGER NOT NULL,
+             Id_country_cod3  TEXT REFERENCES countries(iso3) ,
              FAX       TEXT
            );
 
