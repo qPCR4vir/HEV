@@ -57,6 +57,12 @@ def read_create(db):
     c = db.cursor()
     c.executescript(sql_create)
 
+def read_country_codes(db):
+    with open("country_codes.sql") as dbcreate:
+        sql_create = dbcreate.read()
+    c = db.cursor()
+    c.executescript(sql_create)
+
 def add_def_taxa(db):
     ct= CreateTaxa(db, 'viruses', 'Viridae', '10239')
 
@@ -370,10 +376,14 @@ if __name__ == '__main__':
     # exit(0)
     # """
 
-    newly=False
+    newly=True   # False
+    country=True # False
 
     print('Creating db...')
     sdb = create(newly)
+
+    if newly or country:
+        read_country_codes(sdb)
 
     ref_name = "M73218"
     if newly:
