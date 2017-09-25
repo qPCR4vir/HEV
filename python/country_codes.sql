@@ -26,7 +26,7 @@ CREATE TABLE IF NOT EXISTS countries (
 
 INSERT INTO countries (code, continent_code, name, iso3, number, full_name) VALUES
   ('AF', 'AS', "Afghanistan", 'AFG', '004', "Islamic Republic of Afghanistan"),
-  ('AX', 'EU', "Åland Islands", 'ALA', '248', "Åland Islands"),
+  ('AX', 'EU', "Aland Islands", 'ALA', '248', "Åland Islands"),
   ('AL', 'EU', "Albania", 'ALB', '008', "Republic of Albania"),
   ('DZ', 'AF', "Algeria", 'DZA', '012', "People's Democratic Republic of Algeria"),
   ('AS', 'OC', "American Samoa", 'ASM', '016', "American Samoa"),
