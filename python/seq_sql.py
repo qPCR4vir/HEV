@@ -29,6 +29,9 @@ class CreateTaxa:
                        "               VALUES ( ?   , ?     , ?          , ?           )",
                                               (Name , vulgar, self.r_rank, NCBI_TaxID  ) )
         self.r_taxa = self.c.lastrowid
+        self.c.execute("INSERT INTO taxa_parents (Id_taxa     , parent     , Id_rank      )"
+                       "                  VALUES ( ?          , ?          , ?            )",
+                                                 (self.r_taxa , self.r_taxa, self.r_rank  ) )
         return self.r_taxa
 
     def rank (self, name, parent_rank):
@@ -41,7 +44,14 @@ class CreateTaxa:
         self.c.execute("INSERT INTO taxa (Name,  vulgar, Id_rank, parent     , NCBI_TaxID )"
                        "          VALUES (?   , ?      , ?      , ?          , ?          )",
                        (                  Name, vulgar , rank   , parent_taxa, NCBI_TaxID )   )
-        return self.c.lastrowid
+        Id_taxa=self.c.lastrowid
+        self.c.execute("INSERT INTO taxa_parents (Id_taxa, parent, Id_rank      )"
+                       "                  VALUES ( ?     , ?     , ?            )",
+                                                 (Id_taxa , Id_taxa, rank       ) )
+        self.c.execute("INSERT INTO taxa_parents (Id_taxa, parent, Id_rank      )"
+                       "                  SELECT  ?      , parent, Id_rank       "
+                       "FROM taxa_parents WHERE Id_taxa=?",     (Id_taxa , parent_taxa  ) )
+        return Id_taxa
 
 def create(newly) -> sqlite3.Connection:
     db = sqlite3.connect("../data/temp/seq.db")
@@ -196,12 +206,12 @@ def parse_full_fasta_Align(db, ref_seq = None, file_name=None):
             if  seq[seq_beg] == '-':
                 seq_beg += 1
             else:
-                break  # todo :  check it is a valid base not line end???
+                break
         while seq_end > seq_beg:
             if seq[seq_end] == '-':
                 seq_end -= 1
             else:
-                break  # todo :  check it is a valid base not line end???
+                break
 
         seq = str( seq[seq_beg: seq_end + 1])
         exp_seq = seq.replace('-','')  #''.join([base for base in seq if base != '-'])

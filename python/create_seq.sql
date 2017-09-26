@@ -1,5 +1,7 @@
     -- http://biosql.org/wiki/Schema_Overview
 	-- https://github.com/biosql/biosql/blob/master/sql/biosqldb-sqlite.sql
+
+	-- PRAGMA foreign_keys
 	
 	CREATE TABLE IF NOT EXISTS  seq_file
                      (
@@ -265,6 +267,17 @@
              parent        INTEGER REFERENCES taxa_rank(Id_rank)        -- NULL = Root
              -- NCBI          TEXT                 -- superkingdom, ...
            );
+
+    -- non-normalized table, "temporal", just to make possible to search the tree without recursion.
+    -- for each inserted taxa here we have all the parents with the rank. Including self !!!
+    CREATE TABLE IF NOT EXISTS  taxa_parents
+           (
+             Id_taxa     INTEGER NOT NULL REFERENCES taxa(Id_taxa),
+             parent      INTEGER NOT NULL REFERENCES taxa(Id_taxa),               -- NULL = Root
+             Id_rank     INTEGER NOT NULL REFERENCES taxa_rank(Id_rank),
+             PRIMARY KEY (Id_taxa, parent)
+           );
+
 
 
 
