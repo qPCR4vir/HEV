@@ -130,9 +130,14 @@
     -- strain
     CREATE TABLE IF NOT EXISTS   strain
            (
-             Id_strain  INTEGER PRIMARY KEY AUTOINCREMENT,
-             Name       TEXT    UNIQUE
-           );
+             Id_strain      INTEGER PRIMARY KEY AUTOINCREMENT,
+             Name           TEXT    UNIQUE,
+             Id_taxa        INTEGER   REFERENCES taxa,       -- the finest available classification, consensus
+             host           TEXT,      -- todo: Id_host     INTEGER, --NOT NULL,  -- original taxa    -- consensus
+             source         TEXT,      -- todo: Id_source   INTEGER, --NOT NULL,  -- consensus
+             year           INT,                             -- consensus
+             Id_country_cod TEXT REFERENCES countries(iso3)  -- consensus
+            );
 
     -- isolate
     CREATE TABLE IF NOT EXISTS   isolate
