@@ -312,3 +312,47 @@ CREATE VIEW  exl AS SELECT  seq.Name,
 					USING (Id_algseq, aligned_seq.Id_part , Id_taxa)		       ;
 
 */
+    CREATE VIEW  to_excel AS
+    SELECT Seq.Name                                         AS MEGA_name,
+           t.Name                                           AS Classification,
+           (SELECT taxa.Name FROM taxa_parents
+                             JOIN taxa_rank  USING (Id_rank)
+                             JOIN taxa       ON (taxa.Id_taxa=taxa_parents.parent)
+                             WHERE taxa_parents.Id_taxa  =c.Id_taxa
+                               AND taxa_rank.Name='genotype')
+                                                            AS Genotype,
+           (SELECT taxa.Name FROM taxa_parents
+                             JOIN taxa_rank  USING (Id_rank)
+                             JOIN taxa       ON (taxa.Id_taxa=taxa_parents.parent)
+                             WHERE taxa_parents.Id_taxa  =c.Id_taxa
+                               AND taxa_rank.Name='group')
+                                                            AS 'Group',
+           (SELECT taxa.Name FROM taxa_parents
+                             JOIN taxa_rank  USING (Id_rank)
+                             JOIN taxa       ON (taxa.Id_taxa=taxa_parents.parent)
+                             WHERE taxa_parents.Id_taxa  =c.Id_taxa
+                               AND taxa_rank.Name='subtype')
+                                                            AS Subtype,
+           strain.Name                                      AS 'Strain', 
+           isolate.Name                                     AS 'Isolate ' ,
+           countries.name                                   AS 'Country ',
+           countries.iso3                                   AS 'Country cod',
+           isolate.host                                     AS 'Host',
+           isolate.source                                   AS 'Source ',
+           isolate.year	                                    AS 'Year',
+           isolate.month                                    AS 'Month',
+           isolate.day                                      AS 'Day',
+           isolate.institution                              AS 'Inst',
+           seq.Len                                          AS 'Length ',
+           aligned_seq.pbeg                                 AS 'Beg ',
+           aligned_seq.pend                                 AS 'End ',
+           aligned_seq.pend - aligned_seq.pbeg + 1          AS 'Al length'
+
+    FROM classified_seq AS c JOIN aligned_seq USING (ID_algseq)
+                             JOIN seq         ON    (ID_seq=ID_part)
+                             JOIN isolate_seq USING (ID_seq)
+                             JOIN isolate     USING (ID_isolate)
+                             JOIN taxa AS t   USING (Id_taxa)
+                             JOIN strain      USING (ID_strain)
+                             JOIN countries   ON    (isolate.ID_country_cod=countries.iso3)
+    ;
