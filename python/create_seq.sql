@@ -288,14 +288,17 @@
 
     -- to_excel  VIEW
     CREATE VIEW  files AS SELECT  path, format FROM seq_file;
-    CREATE VIEW  to_excel AS SELECT  Seq.Name, Len FROM seq;
     CREATE VIEW  all_frag AS SELECT  Name, Len, pbeg, pend FROM seq, aligned_seq
              ON seq.Id_seq = aligned_seq.Id_part ;
-    CREATE VIEW  strains_with_duplicate_isolates AS SELECT strain.Name, count(isolate.Id_strain)
+    CREATE VIEW  strains_with_duplicate_isolates AS SELECT strain.Name, count(isolate.Id_strain) AS str_c
                  FROM strain JOIN isolate USING (Id_strain)
-                 GROUP BY isolate.Id_strain HAVING count(isolate.Id_strain) >1 ORDER BY -count(isolate.Id_strain)
-
-            /*
+                 GROUP BY isolate.Id_strain HAVING count(isolate.Id_strain) >1 ORDER BY str_c DESC;
+    CREATE VIEW taxa_tree AS
+    SELECT (SELECT Name FROM taxa WHERE Id_taxa=x.Id_taxa ) AS Taxa_name,
+           (SELECT Name FROM taxa WHERE Id_taxa=x.parent ) AS Taxa_parent,
+           (SELECT Name FROM taxa_rank WHERE Id_rank=x.Id_rank ) AS Taxa_rank
+    FROM taxa_parents as x  ORDER BY Id_taxa, Id_rank DESC;
+             /*
              Seq_Name  ,
              parent ,
              NCBI
