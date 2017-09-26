@@ -315,9 +315,7 @@ def parse_row(db,row):
     c.execute("INSERT INTO isolate (Name   , Id_strain, year, month, day, host, source, institution, Id_country_cod ) "
               "             VALUES (?      , ?        , ?   , ?    , ?  , ?   , ?     , ?          , ?              ) "
                                  , (Isolate, Id_strain, Year, Month, Day, Host, Source, Institut   , Country_cod3 ))
-    Id_isolate= c.fetchone()
-    Id_isolate = Id_isolate[0] if Id_isolate else Id_isolate
-
+    Id_isolate=c.lastrowid
     c.execute("INSERT INTO isolate_seq (Id_isolate   , Id_seq) VALUES (?,?) "
                                      , (Id_isolate   , Id_seq))
     # Id_isolate_seq= c.fetchone()
