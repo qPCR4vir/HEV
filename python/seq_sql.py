@@ -85,25 +85,34 @@ def add_def_taxa(db):
     r   = ct.rank('family', r)
     t   = ct.taxa('Hepeviridae', 'HEV'  , r, t, '291484')
 
-    rG  = ct.rank('genus', r)
-    tO  = ct.taxa('Orthohepevirus', 'Orthohepevirus'  , rG, t, '1678141')
+    rGenus  = ct.rank('genus', r)
+    tOrth  = ct.taxa('Orthohepevirus', 'Orthohepevirus'  , rGenus, t, '1678141')
+    tPisci = ct.taxa('Piscihepevirus', 'Piscihepevirus'  , rGenus, t, '1678142')
 
-    rs  = ct.rank('species', rG)
-    tA  = ct.taxa('Orthohepevirus A', 'Orthohepevirus A'  , rs, tO, '1678143')
+    rSpecie  = ct.rank('species', rGenus)
+    tOrthSpcA= ct.taxa('Orthohepevirus A', 'Orthohepevirus A'  , rSpecie, tOrth, '1678143')
+    tOrthSpcB= ct.taxa('Orthohepevirus B', 'Orthohepevirus B'  , rSpecie, tOrth, '1678144') # NCBI_ID tentative !!
+    tOrthSpcC= ct.taxa('Orthohepevirus C', 'Orthohepevirus C'  , rSpecie, tOrth, '1678145')
+    tOrthSpcD= ct.taxa('Orthohepevirus D', 'Orthohepevirus D'  , rSpecie, tOrth, '1678146')
 
-    rg  = ct.rank('genotype', rs)
-    g1  = ct.taxa('1', 'HEV-g1'  , rg, tA, '185579')
-    g2  = ct.taxa('2', 'HEV-g2'  , rg, tA )
-    g3  = ct.taxa('3', 'HEV-g3'  , rg, tA, '509628')
-    g4  = ct.taxa('4', 'HEV-g4'  , rg, tA, '185580')
-    g5  = ct.taxa('5', 'HEV-g5'  , rg, tA )
-    g6  = ct.taxa('6', 'HEV-g6'  , rg, tA )
-    g7  = ct.taxa('7', 'HEV-g7'  , rg, tA )
+    tPisciSpcA=ct.taxa('Orthohepevirus A', 'Orthohepevirus A'  , rSpecie, tPisci,'1678146')
 
-    rmc  = ct.rank('major clade', rg)
+    rGenotype = ct.rank('genotype', rSpecie)
+    g1  = ct.taxa('1', 'HEV-g1'  , rGenotype, tOrthSpcA, '185579')
+    g2  = ct.taxa('2', 'HEV-g2'  , rGenotype, tOrthSpcA )
+    g3  = ct.taxa('3', 'HEV-g3'  , rGenotype, tOrthSpcA, '509628')
+    g4  = ct.taxa('4', 'HEV-g4'  , rGenotype, tOrthSpcA, '185580')
+    g5  = ct.taxa('5', 'HEV-g5'  , rGenotype, tOrthSpcA )
+    g6  = ct.taxa('6', 'HEV-g6'  , rGenotype, tOrthSpcA )
+    g7  = ct.taxa('7', 'HEV-g7'  , rGenotype, tOrthSpcA )
+
+    gC1 = ct.taxa('C1', 'HEV-C1' , rGenotype, tOrthSpcC )
+    gC2 = ct.taxa('C2', 'HEV-C1' , rGenotype, tOrthSpcC )
+
+    rmc  = ct.rank('major clade', rGenotype)
     maI  = ct.taxa('I'  , 'HEV-g3-I'     , rmc, g3)
     maII = ct.taxa('II' , 'HEV-g3-II'    , rmc, g3)
-    Rab  = ct.taxa('Rab', 'HEV-g3-rabbit', rmc, g3)
+    Rab  = ct.taxa('3ra', 'HEV-g3-rabbit', rmc, g3)
 
     rgr  = ct.rank('group', rmc)
     grchi  = ct.taxa('3chi'  , 'HEV-g3chi'     , rgr, maI)
