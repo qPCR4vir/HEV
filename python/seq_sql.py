@@ -279,29 +279,29 @@ def abnormal_row(c, row):
     if Id_algseq : return False
     return True
 
-def parse_row(db,row):
+def parse_row(db,row, c):
     success = True
-    MEGA_name = row[0].value          # 'A' - MEGA name. How to avoid hard coding this?
-    genotype  = row[2].value          # c - genotype
-    subtype   = row[3].value          # 'D' - subtype
-    grupe     = row[4].value          # 'e' - grupe
-    Str_name  = row[5].value          # 'F ' 5 - Str.name
-    Isolate   = row[6].value          # 'G ' Isolate
-    Country   = row[7].value          # 'H ' Country       todo: deduced
-    Country_cod3=row[8].value          # 'i ' Country cod
-    Region     =row[10].value         # 'H ' Country       todo: deduced
-    Region_full=row[11].value         # 'k ' Country cod
-    Host       =row[12].value         # 'M' Host
-    Source     =row[13].value         # 'N' Host
-    Year       =row[14].value         # 'O' Host
-    Month      =row[15].value         # 'P' Host
-    Day        =row[16].value         # 'Q' Host
-    Institut   =row[17].value         # 'R' Host
-    # Month      =row[15].value         # 'P' Host
-    # Day        =row[16].value         # 'Q' Host
+    MEGA_name = row[c['MEGA name'   ]].value
+    genotype  = row[c['genotype'    ]].value
+    subtype   = row[c['subtype'     ]].value
+    group     = row[c['group'       ]].value
+    Str_name  = row[c['Str.name'    ]].value
+    Isolate   = row[c['Isolate'     ]].value
+    #Country  = row[c['Country'     ]].value
+    Country_cod3=row[c['Country cod']].value
+    Region     =row[c['region'      ]].value         # 'H '        todo: deduced
+    Region_full=row[c['region full' ]].value
+    Host       =row[c['Host'        ]].value
+    Source     =row[c['Source'      ]].value
+    Year       =row[c['Y'           ]].value
+    Month      =row[c['M'           ]].value
+    Day        =row[c['D'           ]].value
+    Institut   =row[c['Inst'        ]].value
+    Reference  =row[c['reference'   ]].value
+    Lu_Li      =row[c['Lu, Li'      ]].value
+    CG         =row[c['CG'          ]].value
 
-
-    if not subtype: subtype   = grupe
+    if not subtype: subtype   = group
     if not subtype: subtype   = genotype
 
     if not Isolate: Isolate   = Str_name
@@ -367,18 +367,20 @@ def parse_HEV_xlsm(db, file_name=None):
     # self.refSeq.clear()
     print(file_name)
 
-    wb=openpyxl.load_workbook(file_name)
+    wb = openpyxl.load_workbook(file_name)
     print(wb.sheetnames)
 
-    ws=wb.worksheets[2]   #('Seq-class')
+    ws = wb['Seq-class']   # 2 ('Seq-class')
     first = True
     error = False
-
+    col=dict()
     for r in ws.iter_rows() :
         if first:
+            for c in range(25):    # make a dic with the first 25 columns headers
+                col[r[c].value]=c
             first = False
         else:
-            error |= parse_row(db,r)
+            error |= parse_row(db,r,col)
     if error:
         print('There were errors during parsing the Excel file !!!!!!!!!!!!!!')
 
