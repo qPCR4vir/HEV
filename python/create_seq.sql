@@ -6,7 +6,7 @@
 	CREATE TABLE IF NOT EXISTS  seq_file
                      (
                        Id_file   INTEGER PRIMARY KEY AUTOINCREMENT,
-                       path      TEXT    ,
+                       path      TEXT    ,    -- UNIQUE   ??
                        format    TEXT
                      );
 
@@ -21,7 +21,9 @@
                        Len      INT
                      );
 
+/*
     -- seq_file_pos
+    -- todo: how to implement? to save space in the DB, and for consistence (keeping only one copy of the sequence, externally )
     --           Original file source position of the referenced sequence
     CREATE TABLE IF NOT EXISTS  seq_file_pos
                      (
@@ -32,6 +34,7 @@
                        file_end INT,      -- optional
                        time     INT       -- format ??
                      );
+*/
 
     -- bio_seq  -- A (preferably) complete sequence from a gen, organism, etc. For example the HEV complete genomes.
     -- temp: just a seq with Id_gen from a genomic_region with Name "CG".
@@ -44,11 +47,12 @@
              Id_seq           INTEGER   REFERENCES seq(Id_seq)
            );
 
+    -- isolate_seq   :   all the experimental sequences obtained from a given isolate
     CREATE TABLE IF NOT EXISTS  isolate_seq
            (
              Id_isolate_seq   INTEGER   PRIMARY KEY AUTOINCREMENT,
              Id_isolate       INTEGER   REFERENCES isolate(Id_isolate),
-             Id_seq           INTEGER   REFERENCES seq(Id_seq)
+             Id_seq           INTEGER   REFERENCES seq(Id_seq)    -- PRIMARY KEY  ??
            );
 
     CREATE TABLE IF NOT EXISTS  classified_seq
@@ -172,7 +176,9 @@
              Id_author       INTEGER,   -- NOT NULL,
              institution     TEXT,      -- todo: Id_institution  INTEGER, --NOT NULL,
              Id_location     INTEGER REFERENCES location(Id_location), -- NOT NULL,
-             Id_country_cod  TEXT REFERENCES countries(iso3)
+             country_iso3    TEXT REFERENCES countries(iso3),
+             region          TEXT,      -- todo: Id_location,
+             region_full     TEXT       -- todo: Id_location
            );
 
     CREATE TABLE IF NOT EXISTS location
@@ -351,7 +357,7 @@ CREATE VIEW  exl AS SELECT  seq.Name,
                              WHERE taxa_parents.Id_taxa  =c.Id_taxa
                                AND taxa_rank.Name='subtype')
                                                             AS Subtype,
-           strain.Name                                      AS 'Strain', 
+           strain.Name                                      AS 'Strain',
            isolate.Name                                     AS 'Isolate ' ,
            countries.name                                   AS 'Country ',
            countries.iso3                                   AS 'Country cod',
@@ -372,5 +378,5 @@ CREATE VIEW  exl AS SELECT  seq.Name,
                              JOIN isolate     USING (ID_isolate)
                              JOIN taxa AS t   USING (Id_taxa)
                              JOIN strain      USING (ID_strain)
-                             JOIN countries   ON    (isolate.ID_country_cod=countries.iso3)
+                             JOIN countries   ON    (isolate.country_iso3=countries.iso3)
     ;

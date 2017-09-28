@@ -417,7 +417,8 @@ class ID_list(tkinter.Frame):
         self.txt_list.delete(1.0, tkinter.END)
 
     def load(self):
-        with filedialog.askopenfile(filetypes=(("TXT", "*.txt"), ("All files", "*.*") ), title='Load a ID list in txt format') as ID_file:
+        with filedialog.askopenfile(filetypes=(("TXT", "*.txt"), ("All files", "*.*") ),
+                                        title='Load a ID list in txt format'             ) as ID_file:
             self.add(ID_file.read())
             #for ID in ID_file:
             #    self.add(ID)

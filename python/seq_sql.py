@@ -112,7 +112,7 @@ def add_def_taxa(db):
     tOrthSpcC= ct.taxa('Orthohepevirus C', 'Orthohepevirus C'  , rSpecie, tOrth, '1678145')
     tOrthSpcD= ct.taxa('Orthohepevirus D', 'Orthohepevirus D'  , rSpecie, tOrth, '1678146')
 
-    tPisciSpcA=ct.taxa('Orthohepevirus A', 'Orthohepevirus A'  , rSpecie, tPisci,'1678146')
+    tPisciSpcA=ct.taxa('Piscihepevirus A', 'Piscihepevirus A'  , rSpecie, tPisci,'1678146')
 
     rGenotype = ct.rank('genotype', rSpecie)
     g1  = ct.taxa('1', 'HEV-g1'  , rGenotype, tOrthSpcA, '185579')
@@ -323,6 +323,8 @@ def parse_row(db,row, c):
 
     if not Isolate: Isolate   = Str_name
 
+
+
     c = sdb.cursor()
     c.execute("SELECT Id_strain FROM strain WHERE Name=?", (Str_name, ))
     Id_strain = c.fetchone()
@@ -335,11 +337,11 @@ def parse_row(db,row, c):
         Id_strain = c.lastrowid
         # print('New Strain ID:', Id_strain)
 
-    c.execute("SELECT Id_taxa FROM taxa WHERE taxa.Name=?", (subtype, ))
+    c.execute("SELECT Id_taxa FROM taxa WHERE taxa.Name=?", (subtype, ))   # ?? Name UNIQUE ??
     Id_taxa = c.fetchone()
     Id_taxa = Id_taxa[0] if Id_taxa else Id_taxa
 
-    c.execute("SELECT Id_seq FROM seq WHERE seq.Name=? ", ( MEGA_name,))
+    c.execute("SELECT Id_seq FROM seq WHERE seq.Name=? ", ( MEGA_name,))   # ?? Name UNIQUE ??
     Id_seq = c.fetchone()
     Id_seq = Id_seq[0] if Id_seq else Id_seq
 
@@ -348,9 +350,10 @@ def parse_row(db,row, c):
     Id_algseq= c.fetchone()
     Id_algseq = Id_algseq[0] if Id_algseq else Id_algseq
 
-    c.execute("INSERT INTO isolate (Name   , Id_strain, year, month, day, host, source, institution, Id_country_cod ) "
-              "             VALUES (?      , ?        , ?   , ?    , ?  , ?   , ?     , ?          , ?              ) "
-                                 , (Isolate, Id_strain, Year, Month, Day, Host, Source, Institut   , Country_cod3 ))
+    # todo: parse location. Is unique?
+    c.execute("INSERT INTO isolate (Name   , Id_strain, year, month, day, host, source, institution, country_iso3, region, region_full ) "
+              "             VALUES (?      , ?        , ?   , ?    , ?  , ?   , ?     , ?          , ?           , ?     , ?           ) "
+                                 , (Isolate, Id_strain, Year, Month, Day, Host, Source, Institut   , Country_cod3, Region, Region_full ))
     Id_isolate=c.lastrowid
     c.execute("INSERT INTO isolate_seq (Id_isolate   , Id_seq) VALUES (?,?) "
                                      , (Id_isolate   , Id_seq))
