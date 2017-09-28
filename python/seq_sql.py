@@ -9,6 +9,9 @@ import openpyxl
 # import tkinter
 
 
+#class RefSchema
+
+
 class CreateTaxa:
     def __init__(self, db, kingdom, root_taxa, NCBI_TaxID  = None):
         self.db=db
@@ -59,6 +62,10 @@ def create(newly) -> sqlite3.Connection:
        read_create(db)
        print('Adding default taxas...')
        add_def_taxa(db)
+       print('Adding reference schemes...')
+       add_ref_schema(db)
+       db.commit()
+
     return db
 
 def read_create(db):
@@ -72,6 +79,16 @@ def read_country_codes(db):
         sql_create = dbcreate.read()
     c = db.cursor()
     c.executescript(sql_create)
+    db.commit()
+
+
+def add_ref_schema(db):
+    c = db.cursor()
+    for sch in [('Lu'  , 'Lu, Li, 2006'         ),
+                ('VR'  , 'Vina-Rodriguez, 2015' ),
+                ('ICVT', 'ICVT, 2016'           )   ] :
+      c.execute("INSERT INTO ref_schema (schema, name) VALUES (?,     ?)", sch)
+
 
 def add_def_taxa(db):
     ct= CreateTaxa(db, 'viruses', 'Viridae', '10239')
@@ -352,6 +369,18 @@ def parse_row(db,row, c):
         c.execute("INSERT INTO classified_seq (Id_taxa, Id_algseq) VALUES (?,?) "
                                             , (Id_taxa, Id_algseq)                 )
         # if c.rowcount == 0: return abnormal_row(c, row)
+
+    rfs = []
+    if Lu_Li         : rfs.append( 'Lu' )
+    if Reference     : rfs.append( 'VR' )
+    if Reference=='R': rfs.append( 'ICVT')
+    print (rfs)
+    for rf in rfs:
+       print ('Add scheme: ',Id_taxa ,     rf                ,     Id_seq,   MEGA_name    )
+       c.execute("INSERT INTO ref_seq (Id_taxa,     Id_ref_schema     ,      Id_seq,    name        ) "
+               "             VALUES (?, (SELECT Id_ref_schema FROM ref_schema WHERE schema=?), ?, ?) "
+                                  , (Id_taxa ,     rf  ,                     Id_seq,   MEGA_name    ))
+
 
     db.commit()
     return success

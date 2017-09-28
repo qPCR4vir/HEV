@@ -57,8 +57,26 @@
              Id_taxa          INTEGER   REFERENCES taxa,          -- the finest available classification
              -- description      TEXT,                               --  ??
              -- Id_isolate       INTEGER   REFERENCES isolate    ,
-             Id_algseq        INTEGER  NOT NULL REFERENCES aligned_seq(Id_algseq)
+             Id_algseq        INTEGER  NOT NULL REFERENCES aligned_seq(Id_algseq)   -- PRIMARY KEY  ???????
            );
+
+    CREATE TABLE IF NOT EXISTS  ref_schema
+           (
+             Id_ref_schema    INTEGER PRIMARY KEY AUTOINCREMENT,
+             schema           TEXT UNIQUE,        -- PRIMARY KEY  ?   Lu, VRA, IC, etc.
+             name             TEXT                -- full text        Lu et. al. 2006, Vina-Rodriguez 2016, etc.
+           );
+
+    -- ref_seq  :  name may be use to pre-construct a set of ref seq, and posteriorly updated with actual Id_seq.
+    CREATE TABLE IF NOT EXISTS  ref_seq
+           (
+             Id_ref_seq     INTEGER PRIMARY KEY AUTOINCREMENT,
+             Id_taxa        INTEGER   REFERENCES taxa,                    -- the finest available classification
+             Id_ref_schema  INTEGER NOT NULL REFERENCES ref_schema(Id_ref_schema),
+             Id_seq         INTEGER REFERENCES seq(Id_seq),               -- partial_seq,
+             name           TEXT                                          -- preferably = seq.name, but not obligatory
+             -- Id_isolate       INTEGER   REFERENCES isolate    ,
+             -- Id_algseq        INTEGER  NOT NULL REFERENCES aligned_seq
            );
 
 
