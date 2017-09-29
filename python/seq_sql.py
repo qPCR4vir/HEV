@@ -500,7 +500,7 @@ def parseGB(db, GB_flat_file=None):
 
         des = record.definition
         if 'isolate' in des:
-            iso = des.split('isolate')[1]
+            iso = des.split('isolate')[1].split(',')[0]
             if iso[0] == ':':
                 iso = iso[1:].strip()
             iso = iso.split()[0].strip()
@@ -512,7 +512,7 @@ def parseGB(db, GB_flat_file=None):
                 if isolate != iso:
                     isolate = isolate + ' or ' + iso
         if 'strain' in des:
-            st = des.split('strain')[1]
+            st = des.split('strain')[1].split(',')[0]
             if st[0] == ':':
                 st = st[1:].strip()
             st = st.split()[0].strip()
