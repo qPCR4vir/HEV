@@ -425,6 +425,155 @@ def clean_parsed_Excel(db):
     c.execute("DELETE FROM classified_seq")   # ??
     db.commit()
 
+def parseGB(db, GB_flat_file=None):
+    '''
+    Load and parse a GenBank sequence flat file
+    :return:
+    '''
+    if not GB_flat_file:
+        GB_flat_file = filedialog.askopenfilename(filetypes=(("Seq flat GB", "*.gb"), ("All files", "*.*") ),
+                                                      title='Parse the GenBank sequences in flat format')
+    print(GB_flat_file)
+
+    c = db.cursor()
+
+    # no real need to save this info
+    c.execute("INSERT INTO seq_file (path, format) VALUES (?, 'GB_flat')", (GB_flat_file,))
+    Id_file = c.lastrowid
+    with open(GB_flat_file) as GB_flat:
+      for record in GenBank.parse(GB_flat):
+        Name     =  str(record.locus)   # todo: reparse
+        strain   = ''
+        isolate  = ''
+        host     = ''
+        country  = ''
+        region   = ''
+        collection_date = None
+        source   = ''
+        genotype = ''
+        subtype  = None
+        NCBI_TaxID = None
+
+        #  http://biopython.org/DIST/docs/api/Bio.GenBank.Record-pysrc.html#Feature
+        for feature in record.features:
+            if feature.key == 'source':
+                # http://biopython.org/DIST/docs/api/Bio.GenBank.Record.Qualifier-class.html
+                for q in feature.qualifiers:
+
+                    if q.key                                    == '/strain=':
+                        strain = q.value[1:-1].strip()
+
+                    elif q.key                                  == '/isolate=':
+                        isolate = q.value[1:-1].strip()
+
+                    elif q.key                                  == '/country=':
+                        country = q.value[1:-1].split(':')
+                        if len(country) > 1:
+                            region = country[1].strip()  # ok?
+                        country = country[0].strip()
+
+                    elif q.key                                  == '/collection_date=':
+                        collection_date = q.value[1:-1].strip()
+
+                    elif q.key == '/source=' or q.key           == '/isolation_source=':
+                        source = q.value[1:-1].strip()
+
+                    elif q.key                                  == '/host=':
+                        host = q.value[1:-1]
+
+                    elif q.key                                  == '/db_xref=':      # example value= taxon:509628
+                         val = q.value[1:-1]
+                         m = val.split(':')
+                         if m[0].startswith                         ('taxon'):
+                             NCBI_TaxID = m[1].strip()
+
+                    elif q.key                                  == '/note=':
+                        val = q.value[1:-1]
+                        print('Note=', val)
+                        for n in val.split(';'):
+                            m = n.lower().split()  #
+                            if len(m) ==1 : m = m[0].split(':')
+                            if m[0].startswith                      ('genotype'):
+                                genotype = m[1].strip()
+                            elif m[0].startswith                    ('subtype'):
+                                subtype = m[1].strip()
+
+        des = record.definition
+        if 'isolate' in des:
+            iso = des.split('isolate')[1]
+            if iso[0] == ':':
+                iso = iso[1:].strip()
+            iso = iso.split()[0].strip()
+            if iso[-1] == '.':
+                iso = iso[:-1].strip()
+            if isolate == '':
+                isolate = iso
+            else:
+                if isolate != iso:
+                    isolate = isolate + ' or ' + iso
+        if 'strain' in des:
+            st = des.split('strain')[1]
+            if st[0] == ':':
+                st = st[1:].strip()
+            st = st.split()[0].strip()
+            if st[-1] == '.':
+                st = st[:-1].strip()
+            if strain == '':
+                strain = st
+            else:
+                if strain != st:
+                    strain = strain + ' or ' + st
+
+
+        c.execute("INSERT INTO seq (Name,               Seq,     Len  ) "
+                  "         VALUES (?,                  ?,       ?    )",
+                                   (Name, str(record.sequence), len(record.sequence))    )
+        Id_seq = c.lastrowid
+
+        taxa= subtype if subtype else genotype
+        if taxa:
+            c.execute("SELECT Id_taxa FROM taxa WHERE taxa.Name=?", (taxa,))  # ?? Name UNIQUE ??
+        else:
+            c.execute("SELECT Id_taxa FROM taxa WHERE taxa.NCBI_TaxID=?", (NCBI_TaxID,)) # (record.organism,))
+        Id_taxa = c.fetchone()
+        Id_taxa = Id_taxa[0] if Id_taxa else Id_taxa
+
+        # todo: parse location. Is unique?
+        if not strain: strain = isolate
+        if not isolate: isolate = strain
+        c.execute("SELECT Id_strain FROM strain WHERE Name=?", (strain,))
+        Id_strain = c.fetchone()
+        if Id_strain:
+            print('Existing Strain:', strain, Id_strain )
+            c.execute("INSERT INTO strain (Name) VALUES (?) ", (strain,))
+            Id_strain = c.lastrowid
+            print('     new Id_strain:', Id_strain, )
+        else:
+            # print('New Strain:', Str_name, Id_strain)
+            c.execute("INSERT INTO strain (Name) VALUES (?) ", (strain,))
+            Id_strain = c.lastrowid
+            # print('New Strain ID:', Id_strain)
+
+        c.execute("SELECT iso3 FROM countries WHERE name=?", (country,))
+        Country_cod3 = c.fetchone()
+        Country_cod3 = Country_cod3[0] if Country_cod3 else None
+        c.execute(
+            "INSERT INTO isolate (Name   , Id_strain, year,            month, day, host, source, institution, country_iso3, region, region_full ) "
+            "             VALUES (?      , ?        , ?   , ?    , ?  , ?   , ?     , ?          , ?           , ?     , ?           ) "
+            ,                    (isolate, Id_strain, collection_date, None, None, host, source, None       , Country_cod3, None  , region      ))
+        Id_isolate = c.lastrowid
+        c.execute("INSERT INTO isolate_seq (Id_isolate   , Id_seq) VALUES (?,?) "
+                  , (Id_isolate, Id_seq))
+        # Id_isolate_seq= c.fetchone()
+        # Id_isolate_seq = Id_isolate_seq[0] if Id_isolate_seq else Id_isolate_seq
+
+        c.execute("INSERT INTO pending_seq (Name, Id_taxa, description, Id_isolate, Id_seq) VALUES (?,?,?,?,?)",
+                  (Name, Id_taxa, record.definition, Id_isolate, Id_seq))
+
+        db.commit()
+
+
+
 if __name__ == '__main__':
 
     # exit(0)
@@ -441,6 +590,8 @@ if __name__ == '__main__':
 
     ref_name = "M73218"
     if newly:
+        print('Parsing GB_flat_file...')
+        parseGB(sdb, r'C:/Prog/HEV/data/temp/HEV-g3marked_all_2017-09-27.  577 seq.sequence.gb')
         print('Parsing the big alignment...')
         ID_align, ref = parse_full_fasta_Align(sdb, ref_name,'C:/Prog/HEV/alignment/HEV.fas')
         print(ref)
