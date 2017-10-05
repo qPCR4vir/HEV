@@ -276,12 +276,17 @@ def parse_full_fasta_Align(db, ref_seq = None, file_name=None):
                 break
 
         seq = str( seq[seq_beg: seq_end + 1])
-        exp_seq = seq.replace('-','')  #''.join([base for base in seq if base != '-'])
 
-        c.execute("INSERT INTO seq (Name,               Seq,     Len  ) "
+        c.execute("SELECT Id_seq FROM seq WHERE seq.Name=?", (str(seq_record.id),)) # (record.organism,))
+        Id_part = c.fetchone()
+        Id_part = Id_part[0] if Id_part else None
+        if not Id_part:
+            exp_seq = seq.replace('-','')  #''.join([base for base in seq if base != '-'])
+
+            c.execute("INSERT INTO seq (Name,               Seq,     Len  ) "
                   "         VALUES (?,                  ?,       ?    )",
                                    (str(seq_record.id), exp_seq, len(exp_seq))    )
-        Id_part = c.lastrowid
+            Id_part = c.lastrowid
 
         c.execute("INSERT INTO aligned_seq (Id_align, Id_part, Seq,      pbeg,     pend  ) "
                   "                 VALUES (?,        ?,       ?,        ?,       ?    )",
