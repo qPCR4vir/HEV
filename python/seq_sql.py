@@ -8,6 +8,9 @@ import sqlite3
 print('Bio...')
 from Bio import SeqIO
 from Bio import GenBank       # too ?
+#import BioSQL
+#from BioSQL import BioSeqDatabase
+
 
 
 print('openpyxl...')
@@ -78,6 +81,32 @@ class CreateTaxa:
 def rank_ID(db_cursor, rank_name):
     db_cursor.execute("SELECT Id_rank FROM taxa_rank WHERE Name=?", (rank_name,))
     return db_cursor.fetchone()[0]
+
+#def createBioSQL(newly) -> sqlite3.Connection:
+#
+#    server = BioSeqDatabase.open_database(driver="sqlite3", db="HEV")
+#    try:
+#        db = server["HEV"]
+#    except KeyError:
+#    db = server.new_database("HEV",
+#                                 description="For testing GBrowse")
+    #db = sqlite3.connect("../data/temp/BioSQL.db")
+    #if newly:
+       #read_create(db)
+       #print('Adding default taxas...')
+       #add_def_taxa(db)
+       #print('Adding reference schemes...')
+       #add_ref_schema(db)
+       #db.commit()
+#
+#   return db
+#
+#def read_createBioSQL(db):
+#    with open("biosqldb-sqlite.sql") as dbcreate:
+#        sql_create = dbcreate.read()
+#    c = db.cursor()
+#    c.executescript(sql_create)
+
 def create(newly) -> sqlite3.Connection:
     db = sqlite3.connect("../data/temp/seq.db")
     if newly:
@@ -735,6 +764,7 @@ def parse_GB_note(note):
             subtype = m[1].strip()
     return genotype, subtype
 
+
 if __name__ == '__main__':
 
     # exit(0)
@@ -742,6 +772,12 @@ if __name__ == '__main__':
 
     newly=True   # False
     country=True # False
+
+    print('Creating db BioSQL...')
+
+#    dbBioSQL=createBioSQL(newly)
+
+
 
     print('Creating db...')
     sdb = create(newly)
