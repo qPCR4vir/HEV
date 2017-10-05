@@ -1,13 +1,17 @@
 print('tk...')
 from tkinter import filedialog
-print('sqlite3...')
-import sqlite3
-print('Bio...')
-from Bio import SeqIO
-print('openpyxl...')
-import openpyxl
 # import tkinter
 
+print('sqlite3...')
+import sqlite3
+
+print('Bio...')
+from Bio import SeqIO
+from Bio import GenBank       # too ?
+
+
+print('openpyxl...')
+import openpyxl
 
 #class RefSchema
 
@@ -43,7 +47,7 @@ class CreateTaxa:
                        (                       name, self.kingdom, parent_rank )   )
         return self.c.lastrowid
 
-    def taxa (self, Name, vulgar, rank    , parent_taxa,  NCBI_TaxID  = None):
+    def taxa (self, Name, vulgar, rank    , parent_taxa,  NCBI_TaxID  = None, syn=None):
         self.c.execute("INSERT INTO taxa (Name,  vulgar, Id_rank, parent     , NCBI_TaxID )"
                        "          VALUES (?   , ?      , ?      , ?          , ?          )",
                        (                  Name, vulgar , rank   , parent_taxa, NCBI_TaxID )   )
@@ -54,8 +58,26 @@ class CreateTaxa:
         self.c.execute("INSERT INTO taxa_parents (Id_taxa, parent, Id_rank      )"
                        "                  SELECT  ?      , parent, Id_rank       "
                        "FROM taxa_parents WHERE Id_taxa=?",     (Id_taxa , parent_taxa  ) )
+
+        if isinstance(syn, list):
+            syn = [Name, vulgar, NCBI_TaxID] +syn
+        else:
+            syn = [Name, vulgar, NCBI_TaxID]
+        self.synonyms(Id_taxa,  syn)
         return Id_taxa
 
+    def synonyms(self, Id_taxa, names):
+        if isinstance(names, str):
+            names=[names]
+        for name in names:
+            if not name: continue
+            self.c.execute("INSERT INTO taxa_names (Id_taxa, Name      )"
+                           "                VALUES ( ?     , ?         )",
+                                                   (Id_taxa, name      )  )
+
+def rank_ID(db_cursor, rank_name):
+    db_cursor.execute("SELECT Id_rank FROM taxa_rank WHERE Name=?", (rank_name,))
+    return db_cursor.fetchone()[0]
 def create(newly) -> sqlite3.Connection:
     db = sqlite3.connect("../data/temp/seq.db")
     if newly:
@@ -100,31 +122,43 @@ def add_def_taxa(db):
     t   = ct.taxa('ssRNA positive-strand viruses, no DNA stage', 'viruses', r, t, '35278')
 
     r   = ct.rank('family', r)
-    t   = ct.taxa('Hepeviridae', 'HEV'  , r, t, '291484')
+    t   = ct.taxa('Hepeviridae', 'HEV'  , r, t, '291484',
+                  syn=['2021911', '1009842', '172851', '2021912', '2021913', '2021914', '1216472', '996468',
+                       '1638959', '1638960', '1674928', '1530451', '1328106', '1229326', '879095', '301242'])
+    # 172851 Avian hepatitis E virus, 2021912 Barns Ness breadcrumb sponge hepe-like virus 2,
+    # 2021913, Barns Ness breadcrumb sponge hepe-like virus 3, 2021914 Barns Ness breadcrumb sponge hepe-like virus 4
+    # 1216472, Bat hepevirus;  996468 Hepatitis E virus rat/USA/2003; 1638959 Mystacina/New Zealand/2013/3
+    # 1638960 Mystacina/New Zealand/2013;  1674928 seal/AAUST73/BR/2012 ; 1530451 Fesavirus 2; 1328106 Fox
+    # 1229326 Hepelivirus; 879095 rat/R68/DEU/2009; 301242 Big liver and spleen disease virus
 
     rGenus  = ct.rank('genus', r)
-    tOrth  = ct.taxa('Orthohepevirus', 'Orthohepevirus'  , rGenus, t, '1678141')
+    tOrth  = ct.taxa('Orthohepevirus', 'Orthohepevirus'  , rGenus, t, '1678141', syn=['12461', 'Hepatitis E virus','186677', 'Hepevirus'])
     tPisci = ct.taxa('Piscihepevirus', 'Piscihepevirus'  , rGenus, t, '1678142')
 
     rSpecie  = ct.rank('species', rGenus)
-    tOrthSpcA= ct.taxa('Orthohepevirus A', 'Orthohepevirus A'  , rSpecie, tOrth, '1678143')
+    tOrthSpcA= ct.taxa('Orthohepevirus A', 'Orthohepevirus A'  , rSpecie, tOrth, '1678143',
+                                            syn=[ 'Swine hepatitis E virus', '63421']) # ?? syn??
     tOrthSpcB= ct.taxa('Orthohepevirus B', 'Orthohepevirus B'  , rSpecie, tOrth, '1678144') # NCBI_ID tentative !!
-    tOrthSpcC= ct.taxa('Orthohepevirus C', 'Orthohepevirus C'  , rSpecie, tOrth, '1678145')
+    tOrthSpcC= ct.taxa('Orthohepevirus C', 'Orthohepevirus C'  , rSpecie, tOrth, '1678145',
+                                            syn=['879096', '1414752']) # rat/R63/DEU/2009, Mink
     tOrthSpcD= ct.taxa('Orthohepevirus D', 'Orthohepevirus D'  , rSpecie, tOrth, '1678146')
 
-    tPisciSpcA=ct.taxa('Piscihepevirus A', 'Piscihepevirus A'  , rSpecie, tPisci,'1678146')
+    ct.synonyms(tOrthSpcA, '12461')
+
+    tPisciSpcA=ct.taxa('Piscihepevirus A', 'Piscihepevirus A'  , rSpecie, tPisci,'1678146', syn=['1016879']) # Cutthroat trout virus
 
     rGenotype = ct.rank('genotype', rSpecie)
-    g1  = ct.taxa('1', 'HEV-g1'  , rGenotype, tOrthSpcA, '185579')
-    g2  = ct.taxa('2', 'HEV-g2'  , rGenotype, tOrthSpcA )
-    g3  = ct.taxa('3', 'HEV-g3'  , rGenotype, tOrthSpcA, '509628')
-    g4  = ct.taxa('4', 'HEV-g4'  , rGenotype, tOrthSpcA, '185580')
-    g5  = ct.taxa('5', 'HEV-g5'  , rGenotype, tOrthSpcA )
-    g6  = ct.taxa('6', 'HEV-g6'  , rGenotype, tOrthSpcA )
-    g7  = ct.taxa('7', 'HEV-g7'  , rGenotype, tOrthSpcA )
+    g1  = ct.taxa('1', 'HEV-g1'  , rGenotype, tOrthSpcA, '185579', syn=['I', 'GI', 'G1', 'One'] )
+    g2  = ct.taxa('2', 'HEV-g2'  , rGenotype, tOrthSpcA, syn=['II'] )
+    g3  = ct.taxa('3', 'HEV-g3'  , rGenotype, tOrthSpcA, '509628', syn=['G3', 'III', 'Gt3', 'g3', 'HEV-3', 'third', 'GIII'])   # , 'Hepatitis E virus type 3'
+    g4  = ct.taxa('4', 'HEV-g4'  , rGenotype, tOrthSpcA, '185580',
+                  syn=['IV', '689698', '689699', '689700', '689701', '689702', '689703', '4(IV)']) # Hu/03858/HKG/2009, Hu/07598/HKG/2006
+    g5  = ct.taxa('5', 'HEV-g5'  , rGenotype, tOrthSpcA, syn=['V'] )
+    g6  = ct.taxa('6', 'HEV-g6'  , rGenotype, tOrthSpcA, syn=['VI']  )
+    g7  = ct.taxa('7', 'HEV-g7'  , rGenotype, tOrthSpcA, syn=['VII', 'HEV-7' ] )
 
     gC1 = ct.taxa('C1', 'HEV-C1' , rGenotype, tOrthSpcC )
-    gC2 = ct.taxa('C2', 'HEV-C1' , rGenotype, tOrthSpcC )
+    gC2 = ct.taxa('C2', 'HEV-C2' , rGenotype, tOrthSpcC, syn=['1213422', 'Ferret hepatitis E virus'] )
 
     rmc  = ct.rank('major clade', rGenotype)
     maI  = ct.taxa('I'  , 'HEV-g3-I'     , rmc, g3)
@@ -138,10 +172,10 @@ def add_def_taxa(db):
 
     rsubt = ct.rank('subtype', rgr)
     
-    g1a   = ct.taxa('1a', 'HEV-g1a'  , rsubt, g1)
+    g1a   = ct.taxa('1a', 'HEV-g1a'  , rsubt, g1, syn=['a', 'Ia', 'IA'])
     g1b   = ct.taxa('1b', 'HEV-g1b'  , rsubt, g1)
     g1c   = ct.taxa('1c', 'HEV-g1c'  , rsubt, g1)
-    g1d   = ct.taxa('1d', 'HEV-g1d'  , rsubt, g1)
+    g1d   = ct.taxa('1d', 'HEV-g1d'  , rsubt, g1, syn=['d'])
     g1e   = ct.taxa('1e', 'HEV-g1e'  , rsubt, g1)
     g1f   = ct.taxa('1f', 'HEV-g1f'  , rsubt, g1)
     g1g   = ct.taxa('1g', 'HEV-g1g'  , rsubt, g1)
@@ -150,15 +184,17 @@ def add_def_taxa(db):
     g1j   = ct.taxa('1j', 'HEV-g1j'  , rsubt, g1)
     g1k   = ct.taxa('1k', 'HEV-g1k'  , rsubt, g1)
 
-    g3a   = ct.taxa('3a', 'HEV-g3a'  , rsubt, grjab)
+    g2a   = ct.taxa('2a', 'HEV-g2a'  , rsubt, g2)
+
+    g3a   = ct.taxa('3a', 'HEV-g3a'  , rsubt, grjab, syn=['a'])
     g3b   = ct.taxa('3b', 'HEV-g3b'  , rsubt, grjab)
-    g3c   = ct.taxa('3c', 'HEV-g3c'  , rsubt, grchi)
-    g3d   = ct.taxa('3d', 'HEV-g3d'  , rsubt, g3)
-    g3e   = ct.taxa('3e', 'HEV-g3e'  , rsubt, grfeg)
-    g3ef  = ct.taxa('3ef', 'HEV-g3ef', rsubt, grfeg)
-    g3f   = ct.taxa('3f', 'HEV-g3f'  , rsubt, grfeg)
+    g3c   = ct.taxa('3c', 'HEV-g3c'  , rsubt, grchi, syn=['c', 'G3c'])
+    g3d   = ct.taxa('3d', 'HEV-g3d'  , rsubt, g3, syn=['d'])
+    g3e   = ct.taxa('3e', 'HEV-g3e'  , rsubt, grfeg, syn=['e', 'g3e', 'G3E', '3E'])
+    g3ef  = ct.taxa('3ef', 'HEV-g3ef', rsubt, grfeg )
+    g3f   = ct.taxa('3f', 'HEV-g3f'  , rsubt, grfeg, syn=['f', 'g3f', 'G3F', '3F', '515413', '515412']) # human/3f/Fr-27/France/2006, Fr-26/France/2006
     g3g   = ct.taxa('3g', 'HEV-g3g'  , rsubt, grfeg)
-    g3h   = ct.taxa('3h', 'HEV-g3h'  , rsubt, grchi)
+    g3h   = ct.taxa('3h', 'HEV-g3h'  , rsubt, grchi, syn=['h', 'g3h', 'G3H', '3H'])
     g3i   = ct.taxa('3i', 'HEV-g3i'  , rsubt, grchi)
     g3j   = ct.taxa('3j', 'HEV-g3j'  , rsubt, grjab)
     g3k   = ct.taxa('3k', 'HEV-g3k'  , rsubt, g3)
@@ -167,11 +203,11 @@ def add_def_taxa(db):
     g4a   = ct.taxa('4a', 'HEV-g4a'  , rsubt, g4)
     g4b   = ct.taxa('4b', 'HEV-g4b'  , rsubt, g4)
     g4c   = ct.taxa('4c', 'HEV-g4c'  , rsubt, g4)
-    g4d   = ct.taxa('4d', 'HEV-g4d'  , rsubt, g4)
+    g4d   = ct.taxa('4d', 'HEV-g4d'  , rsubt, g4, syn=['d'])
     g4e   = ct.taxa('4e', 'HEV-g4e'  , rsubt, g4)
     g4f   = ct.taxa('4f', 'HEV-g4f'  , rsubt, g4)
     g4g   = ct.taxa('4g', 'HEV-g4g'  , rsubt, g4)
-    g4h   = ct.taxa('4h', 'HEV-g4h'  , rsubt, g4)
+    g4h   = ct.taxa('4h', 'HEV-g4h'  , rsubt, g4, syn=['h'])
     g4i   = ct.taxa('4i', 'HEV-g4i'  , rsubt, g4)
     g4j   = ct.taxa('4j', 'HEV-g4j'  , rsubt, g4)
     g4k   = ct.taxa('4k', 'HEV-g4k'  , rsubt, g4)
@@ -436,12 +472,15 @@ def parseGB(db, GB_flat_file=None):
     print(GB_flat_file)
 
     c = db.cursor()
+    Id_genotype = rank_ID(c, 'genotype')
+    Id_subtype = rank_ID(c, 'subtype')
 
     # no real need to save this info
     c.execute("INSERT INTO seq_file (path, format) VALUES (?, 'GB_flat')", (GB_flat_file,))
     Id_file = c.lastrowid
     with open(GB_flat_file) as GB_flat:
       for record in GenBank.parse(GB_flat):
+
         Name     =  str(record.locus)   # todo: reparse
         strain   = ''
         isolate  = ''
@@ -530,14 +569,8 @@ def parseGB(db, GB_flat_file=None):
                                    (Name, str(record.sequence), len(record.sequence))    )
         Id_seq = c.lastrowid
 
-        taxa= subtype if subtype else genotype
-        if taxa:
-            c.execute("SELECT Id_taxa FROM taxa WHERE taxa.Name=?", (taxa,))  # ?? Name UNIQUE ??
-        else:
-            c.execute("SELECT Id_taxa FROM taxa WHERE taxa.NCBI_TaxID=?", (NCBI_TaxID,)) # (record.organism,))
-        Id_taxa = c.fetchone()
-        Id_taxa = Id_taxa[0] if Id_taxa else Id_taxa
 
+        Id_taxa = find_ID_Taxa(c, NCBI_TaxID, genotype, subtype, Id_genotype, Id_subtype)
         # todo: parse location. Is unique?
         if not strain: strain = isolate
         if not isolate: isolate = strain
@@ -572,6 +605,108 @@ def parseGB(db, GB_flat_file=None):
 
         db.commit()
 
+
+def find_ID_Taxa(db_cursor, NCBI_TaxID, genotype, subtype, Id_genotype, Id_subtype ):
+    #taxa = subtype if subtype else genotype
+    NCBI_Taxa_ID = None
+    genotype_Taxa_ID = None
+    subtype_Taxa_ID = None
+
+    if NCBI_TaxID:
+        db_cursor.execute("SELECT Id_taxa FROM taxa_names WHERE Name=?", (NCBI_TaxID,))
+        NCBI_Taxa_ID= db_cursor.fetchone()    # unique ??
+        if not NCBI_Taxa_ID:
+            print('No NCBI_Id found: NCBI_TaxID, genotype, subtype -> ', NCBI_TaxID, genotype, subtype)
+            NCBI_Taxa_ID = None
+        elif len(NCBI_Taxa_ID)!=1:
+            print('Multiple NCBI_Id found: NCBI_Taxa_ID, NCBI_TaxID, genotype, subtype -> ', NCBI_Taxa_ID, NCBI_TaxID, genotype, subtype)
+            NCBI_Taxa_ID = None
+        else:
+            NCBI_Taxa_ID = NCBI_Taxa_ID[0]
+
+    if genotype:
+        if NCBI_Taxa_ID:
+           db_cursor.execute("SELECT Id_taxa FROM taxa_names JOIN taxa USING(Id_taxa) JOIN taxa_parents USING(Id_taxa) "
+                             "WHERE taxa_names.Name=? AND taxa.Id_rank=? AND taxa_parents.parent=?",
+                             (           genotype,          Id_genotype,        NCBI_Taxa_ID)        )
+        else:
+            db_cursor.execute("SELECT Id_taxa FROM taxa_names JOIN taxa USING(Id_taxa)   "
+                              "WHERE taxa_names.Name=? AND taxa.Id_rank=?  ",
+                                  (            genotype,          Id_genotype ))
+        genotype_Taxa_ID = db_cursor.fetchone()    # unique ??
+        if not genotype_Taxa_ID:
+            if not subtype:
+                #print('Swap genotype to subtype: NCBI_TaxID, genotype, subtype -> ', NCBI_TaxID, genotype, subtype)
+                return find_ID_Taxa(db_cursor, NCBI_TaxID, None, genotype, Id_genotype, Id_subtype )
+            print('Genotype not found: NCBI_TaxID, genotype, subtype -> ', NCBI_TaxID, genotype, subtype)
+            genotype_Taxa_ID = None
+        elif len(genotype_Taxa_ID)!=1:
+            print('Multiple genotype found: genotype_Taxa_ID, NCBI_TaxID, genotype, subtype -> ',
+                                            genotype_Taxa_ID, NCBI_TaxID, genotype, subtype)
+            genotype_Taxa_ID = None
+        else:
+            genotype_Taxa_ID = genotype_Taxa_ID[0]
+
+    if subtype:
+        if genotype_Taxa_ID:
+            if NCBI_Taxa_ID:
+                db_cursor.execute(
+                    "SELECT Id_taxa FROM taxa_names "
+                    "               JOIN taxa               USING(Id_taxa) "
+                    "               JOIN taxa_parents AS pg USING(Id_taxa) "
+                    "               JOIN taxa_parents AS pn USING(Id_taxa) "
+                   "WHERE taxa_names.Name=? "
+                    " AND    taxa.Id_rank=? "
+                    " AND       pg.parent=?"
+                    " AND       pn.parent=?",
+                    (subtype, Id_subtype, genotype_Taxa_ID, NCBI_Taxa_ID))
+            else:
+                db_cursor.execute(
+                    "SELECT Id_taxa FROM taxa_names "
+                    "               JOIN taxa               USING(Id_taxa) "
+                    "               JOIN taxa_parents AS pg USING(Id_taxa) "
+                   "WHERE taxa_names.Name=? "
+                    " AND    taxa.Id_rank=? "
+                    " AND       pg.parent=?",
+                    (subtype, Id_subtype, genotype_Taxa_ID))
+        else:
+            if NCBI_Taxa_ID:
+                db_cursor.execute(
+                    "SELECT Id_taxa FROM taxa_names "
+                    "               JOIN taxa               USING(Id_taxa) "
+                    "               JOIN taxa_parents AS pn USING(Id_taxa) "
+                   "WHERE taxa_names.Name=? "
+                    " AND    taxa.Id_rank=? "
+                    " AND       pn.parent=?",
+                    (subtype, Id_subtype,  NCBI_Taxa_ID))
+            else:
+                db_cursor.execute(
+                    "SELECT Id_taxa FROM taxa_names "
+                    "               JOIN taxa               USING(Id_taxa) "
+                   "WHERE taxa_names.Name=? "
+                    " AND    taxa.Id_rank=? ",
+                    (subtype, Id_subtype))
+
+        subtype_Taxa_ID = db_cursor.fetchone()  # unique ??
+        if not subtype_Taxa_ID:
+                print('No subtype found: NCBI_TaxID, genotype, subtype -> ', NCBI_TaxID, genotype, subtype)
+                subtype_Taxa_ID = None
+        elif len(subtype_Taxa_ID) != 1:
+            print('Multiple subtype found: subtype_Taxa_ID, NCBI_TaxID, genotype, subtype -> ',
+                  subtype_Taxa_ID, NCBI_TaxID, genotype, subtype)
+            subtype_Taxa_ID = None
+        else:
+            subtype_Taxa_ID = subtype_Taxa_ID[0]
+
+    if subtype_Taxa_ID :
+        return subtype_Taxa_ID
+
+    if genotype_Taxa_ID:
+        return genotype_Taxa_ID
+    elif genotype:
+        return find_ID_Taxa(db_cursor, NCBI_TaxID, None, genotype, Id_genotype, Id_subtype )
+
+    if NCBI_Taxa_ID    : return NCBI_Taxa_ID
 
 
 if __name__ == '__main__':

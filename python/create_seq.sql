@@ -284,7 +284,8 @@
              vulgar      TEXT ,
              parent      INTEGER REFERENCES taxa(Id_taxa),               -- NULL = Root
              Id_rank     INTEGER NOT NULL REFERENCES taxa_rank(Id_rank),
-             NCBI_TaxID  TEXT
+             NCBI_TaxID  TEXT,        -- ,   add?      NCBI_Name   TEXT
+             UNIQUE (Name, parent, Id_rank)
            );
 
     -- taxa_category
@@ -306,6 +307,13 @@
              Id_rank     INTEGER NOT NULL REFERENCES taxa_rank(Id_rank),
              PRIMARY KEY (Id_taxa, parent)
            );
+    CREATE TABLE IF NOT EXISTS  taxa_names
+           (
+             Id_taxa_names INTEGER PRIMARY KEY AUTOINCREMENT,
+             Name          TEXT,
+             Id_taxa       INTEGER NOT NULL REFERENCES taxa(Id_taxa)
+           );
+
 
 
 
