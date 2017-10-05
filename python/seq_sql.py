@@ -533,14 +533,7 @@ def parseGB(db, GB_flat_file=None):
 
                     elif q.key                                  == '/note=':
                         val = q.value[1:-1]
-                        print('Note=', val)
-                        for n in val.split(';'):
-                            m = n.lower().split()  #
-                            if len(m) ==1 : m = m[0].split(':')
-                            if m[0].startswith                      ('genotype'):
-                                genotype = m[1].strip()
-                            elif m[0].startswith                    ('subtype'):
-                                subtype = m[1].strip()
+                        genotype, subtype = parse_GB_note(val)
 
 
 
@@ -716,6 +709,21 @@ def reuse_GBdefinition_to_find_strain_isolate(definition, isolate, strain):
             if strain != st:
                 strain = strain + ' or ' + st
     return isolate, strain
+def parse_GB_note(note):
+    # print('Note=', note)
+    genotype, subtype = None, None
+    for n in note.split(';'):
+        m = n.split()  #
+        if len(m) == 1:
+            m = m[0].split(':')
+            if len(m) == 1:
+                m = m[0].split('-')
+        if m[0].lower().startswith                        ('genotype'):
+            genotype = m[1].strip()
+        elif m[0].lower().startswith                      ('subtype'):
+            subtype = m[1].strip()
+    return genotype, subtype
+
 if __name__ == '__main__':
 
     # exit(0)
