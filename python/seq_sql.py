@@ -535,12 +535,9 @@ def parseGB(db, GB_flat_file=None):
                         val = q.value[1:-1]
                         genotype, subtype = parse_GB_note(val)
 
+        Id_seq = save_or_find_seq(c, record)
 
 
-        c.execute("INSERT INTO seq (Name,               Seq,     Len  ) "
-                  "         VALUES (?,                  ?,       ?    )",
-                                   (Name, str(record.sequence), len(record.sequence))    )
-        Id_seq = c.lastrowid
 
         isolate, strain = reuse_GBdefinition_to_find_strain_isolate(record.definition, isolate, strain)
 
@@ -709,6 +706,20 @@ def reuse_GBdefinition_to_find_strain_isolate(definition, isolate, strain):
             if strain != st:
                 strain = strain + ' or ' + st
     return isolate, strain
+
+
+def save_or_find_seq(db_cursor, record):
+    try:
+        db_cursor.execute("INSERT INTO seq (Name,               Seq,            Len  ) "
+                  "         VALUES (?,                  ?,              ?    )",
+                          (record.locus, str(record.sequence), len(record.sequence)))
+        Id_seq = db_cursor.lastrowid
+    except sqlite3.IntegrityError:
+        db_cursor.execute("SELECT Id_seq FROM Seq WHERE Name=?", record.locus)  # check Seq and Len?
+        Id_seq = db_cursor.fetchone()[0]  # Id_seq = Id_seq[0] if Id_seq else Id_seq
+    return Id_seq
+
+
 def parse_GB_note(note):
     # print('Note=', note)
     genotype, subtype = None, None
