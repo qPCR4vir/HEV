@@ -566,7 +566,24 @@ def parseGB(db, GB_flat_file=None):
 
         Id_seq = save_or_find_seq(c, record)
 
+        for rf in record.references:
+         try:
 
+           c.execute("INSERT INTO reference ( title   ,    authors,    journal   , medline_id,    number,    pubmed_id,    remark) "
+                           "         VALUES ( ?       ,    ?      ,    ?      ,    ?         ,    ?     ,    ?        ,    ?     )",
+                                            ( rf.title, rf.authors, rf.journal, rf.medline_id, rf.number, rf.pubmed_id, rf.remark) )
+           reference_id = c.lastrowid
+
+         except sqlite3.IntegrityError:
+
+            c.execute("SELECT reference_id FROM reference WHERE title=? AND authors=? AND journal=?",
+                                                            (rf.title,   rf.authors,   rf.journal)    )
+            reference_id = c.fetchone()[0]  # reference_id = reference_id[0] if reference_id else reference_id
+
+         c.execute(
+                "INSERT INTO reference_to_seq ( location, reference_id , Id_seq  ) "
+                "                      VALUES ( ?       , ?            , ?       )",
+                                              ( rf.bases, reference_id , Id_seq  ) )
 
         isolate, strain = reuse_GBdefinition_to_find_strain_isolate(record.definition, isolate, strain)
 
@@ -600,8 +617,9 @@ def parseGB(db, GB_flat_file=None):
         # Id_isolate_seq= c.fetchone()
         # Id_isolate_seq = Id_isolate_seq[0] if Id_isolate_seq else Id_isolate_seq
 
-        c.execute("INSERT INTO pending_seq (Name, Id_taxa, description, Id_isolate, Id_seq) VALUES (?,?,?,?,?)",
-                  (Name, Id_taxa, record.definition, Id_isolate, Id_seq))
+        c.execute("INSERT INTO pending_seq (Name     , Id_taxa, description      , Id_isolate, Id_seq) "
+                  "     VALUES             (?        , ?      , ?                , ?         ,      ?) ",
+                                 (       record.locus, Id_taxa, record.definition, Id_isolate, Id_seq))
 
         db.commit()
 
@@ -788,7 +806,8 @@ if __name__ == '__main__':
     ref_name = "M73218"
     if newly:
         print('Parsing GB_flat_file...')
-        parseGB(sdb, r'C:/Prog/HEV/data/temp/HEV-g3marked_all_2017-09-27.  577 seq.sequence.gb')
+        # parseGB(sdb, r'C:/Prog/HEV/data/temp/HEV-g3marked_all_2017-09-27.  577 seq.sequence.gb')
+        parseGB(sdb, r'C:/Prog/HEV/data/temp/HEV_all_2017-09-27. 14 469 seq.sequence.gb')
         print('Parsing the big alignment...')
         ID_align, ref = parse_full_fasta_Align(sdb, ref_name,'C:/Prog/HEV/alignment/HEV.fas')
         print(ref)
