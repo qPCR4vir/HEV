@@ -542,31 +542,6 @@ def parseGB(db, GB_flat_file=None):
                             elif m[0].startswith                    ('subtype'):
                                 subtype = m[1].strip()
 
-        des = record.definition
-        if 'isolate' in des:
-            iso = des.split('isolate')[1].split(',')[0]
-            if iso[0] == ':':
-                iso = iso[1:].strip()
-            iso = iso.split()[0].strip()
-            if iso[-1] == '.':
-                iso = iso[:-1].strip()
-            if isolate == '':
-                isolate = iso
-            else:
-                if isolate != iso:
-                    isolate = isolate + ' or ' + iso
-        if 'strain' in des:
-            st = des.split('strain')[1].split(',')[0]
-            if st[0] == ':':
-                st = st[1:].strip()
-            st = st.split()[0].strip()
-            if st[-1] == '.':
-                st = st[:-1].strip()
-            if strain == '':
-                strain = st
-            else:
-                if strain != st:
-                    strain = strain + ' or ' + st
 
 
         c.execute("INSERT INTO seq (Name,               Seq,     Len  ) "
@@ -574,6 +549,7 @@ def parseGB(db, GB_flat_file=None):
                                    (Name, str(record.sequence), len(record.sequence))    )
         Id_seq = c.lastrowid
 
+        isolate, strain = reuse_GBdefinition_to_find_strain_isolate(record.definition, isolate, strain)
 
         Id_taxa = find_ID_Taxa(c, NCBI_TaxID, genotype, subtype, Id_genotype, Id_subtype)
         # todo: parse location. Is unique?
@@ -714,6 +690,32 @@ def find_ID_Taxa(db_cursor, NCBI_TaxID, genotype, subtype, Id_genotype, Id_subty
     if NCBI_Taxa_ID    : return NCBI_Taxa_ID
 
 
+def reuse_GBdefinition_to_find_strain_isolate(definition, isolate, strain):
+    if 'isolate' in definition:
+        iso = definition.split('isolate')[1].split(',')[0]
+        if iso[0] == ':':
+            iso = iso[1:].strip()
+        iso = iso.split()[0].strip()
+        if iso[-1] == '.':
+            iso = iso[:-1].strip()
+        if isolate == '':
+            isolate = iso
+        else:
+            if isolate != iso:
+                isolate = isolate + ' or ' + iso
+    if 'strain' in definition:
+        st = definition.split('strain')[1].split(',')[0]
+        if st[0] == ':':
+            st = st[1:].strip()
+        st = st.split()[0].strip()
+        if st[-1] == '.':
+            st = st[:-1].strip()
+        if strain == '':
+            strain = st
+        else:
+            if strain != st:
+                strain = strain + ' or ' + st
+    return isolate, strain
 if __name__ == '__main__':
 
     # exit(0)
