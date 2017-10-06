@@ -14,11 +14,11 @@
     --           but also sequences obtained in the lab.
     CREATE TABLE IF NOT EXISTS  seq
                      (
-                       Id_seq   INTEGER PRIMARY KEY AUTOINCREMENT,
-                       Name     TEXT    UNIQUE,
+                       Id_seq   INTEGER PRIMARY KEY AUTOINCREMENT,    -- ?? we need this if Name is the key?
+                       Name     TEXT    UNIQUE,        -- make it the key?
                        Seq      TEXT,                  -- The original, preferable full sequence
                        -- Id_gen   INTEGER /* NOT NULL */ REFERENCES genomic_region,   --  (CG, ORF1, etc.)
-                       Len      INT
+                       Len      INT                    -- ?? we need this?
                      );
 
 /*
@@ -47,12 +47,60 @@
              Id_seq           INTEGER   REFERENCES seq(Id_seq)
            );
 
+    -- strain: unique, consolidated
+    CREATE TABLE IF NOT EXISTS   strain
+           (
+             Id_strain      INTEGER PRIMARY KEY AUTOINCREMENT,
+             Name           TEXT,                       --    UNIQUE,      --  ??
+             Id_taxa        INTEGER   REFERENCES taxa,       -- the finest available classification, consensus
+             host           TEXT,      -- todo: Id_host     INTEGER, --NOT NULL,  -- original taxa    -- consensus
+             source         TEXT,      -- todo: Id_source   INTEGER, --NOT NULL,  -- consensus
+             year           INT,                             -- consensus
+             country_iso3   TEXT REFERENCES countries(iso3)  -- consensus
+            );
+
+    -- isolate: unique, consolidated
+    CREATE TABLE IF NOT EXISTS   isolate
+           (
+             Id_isolate  INTEGER PRIMARY KEY AUTOINCREMENT,
+             Name        TEXT,
+             Id_strain   INTEGER NOT NULL REFERENCES strain(Id_strain),
+             col_date    TEXT,
+             year        INT,
+             month       INT,
+             day         INT,
+             host            TEXT,      -- todo: Id_host     INTEGER, --NOT NULL,     -- original taxa
+             source          TEXT,      -- todo: Id_source   INTEGER, --NOT NULL,
+             authors         TEXT,      -- Id_author       INTEGER,   -- NOT NULL,
+             institution     TEXT,      -- todo: Id_institution  INTEGER, --NOT NULL,
+             Id_location     INTEGER REFERENCES location(Id_location), -- NOT NULL,
+             country_iso3    TEXT REFERENCES countries(iso3),
+             region          TEXT,      -- todo: Id_location,
+             region_full     TEXT,       -- todo: Id_location
+             UNIQUE(Id_strain, Name)
+           );
+
+
     -- isolate_seq   :   all the experimental sequences obtained from a given isolate
     CREATE TABLE IF NOT EXISTS  isolate_seq
            (
              Id_isolate_seq   INTEGER   PRIMARY KEY AUTOINCREMENT,
              Id_isolate       INTEGER   REFERENCES isolate(Id_isolate),
-             Id_seq           INTEGER   REFERENCES seq(Id_seq)    -- PRIMARY KEY  ??
+             Id_seq           INTEGER   REFERENCES seq(Id_seq),    -- PRIMARY KEY  ??
+             Id_submission   INTEGER REFERENCES submission(Id_submission), -- NOT NULL,
+             Id_strain   INTEGER NOT NULL REFERENCES strain(Id_strain),
+             Id_taxa        INTEGER   REFERENCES taxa,       -- the finest available classification, consensus
+             Name        TEXT,
+             col_date    TEXT,                -- ?
+             year        INT,
+             month       INT,
+             day         INT,
+             host            TEXT,      -- todo: Id_host     INTEGER, --NOT NULL,     -- original taxa
+             source          TEXT,      -- todo: Id_source   INTEGER, --NOT NULL,
+             -- Id_location     INTEGER REFERENCES location(Id_location), -- NOT NULL,
+             country_iso3    TEXT REFERENCES countries(iso3),
+             region          TEXT,      -- todo: Id_location,
+             region_full     TEXT       -- todo: Id_location
            );
 
     -- submission   :   the GB submission process
@@ -71,6 +119,16 @@
              UNIQUE(title, authors)
            );
 
+    -- strain_isolate: all possible isolate for a given strain
+    CREATE TABLE IF NOT EXISTS   strain_isolate
+           (
+             Id_strain_isolate   INTEGER   PRIMARY KEY AUTOINCREMENT,
+             Id_strain           INTEGER NOT NULL REFERENCES strain(Id_strain),
+             Id_isolate_seq      INTEGER REFERENCES isolate_seq(Id_isolate_seq),
+             Name                TEXT
+            );
+
+
     CREATE TABLE IF NOT EXISTS  classified_seq
            (
              Id_clas_seq      INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -78,6 +136,17 @@
              -- description      TEXT,                               --  ??
              -- Id_isolate       INTEGER   REFERENCES isolate    ,
              Id_algseq        INTEGER  NOT NULL REFERENCES aligned_seq(Id_algseq)   -- PRIMARY KEY  ???????
+           );
+
+    CREATE TABLE IF NOT EXISTS  pending_seq
+           (
+             Id_pend_seq      INTEGER   PRIMARY KEY AUTOINCREMENT,
+             Name             TEXT,                    -- not NULL only if there is not ID_seq
+             Id_taxa          INTEGER   REFERENCES taxa(Id_taxa),          -- the finest available classification
+             description      TEXT,
+             Id_isolate       INTEGER   REFERENCES isolate(Id_isolate)    ,
+             Id_algseq        INTEGER   REFERENCES aligned_seq(Id_algseq),
+             Id_seq           INTEGER   REFERENCES seq(Id_seq)
            );
 
     CREATE TABLE IF NOT EXISTS  ref_schema
@@ -100,24 +169,13 @@
            );
 
 
-    CREATE TABLE IF NOT EXISTS  pending_seq
-           (
-             Id_pend_seq      INTEGER   PRIMARY KEY AUTOINCREMENT,
-             Name             TEXT,
-             Id_taxa          INTEGER   REFERENCES taxa(Id_taxa),          -- the finest available classification
-             description      TEXT,                               --  ??
-             Id_isolate       INTEGER   REFERENCES isolate(Id_isolate)    ,
-             Id_algseq        INTEGER   REFERENCES aligned_seq(Id_algseq),
-             Id_seq           INTEGER   REFERENCES seq(Id_seq)
-           );
-
    -- GB_seq  -- a simplified view of a GenBank entry sequence: todo use BioSQL
     CREATE TABLE IF NOT EXISTS  GB_seq
            (
              Id_GB_seq        INTEGER PRIMARY KEY AUTOINCREMENT,
-             Acc              TEXT    UNIQUE,
-             description      TEXT,
-             locus            TEXT,
+             -- Acc              TEXT    UNIQUE,
+             -- description      TEXT,
+             -- locus            TEXT,
              Id_seq           INTEGER   REFERENCES seq(Id_seq)
            );
 
@@ -130,7 +188,7 @@
                        pbeg     INT,             -- relative to the original
                        pend     INT
                      );
-          
+
     -- partial_seq  -- Usually a temporal information construct containing the seq text,
     --                 for example from: a BLAST hit, or a region selected for phylogenetic analysis
     --       if the corresponding experimental seq is found it can be converted into a seq_fragment
@@ -142,7 +200,7 @@
                        end     INT,
                        seq     TEXT              -- The aligned sequence, with internal gaps -, but without external
                      );
-          
+
     -- align -- for axample a BLAST result from one query, or a "normal" Multialignment.
     --          if all the sequences are experimental (not necessary bio_seq) it is a full_align (don't BLAST!)
     CREATE TABLE IF NOT EXISTS    align
@@ -153,7 +211,19 @@
                        Al_len    integer ,
                        Ref       text        -- if not NULL, the suggested reference sequence
                      );
-          
+
+    -- to analise a region of a big alignment we create partial alignments from the original
+    CREATE TABLE IF NOT EXISTS    align_partial
+                     (
+                       Id_al_part  INTEGER PRIMARY KEY AUTOINCREMENT,
+                       Id_align    INTEGER    REFERENCES align(Id_align),  -- the original alignmet
+                       Name        TEXT,
+                       Al_len      INTEGER ,
+                       pbeg        INTEGER ,       -- relative to the original alignmet
+                       pend        INTEGER ,
+                       Ref         text            -- if not NULL, the suggested reference sequence
+                     );
+
     -- aligned_seq
     CREATE TABLE IF NOT EXISTS  aligned_seq
                      (
@@ -164,39 +234,29 @@
                        pbeg        INT,             -- relative to the alignment
                        pend        INT
                      );
-          
-    -- strain
-    CREATE TABLE IF NOT EXISTS   strain
-           (
-             Id_strain      INTEGER PRIMARY KEY AUTOINCREMENT,
-             Name           TEXT,                       --    UNIQUE,      --  ??
-             Id_taxa        INTEGER   REFERENCES taxa,       -- the finest available classification, consensus
-             host           TEXT,      -- todo: Id_host     INTEGER, --NOT NULL,  -- original taxa    -- consensus
-             source         TEXT,      -- todo: Id_source   INTEGER, --NOT NULL,  -- consensus
-             year           INT,                             -- consensus
-             Id_country_cod TEXT REFERENCES countries(iso3)  -- consensus
-            );
 
-    -- isolate
-    CREATE TABLE IF NOT EXISTS   isolate
+
+
+    CREATE TABLE reference (
+        reference_id   INTEGER PRIMARY KEY AUTOINCREMENT,
+        title    	   TEXT,                           -- # title
+        authors  	   TEXT,                           -- # authors
+        journal        TEXT,                           -- # journal
+        medline_id     TEXT,                           -- # medline_id
+        number         TEXT,                           -- # number
+        pubmed_id      TEXT,                           -- # pubmed_id
+        remark         TEXT,                           -- # remark
+        UNIQUE(journal, authors, title)
+        -- dbxref_id	   INT(10) ,
+        -- crc	   	   VARCHAR(32),
+        -- UNIQUE (dbxref_id),
+        -- UNIQUE (crc),
+        -- FOREIGN KEY ( dbxref_id ) REFERENCES dbxref ( dbxref_id )
+    );
+
     -- reference_to_seq   :   all the references papers for a given GB seq
     CREATE TABLE IF NOT EXISTS  reference_to_seq
            (
-             Id_isolate  INTEGER PRIMARY KEY AUTOINCREMENT,
-             Name        TEXT,
-             Id_strain   INTEGER NOT NULL REFERENCES strain(Id_strain),
-             -- idate       TEXT,                -- ?
-             year        INT,
-             month       INT,
-             day         INT,
-             host            TEXT,      -- todo: Id_host     INTEGER, --NOT NULL,     -- original taxa
-             source          TEXT,      -- todo: Id_source   INTEGER, --NOT NULL,
-             Id_author       INTEGER,   -- NOT NULL,
-             institution     TEXT,      -- todo: Id_institution  INTEGER, --NOT NULL,
-             Id_location     INTEGER REFERENCES location(Id_location), -- NOT NULL,
-             country_iso3    TEXT REFERENCES countries(iso3),
-             region          TEXT,      -- todo: Id_location,
-             region_full     TEXT       -- todo: Id_location
              Id_ref_to_seq    INTEGER   PRIMARY KEY AUTOINCREMENT,   -- we need this?
              location 	      TEXT NOT NULL,                  -- coordinates in the seq,  # bases
              reference_id     INTEGER NOT NULL   REFERENCES reference(reference_id),

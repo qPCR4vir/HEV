@@ -82,6 +82,10 @@ def rank_ID(db_cursor, rank_name):
     db_cursor.execute("SELECT Id_rank FROM taxa_rank WHERE Name=?", (rank_name,))
     return db_cursor.fetchone()[0]
 
+def rank_ID_taxa(db_cursor, Id_taxa):
+    db_cursor.execute("SELECT Id_rank FROM taxa WHERE Id_taxa=?", (Id_taxa,))
+    return db_cursor.fetchone()[0]
+
 #def createBioSQL(newly) -> sqlite3.Connection:
 #
 #    server = BioSeqDatabase.open_database(driver="sqlite3", db="HEV")
@@ -200,7 +204,7 @@ def add_def_taxa(db):
     grfeg  = ct.taxa('3feg'  , 'HEV-g3feg'     , rgr, maII)
 
     rsubt = ct.rank('subtype', rgr)
-    
+
     g1a   = ct.taxa('1a', 'HEV-g1a'  , rsubt, g1, syn=['a', 'Ia', 'IA'])
     g1b   = ct.taxa('1b', 'HEV-g1b'  , rsubt, g1)
     g1c   = ct.taxa('1c', 'HEV-g1c'  , rsubt, g1)
@@ -243,6 +247,7 @@ def add_def_taxa(db):
 
     db.commit()
 
+
 def build_ref_pos(Seq, beg, end, Al_len):
     sr=0
     ref = [sr]*beg
@@ -251,6 +256,7 @@ def build_ref_pos(Seq, beg, end, Al_len):
         ref.append(sr)
     ref += [sr]*(Al_len - end-1)
     return ref
+
 
 def parse_full_fasta_Align(db, ref_seq = None, file_name=None):
     """Will parse an alignment and insert it into the tables:
@@ -326,6 +332,7 @@ def parse_full_fasta_Align(db, ref_seq = None, file_name=None):
     db.commit()
     return Id_align , build_ref_pos(al_ref_seq,0,len(al_ref_seq)-1, max_len)
 
+
 def ref_pos(sdb, ID_align, seq_name=None):
     c = sdb.cursor()
     c.execute("SELECT Al_len, Ref FROM align WHERE Id_align=? ", (ID_align,  ))
@@ -336,6 +343,7 @@ def ref_pos(sdb, ID_align, seq_name=None):
                                      (seq_name,     ID_align ))
     Seq, beg, end = c.fetchone()
     return build_ref_pos(Seq, beg, end, Al_len)
+
 
 def abnormal_row(c, row):
     MEGA_name = row[0].value          # 'A' - MEGA name
@@ -649,34 +657,56 @@ def parseGB(db, GB_flat_file=None):
         isolate, strain = reuse_GBdefinition_to_find_strain_isolate(record.definition, isolate, strain)
 
         Id_taxa = find_ID_Taxa(c, NCBI_TaxID, genotype, subtype, Id_genotype, Id_subtype)
+        # Id_rank = rank_ID_taxa(c, Id_taxa)
+
+        c.execute("SELECT iso3 FROM countries WHERE name=?", (country,))
+        country_iso3 = c.fetchone()
+        country_iso3 = country_iso3[0] if country_iso3 else None
+
         # todo: parse location. Is unique?
         if not strain: strain = isolate
         if not isolate: isolate = strain
-        c.execute("SELECT Id_strain FROM strain WHERE Name=?", (strain,))
+
+        c.execute("SELECT Id_strain FROM strain WHERE Name=?", (strain,))   # select other fields to update if possible
         Id_strain = c.fetchone()
         if Id_strain:
-            print('Existing Strain:', strain, Id_strain )
-            c.execute("INSERT INTO strain (Name) VALUES (?) ", (strain,))
-            Id_strain = c.lastrowid
-            print('     new Id_strain:', Id_strain, )
+            # print('Existing Strain:', strain, Id_strain )
+            # c.execute("UPDATE strain (Name) VALUES (?) ", (strain,))  # todo: update here !!!!!!!!
+            # Id_strain = c.lastrowid
+            # print('     new Id_strain:', Id_strain, )
+            Id_strain = Id_strain[0]
         else:
             # print('New Strain:', Str_name, Id_strain)
-            c.execute("INSERT INTO strain (Name) VALUES (?) ", (strain,))
+            c.execute("INSERT INTO strain (Name  , Id_taxa, host, source, year           , country_iso3) "
+                      "     VALUES        (?     , ?      , ?   , ?     , ?              , ?           ) ",
+                                          (strain, Id_taxa, host, source, collection_date, country_iso3))
             Id_strain = c.lastrowid
             # print('New Strain ID:', Id_strain)
 
-        c.execute("SELECT iso3 FROM countries WHERE name=?", (country,))
-        Country_cod3 = c.fetchone()
-        Country_cod3 = Country_cod3[0] if Country_cod3 else None
-        c.execute(
-            "INSERT INTO isolate (Name   , Id_strain, year,            month, day, host, source, institution, country_iso3, region, region_full ) "
-            "             VALUES (?      , ?        , ?   , ?    , ?  , ?   , ?     , ?          , ?           , ?     , ?           ) "
-            ,                    (isolate, Id_strain, collection_date, None, None, host, source, None       , Country_cod3, None  , region      ))
-        Id_isolate = c.lastrowid
-        c.execute("INSERT INTO isolate_seq (Id_isolate   , Id_seq) VALUES (?,?) "
-                  , (Id_isolate, Id_seq))
-        # Id_isolate_seq= c.fetchone()
-        # Id_isolate_seq = Id_isolate_seq[0] if Id_isolate_seq else Id_isolate_seq
+        c.execute("SELECT Id_isolate FROM isolate WHERE Name=? AND Id_strain=?", (isolate, Id_strain))
+                 # select other fields to update if possible
+        Id_isolate = c.fetchone()
+        if Id_isolate:
+            # print('Existing isolate:', isolate, Id_isolate )
+            # c.execute("UPDATE  isolate (Name) VALUES (?) ", ( isolate,))  # todo: update here !!!!!!!!
+            # Id_isolate = c.lastrowid
+            Id_isolate = Id_isolate[0]
+        else:
+            c.execute(
+                "INSERT INTO isolate (Name   , Id_strain, col_date       , host, source, authors  , institution, country_iso3, region_full ) "
+                "             VALUES (?      , ?        , ?              , ?   , ?     , ?        , ?          , ?           , ?           ) "
+                                   , (isolate, Id_strain, collection_date, host, source, p_authors, institution, country_iso3, region      ))
+            Id_isolate = c.lastrowid
+
+        c.execute("INSERT INTO isolate_seq (Id_isolate, Id_seq, Id_submission, Id_strain, Id_taxa, Name   , col_date       , host, source, country_iso3, region_full) "
+                  "VALUES                  (?         ,?      , ?            , ?        , ?      , ?      , ?              , ?   , ?     , ?           , ?           ) "
+                  ,                        (Id_isolate, Id_seq, Id_submission, Id_strain, Id_taxa, isolate, collection_date, host, source, country_iso3, region      ))
+        Id_isolate_seq= c.fetchone()
+        Id_isolate_seq = Id_isolate_seq[0] if Id_isolate_seq else Id_isolate_seq
+
+        c.execute("INSERT INTO strain_isolate (Id_strain, Name  , Id_isolate_seq) "
+                  "     VALUES                (?        , ?     , ?             ) ",
+                                              (Id_strain, strain, Id_isolate_seq) )
 
         c.execute("INSERT INTO pending_seq (Name     , Id_taxa, description      , Id_isolate, Id_seq) "
                   "     VALUES             (?        , ?      , ?                , ?         ,      ?) ",
@@ -816,14 +846,14 @@ def reuse_GBdefinition_to_find_strain_isolate(definition, isolate, strain):
     return isolate, strain
 
 
-def save_or_find_seq(db_cursor, record):
+def save_or_find_seq(db_cursor, GBrecord):
     try:
         db_cursor.execute("INSERT INTO seq (Name,               Seq,            Len  ) "
                   "         VALUES (?,                  ?,              ?    )",
-                          (record.locus, str(record.sequence), len(record.sequence)))
+                          (GBrecord.locus, str(GBrecord.sequence), len(GBrecord.sequence)))
         Id_seq = db_cursor.lastrowid
     except sqlite3.IntegrityError:
-        db_cursor.execute("SELECT Id_seq FROM Seq WHERE Name=?", record.locus)  # check Seq and Len?
+        db_cursor.execute("SELECT Id_seq FROM Seq WHERE Name=?", GBrecord.locus)  # check Seq and Len?
         Id_seq = db_cursor.fetchone()[0]  # Id_seq = Id_seq[0] if Id_seq else Id_seq
     return Id_seq
 
