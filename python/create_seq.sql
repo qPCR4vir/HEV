@@ -55,6 +55,22 @@
              Id_seq           INTEGER   REFERENCES seq(Id_seq)    -- PRIMARY KEY  ??
            );
 
+    -- submission   :   the GB submission process
+    CREATE TABLE IF NOT EXISTS  submission
+           (
+             Id_submission    INTEGER   PRIMARY KEY AUTOINCREMENT,
+             title       TEXT,
+             sub_date    TEXT,
+             -- year   INT,
+             -- month       INT,
+             -- day         INT,
+             authors         TEXT,      -- Id_author       INTEGER,   -- NOT NULL,
+             institution     TEXT,      -- todo: Id_institution  INTEGER, --NOT NULL,
+             --Id_location     INTEGER REFERENCES location(Id_location), -- NOT NULL,
+             country_iso3    TEXT REFERENCES countries(iso3),
+             UNIQUE(title, authors)
+           );
+
     CREATE TABLE IF NOT EXISTS  classified_seq
            (
              Id_clas_seq      INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -163,6 +179,8 @@
 
     -- isolate
     CREATE TABLE IF NOT EXISTS   isolate
+    -- reference_to_seq   :   all the references papers for a given GB seq
+    CREATE TABLE IF NOT EXISTS  reference_to_seq
            (
              Id_isolate  INTEGER PRIMARY KEY AUTOINCREMENT,
              Name        TEXT,
@@ -179,7 +197,13 @@
              country_iso3    TEXT REFERENCES countries(iso3),
              region          TEXT,      -- todo: Id_location,
              region_full     TEXT       -- todo: Id_location
+             Id_ref_to_seq    INTEGER   PRIMARY KEY AUTOINCREMENT,   -- we need this?
+             location 	      TEXT NOT NULL,                  -- coordinates in the seq,  # bases
+             reference_id     INTEGER NOT NULL   REFERENCES reference(reference_id),
+             Id_seq           INTEGER NOT NULL REFERENCES seq(Id_seq),   -- PRIMARY KEY  ??
+             UNIQUE (reference_id, Id_seq)
            );
+
 
     CREATE TABLE IF NOT EXISTS location
         (

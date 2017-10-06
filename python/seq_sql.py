@@ -513,6 +513,9 @@ def parseGB(db, GB_flat_file=None):
     c.execute("INSERT INTO seq_file (path, format) VALUES (?, 'GB_flat')", (GB_flat_file,))
     Id_file = c.lastrowid
     with open(GB_flat_file) as GB_flat:
+      prev_sub_auth = None
+      prev_sub_jour = None
+      prev_sub_ID   = None
       for record in GenBank.parse(GB_flat):
 
         Name     =  str(record.locus)   # todo: reparse
@@ -566,24 +569,82 @@ def parseGB(db, GB_flat_file=None):
 
         Id_seq = save_or_find_seq(c, record)
 
+        authors = None
+        unp_aut = None
+        references = []
+        title = None
+        sub_date = None
+        institution = None
+        Id_submission = None
+        p_authors = None
+        p_country = None
+        p_journal = None
+
         for rf in record.references:
-         try:
 
-           c.execute("INSERT INTO reference ( title   ,    authors,    journal   , medline_id,    number,    pubmed_id,    remark) "
-                           "         VALUES ( ?       ,    ?      ,    ?      ,    ?         ,    ?     ,    ?        ,    ?     )",
-                                            ( rf.title, rf.authors, rf.journal, rf.medline_id, rf.number, rf.pubmed_id, rf.remark) )
-           reference_id = c.lastrowid
+            if rf.title == 'Direct Submission':
+                if prev_sub_auth == rf.authors and prev_sub_jour == rf.journal:
+                    Id_submission = prev_sub_ID
+                    break
+                else:
+                    p_authors = rf.authors
+                    p_journal = rf.journal
+                    institution = p_journal[24:]
 
-         except sqlite3.IntegrityError:
+            elif rf.journal == 'Unpublished':
+                title = rf.journal
+                unp_aut = rf.authors
 
-            c.execute("SELECT reference_id FROM reference WHERE title=? AND authors=? AND journal=?",
-                                                            (rf.title,   rf.authors,   rf.journal)    )
-            reference_id = c.fetchone()[0]  # reference_id = reference_id[0] if reference_id else reference_id
+            else:
+                references.append(rf)
 
-         c.execute(
+        if not Id_submission:    # if not like the previous ...
+                                 # look for this authors in existing submissions in DB
+            for ID, tl in c.execute("SELECT Id_submission, title  FROM submission WHERE  authors=? ", (p_authors, )):
+                if tl == title:           # with the same title will be the same submission
+                    Id_submission = ID
+                    break
+                elif title:
+                    continue
+                else:
+                    for rf in references:   # the submission could uses the title of one of the references
+                        if tl == rf.title:
+                            title = rf.title
+                            Id_submission = ID
+                            break
+
+            if not Id_submission and p_journal:   # is a new submission that we can built
+                sub_date = p_journal[11:23]
+                p_country = institution.split(',')[-1]
+                if not title:
+                   title = references[0].title if references else None         # lets take the title of the first reference
+                c.execute(
+                  "INSERT INTO submission ( title, sub_date, authors  , country_iso3                                )"
+                  "                VALUES ( ?    ,    ?    , ?        , (SELECT iso3 FROM countries WHERE name=? )  )",
+                                          ( title, sub_date, p_authors, p_country                                )  )
+                Id_submission = c.lastrowid
+                prev_sub_auth = p_authors          # now this will be the prev sub
+                prev_sub_jour = p_journal
+                prev_sub_ID   = Id_submission
+
+        for rf in references:   # very often this is empty. Add to every seq referenced
+            try:
+                c.execute(
+                "INSERT INTO reference ( title   ,    authors,    journal   , medline_id,    number,    pubmed_id,    remark) "
+                "     VALUES           ( ?       ,    ?      ,    ?      ,    ?         ,    ?     ,    ?        ,    ?     )",
+                                       ( rf.title, rf.authors, rf.journal, rf.medline_id, rf.number, rf.pubmed_id, rf.remark))
+                reference_id = c.lastrowid
+
+            except sqlite3.IntegrityError:
+                c.execute("SELECT reference_id FROM reference WHERE title=? AND authors=? AND journal=?",
+                                                                  (rf.title,    rf.authors,   rf.journal))
+                reference_id = c.fetchone()[0]
+                # reference_id = reference_id[0] if reference_id else reference_id
+
+            c.execute(
                 "INSERT INTO reference_to_seq ( location, reference_id , Id_seq  ) "
                 "                      VALUES ( ?       , ?            , ?       )",
-                                              ( rf.bases, reference_id , Id_seq  ) )
+                                              (rf.bases, reference_id  , Id_seq ))
 
         isolate, strain = reuse_GBdefinition_to_find_strain_isolate(record.definition, isolate, strain)
 
