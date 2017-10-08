@@ -472,8 +472,8 @@ def parse_row(db, row, col):
         c.execute("INSERT INTO pending_seq (Id_taxa, Name,      Id_seq, Id_isolate) VALUES (?,?,?,?)",
                                            (Id_taxa, MEGA_name, Id_seq, Id_isolate))
 
-        print("Abnormal row !!!!! ", MEGA_name, subtype, Str_name,
-          "-------> Taxa:{0}, Alseq:{1}, Seq:{2}".format(Id_taxa, Id_algseq, Id_seq))
+        # print("Abnormal row !!!!! ", MEGA_name, subtype, Str_name,
+        #   "-------> Taxa:{0}, Alseq:{1}, Seq:{2}".format(Id_taxa, Id_algseq, Id_seq))
         success = False
     else:
         c.execute("INSERT INTO classified_seq (Id_taxa, Id_algseq) VALUES (?,?) "
@@ -484,16 +484,16 @@ def parse_row(db, row, col):
     if Lu_Li         : rfs.append( 'Lu' )
     if Reference     : rfs.append( 'VR' )
     if Reference=='R': rfs.append( 'ICVT')
-    print (rfs)
+    # print (rfs)
     for rf in rfs:
-       print ('Add scheme: ',Id_taxa ,     rf                ,     Id_seq,   MEGA_name    )
+       # print ('Add scheme: ',Id_taxa ,     rf                ,     Id_seq,   MEGA_name    )
        c.execute("INSERT INTO ref_seq (Id_taxa,                                    Id_ref_schema     , Id_seq, name   ) "
                "               VALUES (?      , (SELECT Id_ref_schema FROM ref_schema WHERE schema=?), ?     , ?      ) "
                                     , (Id_taxa,                                                  rf  , Id_seq, MEGA_name    ))
 
-
-    db.commit()
+    # db.commit()
     return success
+
 
 def parse_HEV_xlsm(db, file_name=None):
     if not file_name:
@@ -522,6 +522,9 @@ def parse_HEV_xlsm(db, file_name=None):
             error |= parse_row(db,r,col)
     if error:
         print('There were errors during parsing the Excel file !!!!!!!!!!!!!!')
+
+    db.commit()
+
 
 def clean_parsed_Excel(db):
     c = db.cursor()
