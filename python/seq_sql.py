@@ -2,6 +2,8 @@ print('tk...')
 from tkinter import filedialog
 # import tkinter
 
+import datetime
+
 print('sqlite3...')
 import sqlite3
 
@@ -570,6 +572,9 @@ def parseGB(db, GB_flat_file=None):
         country  = None      # colection contry, NO author country
         region   = None      # colection region, NO author country
         collection_date = None
+        year     = None
+        month    = None
+        day      = None
         source   = None
         genotype = None
         subtype  = None
@@ -606,6 +611,7 @@ def parseGB(db, GB_flat_file=None):
 
                     elif q.key                                  == '/collection_date=':
                         collection_date = q.value[1:-1].strip()
+                        year, month, day = parse_date(collection_date)
 
                     elif q.key == '/source=' or q.key           == '/isolation_source=':
                         source = q.value[1:-1].strip()
@@ -670,7 +676,7 @@ def parseGB(db, GB_flat_file=None):
                             break
 
             if not Id_submission and p_journal:   # is a new submission that we can built
-                sub_date = p_journal[11:23]
+                sub_date = p_journal[11:23]       # todo: parse ???
                 p_country = institution.split(',')[-1]
                 if not title:
                    title = references[0].title if references else None         # lets take the title of the first reference
@@ -728,9 +734,9 @@ def parseGB(db, GB_flat_file=None):
 
         if not Id_strain:
             #  the normal situation: a new strain
-            c.execute("INSERT INTO strain (Name  , Id_taxa, host, source, year           , country_iso3) "
-                      "     VALUES        (?     , ?      , ?   , ?     , ?              , ?           ) ",
-                                          (strain, Id_taxa, host, source, collection_date, country_iso3))
+            c.execute("INSERT INTO strain (Name  , Id_taxa, host, source, year, country_iso3) "
+                      "     VALUES        (?     , ?      , ?   , ?     , ?   , ?           ) ",
+                                          (strain, Id_taxa, host, source, year, country_iso3))
             Id_strain = c.lastrowid
         else:
             # TENTATIVELY we considere it is the same strain, just these strain have seq already
@@ -755,15 +761,15 @@ def parseGB(db, GB_flat_file=None):
         if not Id_isolate:
             #  normal situation: a new isolate for that strain
             c.execute(
-                "INSERT INTO isolate (Name   , Id_strain, col_date       , host, source, authors  , institution, country_iso3, region_full ) "
-                "             VALUES (?      , ?        , ?              , ?   , ?     , ?        , ?          , ?           , ?           ) "
-                                   , (isolate, Id_strain, collection_date, host, source, p_authors, institution, country_iso3, region))
+                "INSERT INTO isolate (Name   , Id_strain, col_date       , Year ,  Month , Day, host, source, authors  , institution, country_iso3, region_full ) "
+                "             VALUES (?      , ?        , ?              , ?    ,  ?     , ?  , ?   , ?     , ?        , ?          , ?           , ?           ) "
+                                   , (isolate, Id_strain, collection_date, year ,  month , day, host, source, p_authors, institution, country_iso3, region))
             Id_isolate = c.lastrowid
 
         # create isolate_seq and strain_isolate
-        c.execute("INSERT INTO isolate_seq (authority, Id_isolate, Id_seq, Id_submission, Id_strain, Id_taxa, Name   , col_date       , host, source, country_iso3, region_full) "
-                  "VALUES                  ('GB'     , ?         ,?      , ?            , ?        , ?      , ?      , ?              , ?   , ?     , ?           , ?           ) "
-                  ,                        (           Id_isolate, Id_seq, Id_submission, Id_strain, Id_taxa, isolate, collection_date, host, source, country_iso3, region      ))
+        c.execute("INSERT INTO isolate_seq (authority, Id_isolate, Id_seq, Id_submission, Id_strain, Id_taxa, Name   , col_date       , year ,  month , day, host, source, country_iso3, region_full) "
+                  "VALUES                  ('GB'     , ?         ,?      , ?            , ?        , ?      , ?      , ?              , ?    ,  ?     , ?  , ?   , ?     , ?           , ?           ) "
+                  ,                        (           Id_isolate, Id_seq, Id_submission, Id_strain, Id_taxa, isolate, collection_date, year ,  month , day, host, source, country_iso3, region      ))
         Id_isolate_seq= c.lastrowid
 
         c.execute("INSERT INTO strain_isolate (authority, Id_strain, Name  , Id_isolate_seq) "
@@ -922,6 +928,47 @@ def parse_GB_note(note):
         elif m[0].lower().startswith                      ('subtype'):
             subtype = m[1].strip()
     return genotype, subtype
+
+
+def parse_date(date :str):
+    L=len(date)
+
+    try:
+
+        if L == 11 :                                    # 02-Mar-2010
+            d=datetime.datetime.strptime(date, '%d-%b-%Y')
+            return d.year, d.month, d.day
+
+        elif L == 4 :                                   # 2011
+            return date, None, None
+
+        elif L == 8 :                                   # Sep-2011
+                d=datetime.datetime.strptime(date, '%b-%Y')
+                return d.year, d.month, None
+
+        elif L == 9:
+            d=date.split('/')[0]                        # 2013/2014
+            return d, None, None
+
+        elif L == 10 :                                  # 2016-05-12
+            d=datetime.datetime.strptime(date, '%Y-%m-%d')
+            return d.year, d.month, d.day
+
+        elif L == 7 :                                   # 2016-05
+            d=datetime.datetime.strptime(date, '%Y-%m')
+            return d.year, d.month, None
+
+        elif L == 3 :                                   # Sep       ???????
+            d=datetime.datetime.strptime(date, '%b')
+            return None, d.month, None
+
+        else:
+            raise ValueError
+
+    except ValueError:
+        print('Unable to parse date: ', date, ' of length ', len(date) )
+        return None, None, None
+
 
 
 if __name__ == '__main__':
