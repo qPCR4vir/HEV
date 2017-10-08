@@ -531,15 +531,18 @@ def parseGB(db, GB_flat_file=None):
       prev_sub_ID   = None
       for record in GenBank.parse(GB_flat):
 
-        Name     =  str(record.locus)   # todo: reparse
-        strain   = ''
-        isolate  = ''
-        host     = ''
-        country  = ''
-        region   = ''
+        # record.locus  : locus - The name specified after the LOCUS keyword in the GenBank
+        # record. This may be the accession number, or a clone id or something else.
+
+        Name     = record.accession[0] if record.accession else record.locus
+        strain   = None     # record.locus ??
+        isolate  = None
+        host     = None
+        country  = None      # colection contry, NO author country
+        region   = None      # colection region, NO author country
         collection_date = None
-        source   = ''
-        genotype = ''
+        source   = None
+        genotype = None
         subtype  = None
         NCBI_TaxID = None
 
@@ -669,8 +672,6 @@ def parseGB(db, GB_flat_file=None):
                 "                      VALUES ( ?       , ?            , ?       )",
                                               (rf.bases, reference_id  , Id_seq ))
 
-        isolate, strain = reuse_GBdefinition_to_find_strain_isolate(record.definition, isolate, strain)
-
         Id_taxa = find_ID_Taxa(c, NCBI_TaxID, genotype, subtype, Id_genotype, Id_subtype)
         # Id_rank = rank_ID_taxa(c, Id_taxa)
 
@@ -679,8 +680,13 @@ def parseGB(db, GB_flat_file=None):
         country_iso3 = country_iso3[0] if country_iso3 else None
 
         # todo: parse location. Is unique?
+
+        isolate, strain = reuse_GBdefinition_to_find_strain_isolate(record.definition, isolate, strain)
         if not strain: strain = isolate
         if not isolate: isolate = strain
+        if not strain:
+            strain = Name
+            isolate = record.locus
 
         c.execute("SELECT Id_strain FROM strain WHERE Name=?", (strain,))   # select other fields to update if possible
         Id_strain = c.fetchone()
@@ -725,7 +731,7 @@ def parseGB(db, GB_flat_file=None):
 
         c.execute("INSERT INTO pending_seq (Name     , Id_taxa, description      , Id_isolate, Id_seq) "
                   "     VALUES             (?        , ?      , ?                , ?         ,      ?) ",
-                                 (       record.locus, Id_taxa, record.definition, Id_isolate, Id_seq))
+                                           (Name, Id_taxa, record.definition, Id_isolate, Id_seq))
 
         db.commit()
 
