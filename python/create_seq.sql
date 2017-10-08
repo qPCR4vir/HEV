@@ -408,7 +408,8 @@ CREATE TABLE IF NOT EXISTS  taxa_names
 CREATE VIEW  files AS SELECT  path, format FROM seq_file;
 CREATE VIEW  all_frag AS SELECT  Name, Len, pbeg, pend FROM seq, aligned_seq
          ON seq.Id_seq = aligned_seq.Id_part ;
-CREATE VIEW  strains_with_duplicate_isolates AS SELECT strain.Name, count(isolate.Id_strain) AS str_c
+CREATE VIEW  strains_with_duplicate_isolates AS
+SELECT strain.Name, count(isolate.Id_strain) AS str_c
              FROM strain JOIN isolate USING (Id_strain)
              GROUP BY isolate.Id_strain HAVING count(isolate.Id_strain) >1 ORDER BY str_c DESC;
 CREATE VIEW taxa_tree AS
@@ -516,8 +517,25 @@ FROM pending_seq AS p    JOIN seq         USING (ID_seq)
                          JOIN countries   ON    (isolate.country_iso3=countries.iso3)
 ;
 CREATE VIEW  original_data AS
-select strain.Name as Str, isolate.Name as Iso, seq.Name as Seq, isolate_seq.authority,
-       strain_isolate.Name as Ori_Str, isolate_seq.Name as Ori_iso, isolate_seq.col_date, isolate_seq.year, isolate_seq.month, isolate_seq.day, isolate_seq.host, isolate_seq.source, isolate_seq.country_iso3, isolate_seq.region, isolate_seq.region_full
+select strain.Name                          as Str,
+         (SELECT taxa.Name FROM taxa WHERE
+       strain.Id_taxa= Id_taxa)             as Str_t ,
+       isolate.Name                         as Iso,
+       seq.Name                             as SeqAcc,
+       isolate_seq.authority,
+       strain_isolate.Name                  as Ori_Str,
+       isolate_seq.Name                     as Ori_iso,
+         (SELECT taxa.Name FROM taxa WHERE
+       isolate_seq.Id_taxa= Id_taxa)        as Ori_Str_t,
+       isolate_seq.col_date,
+       isolate_seq.year,
+       isolate_seq.month,
+       isolate_seq.day,
+       isolate_seq.host,
+       isolate_seq.source,
+       isolate_seq.country_iso3,
+       isolate_seq.region,
+       isolate_seq.region_full
 from isolate_seq join seq using (Id_seq)
                  join isolate using (Id_isolate)
 	             join strain  using (Id_strain)
