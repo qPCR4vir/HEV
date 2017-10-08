@@ -78,9 +78,11 @@ class CreateTaxa:
                            "                VALUES ( ?     , ?         )",
                                                    (Id_taxa, name      )  )
 
+
 def rank_ID(db_cursor, rank_name):
     db_cursor.execute("SELECT Id_rank FROM taxa_rank WHERE Name=?", (rank_name,))
     return db_cursor.fetchone()[0]
+
 
 def rank_ID_taxa(db_cursor, Id_taxa):
     db_cursor.execute("SELECT Id_rank FROM taxa WHERE Id_taxa=?", (Id_taxa,))
@@ -111,6 +113,7 @@ def rank_ID_taxa(db_cursor, Id_taxa):
 #    c = db.cursor()
 #    c.executescript(sql_create)
 
+
 def create(newly) -> sqlite3.Connection:
     db = sqlite3.connect("../data/temp/seq.db")
     if newly:
@@ -123,11 +126,13 @@ def create(newly) -> sqlite3.Connection:
 
     return db
 
+
 def read_create(db):
     with open("create_seq.sql") as dbcreate:
         sql_create = dbcreate.read()
     c = db.cursor()
     c.executescript(sql_create)
+
 
 def read_country_codes(db):
     with open("country_codes.sql") as dbcreate:
@@ -538,6 +543,17 @@ def parseGB(db, GB_flat_file=None):
         subtype  = None
         NCBI_TaxID = None
 
+        # let assume the normal situation where we are inserting a new seq
+        try:
+            c.execute("INSERT INTO seq (Name,     Seq             ,   Len               )"
+                      "         VALUES (?,          ?             ,   ?                 )",
+                                       (Name, str(record.sequence), len(record.sequence)))
+            Id_seq = c.lastrowid
+
+        except sqlite3.IntegrityError:
+            print('Atempt to duplicate seq ', Name)
+            continue
+
         #  http://biopython.org/DIST/docs/api/Bio.GenBank.Record-pysrc.html#Feature
         for feature in record.features:
             if feature.key == 'source':
@@ -575,7 +591,6 @@ def parseGB(db, GB_flat_file=None):
                         val = q.value[1:-1]
                         genotype, subtype = parse_GB_note(val)
 
-        Id_seq = save_or_find_seq(c, record)
 
         authors = None
         unp_aut = None
@@ -844,18 +859,6 @@ def reuse_GBdefinition_to_find_strain_isolate(definition, isolate, strain):
             if strain != st:
                 strain = strain + ' or ' + st
     return isolate, strain
-
-
-def save_or_find_seq(db_cursor, GBrecord):
-    try:
-        db_cursor.execute("INSERT INTO seq (Name,               Seq,            Len  ) "
-                  "         VALUES (?,                  ?,              ?    )",
-                          (GBrecord.locus, str(GBrecord.sequence), len(GBrecord.sequence)))
-        Id_seq = db_cursor.lastrowid
-    except sqlite3.IntegrityError:
-        db_cursor.execute("SELECT Id_seq FROM Seq WHERE Name=?", GBrecord.locus)  # check Seq and Len?
-        Id_seq = db_cursor.fetchone()[0]  # Id_seq = Id_seq[0] if Id_seq else Id_seq
-    return Id_seq
 
 
 def parse_GB_note(note):
