@@ -207,6 +207,7 @@ def add_def_taxa(db):
     grchi  = ct.taxa('3chi'  , 'HEV-g3chi'     , rgr, maI)
     grjab  = ct.taxa('3jab'  , 'HEV-g3jab'     , rgr, maI)
     grfeg  = ct.taxa('3feg'  , 'HEV-g3feg'     , rgr, maII)
+    grRab  = ct.taxa('3rab'  , 'HEV-g3rabbit'  , rgr, Rab, syn=['Rab']  )  # temporal???
 
     rsubt = ct.rank('subtype', rgr)
 
@@ -350,103 +351,126 @@ def ref_pos(sdb, ID_align, seq_name=None):
     return build_ref_pos(Seq, beg, end, Al_len)
 
 
-def abnormal_row(c, row):
-    MEGA_name = row[0].value          # 'A' - MEGA name
-    subtype   = row[3].value          # 'D' - subtype
-    Str_name  = row[5].value          # 'F ' 5 - Str.name
-    if not subtype: subtype   = row[2].value          # 'C' - genotype
-
-    c.execute("SELECT Id_taxa FROM taxa WHERE taxa.Name=?", (subtype, ))
-    Id_taxa = c.fetchone()
-    Id_taxa = Id_taxa[0] if Id_taxa else Id_taxa
-
-    c.execute("SELECT Id_seq FROM seq WHERE seq.Name=? ", ( MEGA_name,))
-    Id_seq = c.fetchone()
-    Id_seq = Id_seq[0] if Id_seq else Id_seq
-
-    c.execute("SELECT Id_algseq FROM aligned_seq WHERE Id_part=?", (Id_seq,))
-    Id_algseq= c.fetchone()
-    Id_algseq = Id_algseq[0] if Id_algseq else Id_algseq
-
-    if Id_algseq is not None:
-        c.execute("INSERT INTO classified_seq (Id_taxa, Id_algseq) VALUES (?,?) "
-                                            , (Id_taxa, Id_algseq)                 )
-    else:
-        c.execute("INSERT INTO pending_seq (Id_taxa, Name,      Id_seq) VALUES (?,?,?)",
-                                           (Id_taxa, MEGA_name, Id_seq))
-
-    print("Abnormal row !!!!! ", MEGA_name, subtype, Str_name,"-------> Taxa:{0}, Alseq:{1}, Seq:{2}".format( Id_taxa, Id_algseq, Id_seq))
-    if Id_algseq : return False
-    return True
-
-def parse_row(db,row, c):
+def parse_row(db, row, col):
     success = True
-    MEGA_name = row[c['MEGA name'   ]].value
-    genotype  = row[c['genotype'    ]].value
-    subtype   = row[c['subtype'     ]].value
-    group     = row[c['group'       ]].value
-    Str_name  = row[c['Str.name'    ]].value
-    Isolate   = row[c['Isolate'     ]].value
-    #Country  = row[c['Country'     ]].value
-    Country_cod3=row[c['Country cod']].value
-    Region     =row[c['region'      ]].value         # 'H '        todo: deduced
-    Region_full=row[c['region full' ]].value
-    Host       =row[c['Host'        ]].value
-    Source     =row[c['Source'      ]].value
-    Year       =row[c['Y'           ]].value
-    Month      =row[c['M'           ]].value
-    Day        =row[c['D'           ]].value
-    Institut   =row[c['Inst'        ]].value
-    Reference  =row[c['reference'   ]].value
-    Lu_Li      =row[c['Lu, Li'      ]].value
-    CG         =row[c['CG'          ]].value
-
-    if not subtype: subtype   = group
-    if not subtype: subtype   = genotype
-
-    if not Isolate: Isolate   = Str_name
-	
-
+    MEGA_name = row[col['MEGA name']].value
+    genotype  = row[col['genotype']].value
+    subtype   = row[col['subtype']].value
+    group     = row[col['group']].value
+    Str_name  = row[col['Str.name']].value
+    Isolate   = row[col['Isolate']].value
+    # Country  = row[col['Country'     ]].value
+    Country_cod3=row[col['Country cod']].value
+    Region     =row[col['region']].value         # 'H '        todo: deduced
+    Region_full=row[col['region full']].value
+    Host       =row[col['Host']].value
+    Source     =row[col['Source']].value
+    Year       =row[col['Y']].value
+    Month      =row[col['M']].value
+    Day        =row[col['D']].value
+    Institut   =row[col['Inst']].value
+    Reference  =row[col['reference']].value
+    Lu_Li      =row[col['Lu, Li']].value
+    CG         =row[col['CG']].value
 
     c = sdb.cursor()
-    c.execute("SELECT Id_strain FROM strain WHERE Name=?", (Str_name, ))
-        Id_strain = c.fetchone()
-        if Id_strain:
-        # print('Existing Strain:', Str_name, Id_strain)
-            Id_strain = Id_strain[0]
-    else:
-        # print('New Strain:', Str_name, Id_strain)
-        c.execute("INSERT INTO strain (Name) VALUES (?) ", (Str_name,))
-        Id_strain = c.lastrowid
-        # print('New Strain ID:', Id_strain)
-
-    c.execute("SELECT Id_taxa FROM taxa WHERE taxa.Name=?", (subtype, ))   # ?? Name UNIQUE ??
+    taxa = subtype if subtype else group if group else genotype
+    c.execute("SELECT Id_taxa FROM taxa WHERE taxa.Name=?", (taxa, ))   # ?? Name UNIQUE ??
     Id_taxa = c.fetchone()
     Id_taxa = Id_taxa[0] if Id_taxa else Id_taxa
 
-    c.execute("SELECT Id_seq FROM seq WHERE seq.Name=? ", ( MEGA_name,))   # ?? Name UNIQUE ??
-    Id_seq = c.fetchone()
-    Id_seq = Id_seq[0] if Id_seq else Id_seq
+    if not Isolate: Isolate   = Str_name
 
-    # revise this. Is general??
+    Id_strain  = None
+    Id_isolate = None
+    Id_seq     = None
+    strain_Name = None
+    isolate_Name = None
+
+    # let assume the normal situation where seq name exist, and lets examine strain and isolate.
+    c.execute("""
+                select  seq.Id_seq, 
+                        strain.Id_strain, strain.Name, 
+	                    isolate.Id_isolate, isolate.Name 
+
+                from      seq 
+                left join isolate_seq USING(Id_seq)
+                left join strain      USING(Id_strain)  
+                left join isolate     USING(Id_isolate)
+	
+                where seq.Name = ?
+                """
+              , (            MEGA_name,        ))
+
+    select = c.fetchone()
+    if select:
+        Id_seq, Id_strain, strain_Name, Id_isolate, isolate_Name = select
+    else:
+        # there are not seq, but still could be strain and isolate
+        print('Unregistered seq ', MEGA_name)
+
+    if not Id_strain:
+        c.execute("select Id_strain from strain where Name = ?", (Str_name,))
+        Id_strain = c.fetchone()
+        if Id_strain:
+            Id_strain = Id_strain[0]
+            c.execute("select Id_isolate from isolate where Id_strain = ? and Name=?"
+                                                              , (Id_strain, Isolate))
+            Id_isolate = c.fetchone()
+            Id_isolate = Id_isolate[0] if Id_isolate else None
+
+    if Id_strain:
+        if not strain_Name or Str_name != strain_Name:
+            print('Renaming? strain  of seq ', MEGA_name, ' from ', strain_Name, ' to ', Str_name)
+            if not Str_name:
+                Str_name = strain_Name  # the same with the other fields !!!!!
+        st = strain_Name if strain_Name else Str_name
+        # update strain
+        c.execute("UPDATE strain SET Name=?  , Id_taxa=?, year=?, host=?, source=?, country_iso3=?  where Id_strain=? "
+                                  , (st      , Id_taxa  , Year ,  Host  , Source  , Country_cod3,         Id_strain    ) )
+    else:
+        # create strain
+        print('New Strain:', Str_name)
+        c.execute("INSERT INTO strain (Name    , Id_taxa, host, source, year, country_iso3) "
+                  "     VALUES        (?       , ?      , ?   , ?     , ?   , ?           ) ",
+                                      (Str_name, Id_taxa, Host, Source, Year, Country_cod3))
+        Id_strain = c.lastrowid
+
+    if Id_isolate:
+        if not isolate_Name or Isolate != isolate_Name:
+            print('Renaming? isolate of seq ', MEGA_name, ' from ', isolate_Name, ' to ', Isolate)
+            if not Isolate:
+                Isolate = isolate_Name     # the same with the other fields !!!!!
+
+        iso = isolate_Name if isolate_Name else Isolate
+        c.execute("UPDATE isolate SET Name=?, Id_strain=?, year=?, month=?, day=?, host=?, source=?, institution=?, country_iso3=?, region=?, region_full=?   where Id_isolate=? "
+                                  ,    (iso, Id_strain   , Year ,  Month , Day  , Host  , Source  , Institut     , Country_cod3  , Region  , Region_full,          Id_isolate ))
+    else:
+        c.execute(
+            "INSERT INTO isolate (Name   , Id_strain, Year ,  Month , Day, host, source, institution, country_iso3, region, region_full ) "
+            "             VALUES (?      , ?        , ?    , ?      , ?  , ?   , ?     , ?          , ?           , ?     , ?           ) "
+                               , (Isolate, Id_strain, Year ,  Month , Day, Host, Source, Institut   , Country_cod3, Region, Region_full ))
+        Id_isolate = c.lastrowid
+
+    # create isolate_seq and strain_isolate
+    c.execute("INSERT INTO isolate_seq (authority, Id_isolate, Id_seq, Id_strain, Id_taxa, Name   , Year ,  Month , Day, host, source, country_iso3, region, region_full ) "
+              "VALUES                  ('AV'     , ?         ,?      , ?        , ?      , ?      , ?    , ?      , ?  , ?   , ?     , ?           , ?     , ?           ) "
+              ,                        (           Id_isolate, Id_seq, Id_strain, Id_taxa, Isolate, Year ,  Month , Day, Host, Source, Country_cod3, Region, Region_full ))
+    Id_isolate_seq= c.lastrowid
+
+    c.execute("INSERT INTO strain_isolate (authority, Id_strain, Name    , Id_isolate_seq) "
+              "     VALUES                ('AV'     , ?        , ?       , ?             ) ",
+                                          (           Id_strain, Str_name, Id_isolate_seq))
+
+    # todo: revise this. Is general??
     c.execute("SELECT Id_algseq FROM aligned_seq WHERE Id_part=?", (Id_seq,))
     Id_algseq= c.fetchone()
-    Id_algseq = Id_algseq[0] if Id_algseq else Id_algseq
-
-    # todo: parse location. Is unique?
-    c.execute("INSERT INTO isolate (Name   , Id_strain, year, month, day, host, source, institution, country_iso3, region, region_full ) "
-              "             VALUES (?      , ?        , ?   , ?    , ?  , ?   , ?     , ?          , ?           , ?     , ?           ) "
-                                 , (Isolate, Id_strain, Year, Month, Day, Host, Source, Institut   , Country_cod3, Region, Region_full ))
-    Id_isolate=c.lastrowid
-    c.execute("INSERT INTO isolate_seq (Id_isolate   , Id_seq) VALUES (?,?) "
-                                     , (Id_isolate   , Id_seq))
-    # Id_isolate_seq= c.fetchone()
-    # Id_isolate_seq = Id_isolate_seq[0] if Id_isolate_seq else Id_isolate_seq
+    Id_algseq = Id_algseq[0] if Id_algseq else None
 
     if Id_algseq is None:
         #success = abnormal_row(c, row)
-        c.execute("INSERT INTO pending_seq (Id_taxa, Name,      Id_seq) VALUES (?,?,?)",
-                  (Id_taxa, MEGA_name, Id_seq))
+        c.execute("INSERT INTO pending_seq (Id_taxa, Name,      Id_seq, Id_isolate) VALUES (?,?,?,?)",
+                                           (Id_taxa, MEGA_name, Id_seq, Id_isolate))
 
         print("Abnormal row !!!!! ", MEGA_name, subtype, Str_name,
           "-------> Taxa:{0}, Alseq:{1}, Seq:{2}".format(Id_taxa, Id_algseq, Id_seq))
