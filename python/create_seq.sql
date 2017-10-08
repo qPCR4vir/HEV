@@ -85,6 +85,7 @@ CREATE TABLE IF NOT EXISTS   isolate
 CREATE TABLE IF NOT EXISTS  isolate_seq
        (
          Id_isolate_seq   INTEGER   PRIMARY KEY AUTOINCREMENT,
+         authority        TEXT,
          Id_isolate       INTEGER   REFERENCES isolate(Id_isolate),
          Id_seq           INTEGER   REFERENCES seq(Id_seq),    -- PRIMARY KEY  ??
          Id_submission   INTEGER REFERENCES submission(Id_submission), -- NOT NULL,
@@ -125,6 +126,7 @@ CREATE TABLE IF NOT EXISTS   strain_isolate
          Id_strain_isolate   INTEGER   PRIMARY KEY AUTOINCREMENT,
          Id_strain           INTEGER NOT NULL REFERENCES strain(Id_strain),
          Id_isolate_seq      INTEGER REFERENCES isolate_seq(Id_isolate_seq),
+         authority           TEXT,
          Name                TEXT
         );
 
@@ -513,3 +515,12 @@ FROM pending_seq AS p    JOIN seq         USING (ID_seq)
                          JOIN strain      USING (ID_strain)
                          JOIN countries   ON    (isolate.country_iso3=countries.iso3)
 ;
+CREATE VIEW  original_data AS
+select strain.Name as Str, isolate.Name as Iso, seq.Name as Seq, isolate_seq.authority,
+       strain_isolate.Name as Ori_Str, isolate_seq.Name as Ori_iso, isolate_seq.col_date, isolate_seq.year, isolate_seq.month, isolate_seq.day, isolate_seq.host, isolate_seq.source, isolate_seq.country_iso3, isolate_seq.region, isolate_seq.region_full
+from isolate_seq join seq using (Id_seq)
+                 join isolate using (Id_isolate)
+	             join strain  using (Id_strain)
+				 join strain_isolate using (Id_isolate_seq)
+
+			order by Str, Iso, Id_seq	 ;
