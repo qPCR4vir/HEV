@@ -508,6 +508,7 @@ def clean_parsed_Excel(db):
     c.execute("DELETE FROM classified_seq")   # ??
     db.commit()
 
+
 def parseGB(db, GB_flat_file=None):
     '''
     Load and parse a GenBank sequence flat file
@@ -529,6 +530,7 @@ def parseGB(db, GB_flat_file=None):
       prev_sub_auth = None
       prev_sub_jour = None
       prev_sub_ID   = None
+      prev_sub_ref  = None
       for record in GenBank.parse(GB_flat):
 
         # record.locus  : locus - The name specified after the LOCUS keyword in the GenBank
@@ -611,6 +613,7 @@ def parseGB(db, GB_flat_file=None):
             if rf.title == 'Direct Submission':
                 if prev_sub_auth == rf.authors and prev_sub_jour == rf.journal:
                     Id_submission = prev_sub_ID
+                    references = prev_sub_ref
                     break
                 else:
                     p_authors = rf.authors
@@ -652,6 +655,7 @@ def parseGB(db, GB_flat_file=None):
                 prev_sub_auth = p_authors          # now this will be the prev sub
                 prev_sub_jour = p_journal
                 prev_sub_ID   = Id_submission
+                prev_sub_ref  = references
 
         for rf in references:   # very often this is empty. Add to every seq referenced
             try:
