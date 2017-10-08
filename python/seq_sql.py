@@ -853,7 +853,7 @@ def reuse_GBdefinition_to_find_strain_isolate(definition, isolate, strain):
         st = st.split()[0].strip()
         if st[-1] == '.':
             st = st[:-1].strip()
-        if strain == '':
+        if not strain:
             strain = st
         else:
             if strain != st:
