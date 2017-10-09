@@ -97,7 +97,9 @@ CREATE TABLE IF NOT EXISTS  isolate_seq
          month       INT,
          day         INT,
          host            TEXT,      -- todo: Id_host     INTEGER, --NOT NULL,     -- original taxa
+         host_ori        TEXT,      -- todo: Id_host     INTEGER, --NOT NULL,     -- original taxa
          source          TEXT,      -- todo: Id_source   INTEGER, --NOT NULL,
+         source_ori      TEXT,      -- todo: Id_source   INTEGER, --NOT NULL,
          -- Id_location     INTEGER REFERENCES location(Id_location), -- NOT NULL,
          country_iso3    TEXT REFERENCES countries(iso3),
          region          TEXT,      -- todo: Id_location,
@@ -325,11 +327,21 @@ CREATE TABLE IF NOT EXISTS  genomic_region
 -- source
 CREATE TABLE IF NOT EXISTS   source
        (
+         Id_source      INTEGER PRIMARY KEY AUTOINCREMENT,     -- original taxa
+         artificial     TEXT ,                -- NULL, clone, cell, patent, etc.
+         organ          TEXT,                 -- lever, serum, faces, etc.
+         environment    TEXT                  -- NULL, seawater,  etc.
+        );
+
+CREATE TABLE IF NOT EXISTS   source_names
+       (
+         Is_source_names
          Id_source      INTEGER NOT NULL,     -- original taxa
          artificial     TEXT ,                -- NULL, clone, cell, patent, etc.
          organ          TEXT,                 -- lever, serum, faces, etc.
          environment    TEXT                  -- NULL, seawater,  etc.
         );
+
 
 -- contact_adress
 CREATE TABLE IF NOT EXISTS  contact_adress
@@ -531,7 +543,9 @@ select strain.Name                          as Str,
        isolate_seq.year,
        isolate_seq.month,
        isolate_seq.day,
+       isolate_seq.host_ori,
        isolate_seq.host,
+       isolate_seq.source_ori,
        isolate_seq.source,
        isolate_seq.country_iso3,
        isolate_seq.region,

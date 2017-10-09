@@ -716,6 +716,8 @@ def parseGB(db, GB_flat_file=None):
         country_iso3 = c.fetchone()
         country_iso3 = country_iso3[0] if country_iso3 else None
 
+        host_t, source_t = parse_source(host, source)
+        # print('host_t, source_t = parse_source(host, source): ', host_t, source_t, host, source)
         # todo: parse location. Is unique?
 
         isolate, strain = reuse_GBdefinition_to_find_strain_isolate(record.definition, isolate, strain)
@@ -736,7 +738,7 @@ def parseGB(db, GB_flat_file=None):
             #  the normal situation: a new strain
             c.execute("INSERT INTO strain (Name  , Id_taxa, host, source, year, country_iso3) "
                       "     VALUES        (?     , ?      , ?   , ?     , ?   , ?           ) ",
-                                          (strain, Id_taxa, host, source, year, country_iso3))
+                                          (strain, Id_taxa, host_t, source_t, year, country_iso3))
             Id_strain = c.lastrowid
         else:
             # TENTATIVELY we considere it is the same strain, just these strain have seq already
@@ -763,13 +765,13 @@ def parseGB(db, GB_flat_file=None):
             c.execute(
                 "INSERT INTO isolate (Name   , Id_strain, col_date       , Year ,  Month , Day, host, source, authors  , institution, country_iso3, region_full ) "
                 "             VALUES (?      , ?        , ?              , ?    ,  ?     , ?  , ?   , ?     , ?        , ?          , ?           , ?           ) "
-                                   , (isolate, Id_strain, collection_date, year ,  month , day, host, source, p_authors, institution, country_iso3, region))
+                                   , (isolate, Id_strain, collection_date, year ,  month , day, host_t, source_t, p_authors, institution, country_iso3, region))
             Id_isolate = c.lastrowid
 
         # create isolate_seq and strain_isolate
-        c.execute("INSERT INTO isolate_seq (authority, Id_isolate, Id_seq, Id_submission, Id_strain, Id_taxa, Name   , col_date       , year ,  month , day, host, source, country_iso3, region_full) "
-                  "VALUES                  ('GB'     , ?         ,?      , ?            , ?        , ?      , ?      , ?              , ?    ,  ?     , ?  , ?   , ?     , ?           , ?           ) "
-                  ,                        (           Id_isolate, Id_seq, Id_submission, Id_strain, Id_taxa, isolate, collection_date, year ,  month , day, host, source, country_iso3, region      ))
+        c.execute("INSERT INTO isolate_seq (authority, Id_isolate, Id_seq, Id_submission, Id_strain, Id_taxa, Name   , col_date       , year ,  month , day, host  , source  ,  host_ori, source_ori, country_iso3, region_full) "
+                  "VALUES                  ('GB'     , ?         ,?      , ?            , ?        , ?      , ?      , ?              , ?    ,  ?     , ?  , ?     , ?       ,  ?       , ?         , ?           , ?           ) "
+                  ,                        (           Id_isolate, Id_seq, Id_submission, Id_strain, Id_taxa, isolate, collection_date, year ,  month , day, host_t, source_t,  host    , source    , country_iso3, region      ))
         Id_isolate_seq= c.lastrowid
 
         c.execute("INSERT INTO strain_isolate (authority, Id_strain, Name  , Id_isolate_seq) "
@@ -969,7 +971,196 @@ def parse_date(date :str):
         print('Unable to parse date: ', date, ' of length ', len(date) )
         return None, None, None
 
+def parse_source(host:str, source:str):
+    s = None
+    h = None
+    o = None
+    if host:
+        o= host.lower()
+        if source:
+            source: source = source.lower()
+            o += source
+    else:
+        if source:
+            source: source = source.lower()
+            o = source
+        else:  return None, None
 
+
+
+    if   any(syn in o for syn in ['huma', 'homo sapiens', 'patient', 'donor', 'clinical' ]):
+        h = 'human'
+    elif any(syn in o for syn in ['boar', 'sus scrofa']):    # wild boar
+        if 'sus scrofa domesticus' in o:
+            h = 'swine'
+        else:
+            h = 'wild boar'
+    elif any(syn in o for syn in ['swine', 'pig', 'porcine', 'pork', 'sus scrofa domesticus', 'figatellu']):
+        h = 'swine'
+    elif any(syn in o for syn in ['rattus', 'rat']):   # Rattus flavipectus?? =Rattus tanezumi
+        h = 'rat'
+    elif any(syn in o for syn in ['bandicota indica']):   # greater bandicoot rat (Bandicota indica) is a species of rodent in the family Muridae found in Bangladesh, China,
+        h = 'Bandicota indica'
+    elif any(syn in o for syn in ['goat']):      # cabra, Capra aegagrus hircus
+        h = 'goat'
+    elif any(syn in o for syn in ['ferret', 'mustela putorius furo']):
+        h = 'ferret'
+    elif any(syn in o for syn in ['mustela putorius']):
+        h = 'polecat'
+    elif any(syn in o for syn in ['Vulpes vulpes', 'fox']):  #  red fox (Vulpes vulpes), largest of the true foxes,
+        h = 'fox'
+    elif any(syn in o for syn in ['breadcrumb sponge', 'halichondria panicea']):
+        h = 'sponge'
+    elif any(syn in o for syn in ['treeshrew', 'tree shrew']):
+        h = 'treeshrew'
+    elif any(syn in o for syn in ['shrew', 'suncus murinus']): #  Asian house shrew (Suncus murinus) grey musk shrew, Asian musk shrew, or money shrew is a widespread, adaptable species of shrew
+        h = 'shrew'
+    elif any(syn in o for syn in ['oryctolagus cuniculus', 'rabbit']):
+        h = 'rabbit'
+    elif any(syn in o for syn in ['chicken', 'hens']):
+        h = 'chicken'
+    elif any(syn in o for syn in ['gallus gallus']):  #  red junglefowl (Gallus gallus) is a tropical member of the family Phasianidae. It is the primary progenitor of the domestic chicken
+        h = 'Gallus gallus'
+    elif any(syn in o for syn in ['monkey', 'Macaca mulatta']):
+        h = 'monkey'
+    elif any(syn in o for syn in ['cattle', 'cow']):
+        h = 'cattle'
+    elif any(syn in o for syn in ['tiger']):
+        h = 'tiger'
+    elif any(syn in o for syn in ['roe deer']):       # venado, Capreolus capreolus), also known as the western roe deer, chevreuil, or simply roe deer or roe
+        h = 'roe deer'
+    elif any(syn in o for syn in ['moose', 'alces alces']):  #  moose (North America) or elk (Eurasia), Alces alces, is the largest extant species in the deer family
+        h = 'moose'
+    elif any(syn in o for syn in ['red deer']):       # venado, red deer (Cervus elaphus)
+        h = 'red deer'
+    elif any(syn in o for syn in ['deer']):  # venado,
+        h = 'deer'
+    elif any(syn in o for syn in ['camelus']):        # Bactrian camel
+        h = 'camel'
+    elif any(syn in o for syn in ['thrush']):         # Turdidae, of passerine birds
+        h = 'thrush'
+    elif any(syn in o for syn in ['feral pigeon']):       # palomas, feral pigeons (Columba livia domestica), city doves, city pigeons, street pigeons, or flying rats
+        h = 'feral pigeon'
+    elif any(syn in o for syn in ['buzzard']):       # buzzard is the common name of several species of bird of prey:
+        h = 'buzzard'
+    elif any(syn in o for syn in ['owl']):       # Owls are birds from the order Strigiformes
+        h = 'owl'
+    elif any(syn in o for syn in ['sheep', 'ovine']):       #  sheep (Ovis aries)
+        h = 'sheep'
+    elif any(syn in o for syn in ['falco']):       #   common kestrel (Falco tinnunculus) is a bird of prey species belonging to the kestrel group of the falcon family Falconidae.
+        h = 'falcon'
+    elif any(syn in o for syn in ['mystacina tuberculata',
+                                  'vampyrodes caraccioli',
+                                  'rhinolophus ferrumequinum',
+                                  'myotis',
+                                  'eptesicus serotinus',
+                                  'hipposideros abae']):       # serotine bat (Eptesicus serotinus), also known as the common serotine bat, big brown bat or silky bat --   lesser short-tailed bat (Mystacina tuberculata) – pekapeka-tou-poto in Māori – is the only living species of bat in the family Mystacinidae,[1] and is endemic to New Zealand.
+        h = 'bat'
+    elif any(syn in o for syn in ['arctocephalus australis']):       #   South American fur seal (Arctocephalus australis)
+        h = 'seal'
+    elif any(syn in o for syn in ['vulture']):       #   Himalayan vulture or Himalayan griffon vulture (Gyps himalayensis) is an Old World vulture in the family Accipitridae.
+        h = 'vulture'
+    elif any(syn in o for syn in ['dolphin']):       #
+        h = 'dolphin'
+    elif any(syn in o for syn in ['bos grunniens']):       #
+        h = 'yak'
+    elif any(syn in o for syn in ['mink', 'neovison vison']):       #
+        h = 'mink'
+    elif any(syn in o for syn in ['egret']):       # little egret (Egretta garzetta)
+        h = 'egret'
+    elif any(syn in o for syn in ['ruditapes philippinarum', 'scapharca subcrenata', 'anadara granosa']):       #
+        h = 'clam'
+    elif any(syn in o for syn in ['mytilus galloprovincialis']):  #
+        h = 'mussel'
+    elif any(syn in o for syn in ['oyster']):  #
+        h = 'oyster'
+    elif any(syn in o for syn in ['Felis catus']):       #
+        h = 'cat'
+    elif any(syn in o for syn in ['trout']):       # brook trout, cutthroat brook
+        h = 'trout'
+    elif any(syn in o for syn in ['herpestes javanicus', 'mongoose']):       #
+        h = 'mongoose'
+    elif any(syn in o for syn in ['horse']):       #
+        h = 'horse'
+    elif any(syn in o for syn in ['leopard']):       #
+        h = 'leopard'
+    elif any(syn in o for syn in ['bear']):       #
+        h = 'bear'
+    elif any(syn in o for syn in ['crowned crane']):       #
+        h = 'crowned crane'
+    elif any(syn in o for syn in ['pheasant']):       #
+        h = 'pheasant'
+
+
+
+
+    if not source: return h, None
+
+
+
+    if   any(syn in source for syn in ['sera', 'serum']):
+        s = 'sera'
+    elif any(syn in source for syn in ['plasma']):
+        s = 'plasma'
+    elif any(syn in source for syn in ['liver', 'figatellu']):
+        s = 'liver'
+    elif any(syn in source for syn in ['feces',
+                                       'anal swab',
+                                       'manure',
+                                       'stool',
+                                       'fecal',
+                                       'intestinal content',
+                                       'caecal contents',
+                                       'fecces']):
+        s = 'feces'
+    elif any(syn in source for syn in ['bile', 'gall']):
+        s = 'bile'
+    elif any(syn in source for syn in ['milk']):
+        s = 'milk'
+    elif any(syn in source for syn in ['blood']):
+        s = 'blood'
+    elif any(syn in source for syn in ['brain']):
+        s = 'brain'
+    elif any(syn in source for syn in ['heart']):
+        s = 'heart'
+    elif any(syn in source for syn in ['kidney']):
+        s = 'kidney'
+    elif any(syn in source for syn in ['spleen']):
+        s = 'spleen'
+    elif any(syn in source for syn in ['urine']):
+        s = 'urine'
+    elif any(syn in source for syn in ['nares']):
+        s = 'nares'
+    elif any(syn in source for syn in ['colon']):
+        s = 'colon'
+    elif any(syn in source for syn in ['egg']):
+        s = 'egg'
+    elif any(syn in source for syn in ['sausage']):
+        s = 'sausage'
+    elif any(syn in source for syn in ['flesh', 'pork', 'sausage', 'muscle', 'meat']):
+        s = 'muscle'
+    elif any(syn in source for syn in ['cerebrospinal fluid', 'csf']):
+        s = 'CSF'
+    elif any(syn in source for syn in ['sewage', 'effluent', 'slurry']):   #   ????? feces ??
+        s = 'sewage'
+    elif any(syn in source for syn in ['river']):   #   ?????
+        s = 'river water'
+    elif any(syn in source for syn in ['culture supernatant', 'cell culture', 'hepatocytes']):   #   ?????
+        s = 'cell culture'
+    elif any(syn in source for syn in ['pool']):       #   ?????
+        s = 'pool'
+    elif any(syn in source for syn in ['soil']):  # ?????
+        s = 'soil'
+    elif any(syn in source for syn in ['swab']):       #   ?????
+        s = 'swab'
+    elif any(syn in source for syn in ['wastewater', 'slaughterhouse']):       #   ?????
+        s = 'wastewater'
+    elif any(syn in source for syn in ['water']):       #   ?????
+        s = 'water'
+    elif any(syn in source for syn in ['strawberry']):       #   ?????
+        s = 'strawberry'
+
+    return h, s
 
 if __name__ == '__main__':
 
