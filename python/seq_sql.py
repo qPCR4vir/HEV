@@ -379,7 +379,7 @@ def parse_row(db, row, col):
     taxa = subtype if subtype else group if group else genotype
     c.execute("SELECT Id_taxa FROM taxa WHERE taxa.Name=?", (taxa, ))   # ?? Name UNIQUE ??
     Id_taxa = c.fetchone()
-    Id_taxa = Id_taxa[0] if Id_taxa else Id_taxa
+    Id_taxa = Id_taxa[0] if Id_taxa else None
 
     if not Isolate: Isolate   = Str_name
 

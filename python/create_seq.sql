@@ -1,7 +1,7 @@
 -- http://biosql.org/wiki/Schema_Overview
 -- https://github.com/biosql/biosql/blob/master/sql/biosqldb-sqlite.sql
 
--- PRAGMA foreign_keys
+PRAGMA foreign_keys=ON ;
 
 CREATE TABLE IF NOT EXISTS  seq_file
                  (
@@ -52,7 +52,7 @@ CREATE TABLE IF NOT EXISTS   strain
        (
          Id_strain      INTEGER PRIMARY KEY AUTOINCREMENT,
          Name           TEXT,                       --    UNIQUE,      --  ??
-         Id_taxa        INTEGER   REFERENCES taxa,       -- the finest available classification, consensus
+         Id_taxa        INTEGER   REFERENCES taxa(Id_taxa),       -- the finest available classification, consensus
          host           TEXT,      -- todo: Id_host     INTEGER, --NOT NULL,  -- original taxa    -- consensus
          source         TEXT,      -- todo: Id_source   INTEGER, --NOT NULL,  -- consensus
          year           INT,                             -- consensus
@@ -238,7 +238,6 @@ CREATE TABLE IF NOT EXISTS  aligned_seq
                    pbeg        INT,             -- relative to the alignment
                    pend        INT
                  );
-
 
 
 CREATE TABLE reference (
