@@ -6,7 +6,7 @@ import tkinter
 from Bio.Blast import NCBIWWW
 from Bio.Blast import NCBIXML
 from Bio import Entrez
-Entrez.email = "ArielVina.Rodriguez@fli.bund.de"
+Entrez.email = "arielvina@yahoo.es"
 # http://biopython.org/DIST/docs/api/Bio.SeqIO-module.html
 # http://biopython.org/wiki/SeqIO
 # http://biopython.org/DIST/docs/api/Bio.SeqRecord.SeqRecord-class.html
