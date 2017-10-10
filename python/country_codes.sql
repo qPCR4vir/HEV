@@ -24,6 +24,35 @@ CREATE TABLE IF NOT EXISTS countries (
   continent_code TEXT NOT NULL REFERENCES continents (code)
   )  ;
 
+CREATE TABLE IF NOT EXISTS country_names (
+  name           TEXT NOT NULL  ,                    -- 'other country name',
+  iso3           TEXT NOT NULL UNIQUE                -- 'Three-letter country code (ISO 3166-1 alpha-3)',
+  )  ;
+
+INSERT INTO country_names (iso3, name) VALUES
+  ('GBR', "United Kingdom"),
+  ('KOR', "South Korea"),
+  ('USA', "USA"),
+  ('RUS', "Russia"),
+  ('KGZ', "Kyrgyzstan"),
+  ('LAO', "Laos"),
+/*  ('', ""),
+  ('', ""),
+  ('', ""),
+  ('', ""),
+  ('', ""),
+  ('', ""),
+  ('', ""),
+  ('', ""),
+  ('', ""),
+  ('', ""),
+  ('', ""),
+  ('', ""),
+  ('', ""),
+  ('', ""),
+  ('', ""),*/
+  ('VNM', "Viet Nam");
+
 INSERT INTO countries (code, continent_code, name, iso3, number, full_name) VALUES
   ('AF', 'AS', "Afghanistan", 'AFG', '004', "Islamic Republic of Afghanistan"),
   ('AX', 'EU', "Aland Islands", 'ALA', '248', "Åland Islands"),

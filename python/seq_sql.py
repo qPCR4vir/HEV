@@ -712,9 +712,16 @@ def parseGB(db, GB_flat_file=None):
         Id_taxa = find_ID_Taxa(c, NCBI_TaxID, genotype, subtype, Id_genotype, Id_subtype)
         # Id_rank = rank_ID_taxa(c, Id_taxa)
 
-        c.execute("SELECT iso3 FROM countries WHERE name=?", (country,))
+        c.execute("SELECT iso3 FROM countries LEFT JOIN country_names USING (iso3) "
+                  "WHERE countries.name=? or countries.full_name=? OR country_names.name=?", (country, country, country))
         country_iso3 = c.fetchone()
-        country_iso3 = country_iso3[0] if country_iso3 else None
+        if not country_iso3:
+            if country: print('Not found country: ', country)
+            elif region: print('Seq ', Name, ' have no country, but region:', region)
+            country_iso3 = None
+        else:
+            country_iso3 = country_iso3[0]
+
 
         host_t, source_t = parse_source(host, source)
         # print('host_t, source_t = parse_source(host, source): ', host_t, source_t, host, source)
