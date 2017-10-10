@@ -13,10 +13,8 @@ from Bio import GenBank       # too ?
 #import BioSQL
 #from BioSQL import BioSeqDatabase
 
+import PyQt5
 
-
-print('openpyxl...')
-import openpyxl
 
 #class RefSchema
 
@@ -498,6 +496,9 @@ def parse_row(db, row, col):
 
 
 def parse_HEV_xlsm(db, file_name=None):
+    print('openpyxl...')
+    import openpyxl
+
     if not file_name:
         file_name = filedialog.askopenfilename(filetypes=(("Excel files", "*.xlsm"), ("All files", "*.*")),
                                                defaultextension='fas',
@@ -743,8 +744,8 @@ def parseGB(db, GB_flat_file=None):
 
         if not Id_strain:
             #  the normal situation: a new strain
-            c.execute("INSERT INTO strain (Name  , Id_taxa, host, source, year, country_iso3) "
-                      "     VALUES        (?     , ?      , ?   , ?     , ?   , ?           ) ",
+            c.execute("INSERT INTO strain (Name  , Id_taxa, host  , source  , year, country_iso3) "
+                      "     VALUES        (?     , ?      , ?     , ?       , ?   , ?           ) ",
                                           (strain, Id_taxa, host_t, source_t, year, country_iso3))
             Id_strain = c.lastrowid
         else:
@@ -770,8 +771,8 @@ def parseGB(db, GB_flat_file=None):
         if not Id_isolate:
             #  normal situation: a new isolate for that strain
             c.execute(
-                "INSERT INTO isolate (Name   , Id_strain, col_date       , Year ,  Month , Day, host, source, authors  , institution, country_iso3, region_full ) "
-                "             VALUES (?      , ?        , ?              , ?    ,  ?     , ?  , ?   , ?     , ?        , ?          , ?           , ?           ) "
+                "INSERT INTO isolate (Name   , Id_strain, col_date       , Year ,  Month , Day, host  , source  , authors  , institution, country_iso3, region_full ) "
+                "             VALUES (?      , ?        , ?              , ?    ,  ?     , ?  , ?    , ?        , ?        , ?          , ?           , ?           ) "
                                    , (isolate, Id_strain, collection_date, year ,  month , day, host_t, source_t, p_authors, institution, country_iso3, region))
             Id_isolate = c.lastrowid
 
@@ -1169,10 +1170,7 @@ def parse_source(host:str, source:str):
 
     return h, s
 
-if __name__ == '__main__':
-
-    # exit(0)
-    # """
+def create_all( ):
 
     newly=True   # False
     country=True # False
@@ -1213,3 +1211,10 @@ if __name__ == '__main__':
     sdb.close()
 
     # """
+
+
+if __name__ == '__main__':
+    create_all( )
+
+# exit(0)
+# """
