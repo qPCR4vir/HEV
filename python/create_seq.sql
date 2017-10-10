@@ -51,7 +51,8 @@ CREATE TABLE IF NOT EXISTS  bio_seq
 CREATE TABLE IF NOT EXISTS   strain
        (
          Id_strain      INTEGER PRIMARY KEY AUTOINCREMENT,
-         Name           TEXT,                       --    UNIQUE,      --  ??
+         Name           TEXT,         --    UNIQUE?? - not ! only tentatively, as first aproximation,
+                                      --  subject to confirmation because real world author can chose any name
          Id_taxa        INTEGER   REFERENCES taxa(Id_taxa),       -- the finest available classification, consensus
          host           TEXT,      -- todo: Id_host     INTEGER, --NOT NULL,  -- original taxa    -- consensus
          source         TEXT,      -- todo: Id_source   INTEGER, --NOT NULL,  -- consensus
@@ -65,10 +66,10 @@ CREATE TABLE IF NOT EXISTS   isolate
          Id_isolate  INTEGER PRIMARY KEY AUTOINCREMENT,
          Name        TEXT,
          Id_strain   INTEGER NOT NULL REFERENCES strain(Id_strain),
-         col_date    TEXT,
-         year        INT,
-         month       INT,
-         day         INT,
+         col_date    TEXT,                                                      -- consensus
+         year        INT,                                                     -- consensus
+         month       INT,                                                     -- consensus
+         day         INT,                                                     -- consensus
          host            TEXT,      -- todo: Id_host     INTEGER, --NOT NULL,     -- original taxa
          source          TEXT,      -- todo: Id_source   INTEGER, --NOT NULL,
          authors         TEXT,      -- Id_author       INTEGER,   -- NOT NULL,
@@ -81,21 +82,21 @@ CREATE TABLE IF NOT EXISTS   isolate
        );
 
 
--- isolate_seq   :   all the experimental sequences obtained from a given isolate
+-- isolate_seq   : originally collected data!  all the experimental sequences obtained from a given isolate
 CREATE TABLE IF NOT EXISTS  isolate_seq
        (
          Id_isolate_seq   INTEGER   PRIMARY KEY AUTOINCREMENT,
-         authority        TEXT,
+         authority        TEXT,                                          -- who created this info
          Id_isolate       INTEGER   REFERENCES isolate(Id_isolate),
-         Id_seq           INTEGER   REFERENCES seq(Id_seq),    -- PRIMARY KEY  ??
-         Id_submission   INTEGER REFERENCES submission(Id_submission), -- NOT NULL,
-         Id_strain   INTEGER NOT NULL REFERENCES strain(Id_strain),
-         Id_taxa        INTEGER   REFERENCES taxa,       -- the finest available classification, consensus
-         Name        TEXT,
-         col_date    TEXT,                -- ?
-         year        INT,
-         month       INT,
-         day         INT,
+         Id_seq           INTEGER   REFERENCES seq(Id_seq),
+         Id_submission    INTEGER REFERENCES submission(Id_submission),  -- move to a separate join table??
+         Id_strain        INTEGER NOT NULL REFERENCES strain(Id_strain),
+         Id_taxa          INTEGER   REFERENCES taxa,                  -- the finest available classification, consensus
+         Name             TEXT,
+         col_date         TEXT,                -- ?  deprecated
+         year             INT,
+         month            INT,
+         day              INT,
          host            TEXT,      -- todo: Id_host     INTEGER, --NOT NULL,     -- original taxa
          host_ori        TEXT,      -- todo: Id_host     INTEGER, --NOT NULL,     -- original taxa
          source          TEXT,      -- todo: Id_source   INTEGER, --NOT NULL,
@@ -129,7 +130,7 @@ CREATE TABLE IF NOT EXISTS   strain_isolate
          Id_strain           INTEGER NOT NULL REFERENCES strain(Id_strain),
          Id_isolate_seq      INTEGER REFERENCES isolate_seq(Id_isolate_seq),
          authority           TEXT,
-         Name                TEXT
+         Name                TEXT      -- original name, that now maybe obsolete
         );
 
 
