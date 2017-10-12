@@ -1,7 +1,9 @@
 
 import sys
-from PyQt5.QtWidgets import QMainWindow, QAction, qApp, QApplication
+from PyQt5.QtCore import Qt
+from PyQt5.QtWidgets import QMainWindow, QAction, qApp, QApplication, QFileDialog, QTableView, QVBoxLayout, QMessageBox
 from PyQt5.QtGui import QIcon
+from PyQt5 import QtSql
 
 print('import seq_sql')
 from seq_sql import create_all
@@ -16,6 +18,10 @@ class MW(QMainWindow):
         self.initUI()
 
     def initUI(self):
+
+        self.setGeometry(300, 100, 1300, 800)
+        self.setWindowTitle('Genotyping')
+
         exitAct = QAction(QIcon('exit.png'), '&Exit', self)
         exitAct.setShortcut('Ctrl+Q')
         exitAct.setStatusTip('Exit application')
@@ -65,22 +71,82 @@ class MW(QMainWindow):
         self.toolbar.addAction(impAlignAct)
         self.toolbar.addAction(exitAct)
 
+        self.v = QTableView()
+        self.setCentralWidget(self.v)
 
-        self.setGeometry(300, 100, 1300, 800)
-        self.setWindowTitle('Genotyping')
+        #vbox = QVBoxLayout()
+        #vbox.addWidget(self.v)
+
+        #self.setLayout(vbox)
+
+
         self.show()
 
     def newDB(self):
         create_all()
+        return
 
     def openDB(self):
-        pass
+        print('opening...')
+        dbfilename = QFileDialog.getOpenFileName(self, 'Select the sequence databank to open', '../data/temp/seq- (30).db')
+        print(dbfilename)
+        if not dbfilename:
+            QMessageBox.critical(None, "Cannot open database",  "No fileneme specified.\n.\n\n"
+                                 "Click Cancel to return.",       QMessageBox.Cancel)
+
+        db = QtSql.QSqlDatabase.addDatabase('QSQLITE')
+        db.setDatabaseName(dbfilename[0])
+
+        if not db.open():
+            QMessageBox.critical(None, "Cannot open database",
+                                 "Unable to establish a database connection.\n"
+                                 "This example needs SQLite support. Please read the Qt SQL "
+                                 "driver documentation for information how to build it.\n\n"
+                                 "Click Cancel to exit.",
+                                 QMessageBox.Cancel)
+            return False
+        #print('SELECT * FROM original_data')
+        #query = QtSql.QSqlQuery()
+        #query.prepare('SELECT * FROM original_data')
+        #for r in query.exec_( ):
+        #    print(r)
+
+        t = QtSql.QSqlTableModel(db=db)
+        t.setTable('original_data')
+        t.setEditStrategy(QtSql.QSqlTableModel.OnManualSubmit)
+        t.select()
+
+        t.setHeaderData(0, Qt.Horizontal,'Strain')
+        t.setHeaderData(1, Qt.Horizontal, 'genotype')
+        t.setHeaderData(2, Qt.Horizontal, "Isolate")
+        #rc = t.rowCount()
+        #print('Row count =', rc)
+        #t.selectRow(t.rowCount()-1)
+
+        self.v.setModel(t)
+        #self.v.
+        self.v.resizeColumnsToContents()
+        f = self.v.verticalHeader().font()
+        f.setPixelSize(8)
+        #self.v.selectRow(t.rowCount()-1)
+        #m = self.v.verticalHeader().getContentsMargins()
+        #print('getContentsMargins' , m)
+        #self.v.verticalHeader().
+        self.v.setSortingEnabled(True)
+        while t.canFetchMore():
+            t.fetchMore()
+        self.v.verticalHeader().setFont(f)
+        self.v.verticalHeader().setDefaultSectionSize(12)
+        #self.v.verticalHeader().setDefaultSectionSize(self.v.verticalHeader().minimumSectionSize())
+
+        return
+
 
     def closeDB(self):
-        pass
+        return
 
     def importGB(self):
-        pass
+        return
 
 
 
