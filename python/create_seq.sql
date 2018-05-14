@@ -195,9 +195,9 @@ CREATE TABLE IF NOT EXISTS  ref_seq
 CREATE TABLE IF NOT EXISTS  seq_region
                  (
                    Id_seq_region    INTEGER PRIMARY KEY NOT NULL,
-                   Id_seq  INTEGER REFERENCES seq(Id_seq),
-                   pbeg     INT,             -- relative to the original
-                   pend     INT
+                   Id_seq           INTEGER REFERENCES seq(Id_seq),
+                   pbeg             INT,             -- relative to the original
+                   pend             INT
                  );
 
 -- align -- for example a BLAST result from one query, or a "normal" Multialignment.
@@ -577,3 +577,28 @@ from isolate_seq join seq using (Id_seq)
 				 join strain_isolate using (Id_isolate_seq)
 
 			order by Str, Iso, Id_seq	 ;
+
+
+-- todo: optimize (0,5 sec!)
+CREATE VIEW  strain_seq_count AS
+select strain.Name                          as Str,
+      (SELECT taxa.Name FROM taxa WHERE
+                  strain.Id_taxa= taxa.Id_taxa)  as Str_t ,
+	   (SELECT count()
+	     from isolate
+		   WHERE isolate.Id_strain = strain.Id_strain
+	    )                          			as isolates ,
+	   (SELECT count()
+	     from isolate_seq
+		    join seq using (Id_seq)
+            join isolate using (Id_isolate)
+	        join strain as s  using (Id_strain)
+			join strain_isolate using (Id_isolate_seq)
+			WHERE isolate.Id_strain = strain.Id_strain
+		)                          			as sequences,
+	          strain.year,   --   isolate_seq.month,      isolate_seq.day,   isolate_seq.host_ori,
+       strain.host,    --  isolate_seq.source_ori,
+       strain.source,
+       strain.country_iso3  -- , isolate_seq.region, isolate_seq.region_full
+
+from  strain  order by Str	 ;
