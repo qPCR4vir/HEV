@@ -1,7 +1,8 @@
 
 import sys
 from PyQt5.QtCore import Qt
-from PyQt5.QtWidgets import QMainWindow, QAction, qApp, QApplication, QFileDialog, QTableView, QVBoxLayout, QMessageBox
+from PyQt5.QtWidgets import QMainWindow, QAction,     qApp,        QApplication, QFileDialog, \
+                            QTableView,  QVBoxLayout, QMessageBox
 from PyQt5.QtGui import QIcon
 from PyQt5 import QtSql
 
@@ -52,6 +53,9 @@ class MW(QMainWindow):
         impAlignAct.setStatusTip('Import a sequence alignment file in fasta format')
         impAlignAct.triggered.connect(self.openDB)
 
+        origData = QAction('View &Origial Data', self)
+        origData.triggered.connect(self.viewOrigData)
+
         self.statusBar()
 
         menubar = self.menuBar()
@@ -62,6 +66,10 @@ class MW(QMainWindow):
         fileMenu.addAction(GBfileAct)
         fileMenu.addAction(impAlignAct)
         fileMenu.addAction(exitAct)
+
+        viewMenu = menubar.addMenu('&View')
+        # viewMenu.
+        viewMenu.addAction(origData)
 
         self.toolbar = self.addToolBar('main')
         self.toolbar.addAction(newProjAct)
@@ -111,34 +119,92 @@ class MW(QMainWindow):
         #for r in query.exec_( ):
         #    print(r)
 
-        t = QtSql.QSqlTableModel(db=db)
-        t.setTable('original_data')
-        t.setEditStrategy(QtSql.QSqlTableModel.OnManualSubmit)
-        t.select()
+        self.table = QtSql.QSqlTableModel(db=db)
+        self.table.setTable('original_data')
+        self.table.setEditStrategy(QtSql.QSqlTableModel.OnManualSubmit)
+        self.table.select()
 
-        t.setHeaderData(0, Qt.Horizontal,'Strain')
-        t.setHeaderData(1, Qt.Horizontal, 'genotype')
-        t.setHeaderData(2, Qt.Horizontal, "Isolate")
-        #rc = t.rowCount()
+        self.table.setHeaderData(0, Qt.Horizontal, 'Strain')
+        self.table.setHeaderData(1, Qt.Horizontal, 'genotype')
+        self.table.setHeaderData(2, Qt.Horizontal, "Isolate")
+        #rc = self.table.rowCount()
         #print('Row count =', rc)
-        #t.selectRow(t.rowCount()-1)
+        #self.table.selectRow(self.table.rowCount()-1)
 
-        self.v.setModel(t)
+        self.v.setModel(self.table)
         #self.v.
         self.v.resizeColumnsToContents()
         f = self.v.verticalHeader().font()
         f.setPixelSize(8)
-        #self.v.selectRow(t.rowCount()-1)
+        #self.v.selectRow(self.table.rowCount()-1)
         #m = self.v.verticalHeader().getContentsMargins()
         #print('getContentsMargins' , m)
         #self.v.verticalHeader().
         self.v.setSortingEnabled(True)
-        while t.canFetchMore():
-            t.fetchMore()
+        while self.table.canFetchMore():
+            self.table.fetchMore()
         self.v.verticalHeader().setFont(f)
         self.v.verticalHeader().setDefaultSectionSize(12)
         #self.v.verticalHeader().setDefaultSectionSize(self.v.verticalHeader().minimumSectionSize())
 
+        return
+
+    def viewOrigData(self):
+        self.table.setTable('original_data')
+        self.table.setEditStrategy(QtSql.QSqlTableModel.OnManualSubmit)
+        self.table.select()
+
+        self.table.setHeaderData(0, Qt.Horizontal, 'Strain')
+        self.table.setHeaderData(1, Qt.Horizontal, 'genotype')
+        self.table.setHeaderData(2, Qt.Horizontal, "Isolate")
+        #rc = self.table.rowCount()
+        #print('Row count =', rc)
+        #self.table.selectRow(self.table.rowCount()-1)
+
+        self.v.setModel(self.table)
+        #self.v.
+        self.v.resizeColumnsToContents()
+        f = self.v.verticalHeader().font()
+        f.setPixelSize(8)
+        #self.v.selectRow(self.table.rowCount()-1)
+        #m = self.v.verticalHeader().getContentsMargins()
+        #print('getContentsMargins' , m)
+        #self.v.verticalHeader().
+        self.v.setSortingEnabled(True)
+        while self.table.canFetchMore():
+            self.table.fetchMore()
+        self.v.verticalHeader().setFont(f)
+        self.v.verticalHeader().setDefaultSectionSize(12)
+        #self.v.verticalHeader().setDefaultSectionSize(self.v.verticalHeader().minimumSectionSize())
+        return
+
+    def viewStrains(self):
+        self.table.setTable('original_data')
+        self.table.setEditStrategy(QtSql.QSqlTableModel.OnManualSubmit)
+        self.table.select()
+
+        self.table.setHeaderData(0, Qt.Horizontal, 'Strain')
+        self.table.setHeaderData(1, Qt.Horizontal, 'genotype')
+        self.table.setHeaderData(2, Qt.Horizontal, "Isolate")
+        #rc = self.table.rowCount()
+        #print('Row count =', rc)
+        #self.table.selectRow(self.table.rowCount()-1)
+
+        self.v.setModel(self.table)
+        #self.v.
+        self.v.resizeColumnsToContents()
+        f = self.v.verticalHeader().font()
+        f.setPixelSize(8)
+        #self.v.selectRow(self.table.rowCount()-1)
+        #m = self.v.verticalHeader().getContentsMargins()
+        #print('getContentsMargins' , m)
+        #self.v.verticalHeader().
+        self.v.setSortingEnabled(True)
+        while self.table.canFetchMore():
+            self.table.fetchMore()
+        self.v.verticalHeader().setFont(f)
+        self.v.verticalHeader().setDefaultSectionSize(12)
+        #self.v.verticalHeader().setDefaultSectionSize(self.v.verticalHeader().minimumSectionSize())
         return
 
 
