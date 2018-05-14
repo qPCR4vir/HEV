@@ -190,30 +190,19 @@ CREATE TABLE IF NOT EXISTS  ref_seq
          -- Id_algseq        INTEGER  NOT NULL REFERENCES aligned_seq
        );
 
--- seq_fragment  -- an arbitrary fragment from some seq, for example: a BLAST  hit for which the
+-- seq_region  -- an arbitrary fragment from some seq, for example: a BLAST  hit for which the
 --            original experimental sequence is known, or simple a region selected for phylogenetic analysis
-CREATE TABLE IF NOT EXISTS  seq_fragment
+CREATE TABLE IF NOT EXISTS  seq_region
                  (
-                   Id_frag INTEGER PRIMARY KEY NOT NULL,
+                   Id_seq_region    INTEGER PRIMARY KEY NOT NULL,
                    Id_seq  INTEGER REFERENCES seq(Id_seq),
                    pbeg     INT,             -- relative to the original
                    pend     INT
                  );
 
--- partial_seq  -- Usually a temporal information construct containing the seq text,
---                 for example from: a BLAST hit, or a region selected for phylogenetic analysis
---       if the corresponding experimental seq is found it can be converted into a seq_fragment
-CREATE TABLE IF NOT EXISTS  partial_seq
-                 (
-                   Id_part INTEGER PRIMARY KEY NOT NULL,
-                   Id_seq  INTEGER REFERENCES seq(Id_seq),  -- if known
-                   beg     INT,             -- relative to the original
-                   end     INT,
-                   seq     TEXT              -- The aligned sequence, with internal gaps -, but without external
-                 );
-
--- align -- for axample a BLAST result from one query, or a "normal" Multialignment.
+-- align -- for example a BLAST result from one query, or a "normal" Multialignment.
 --          if all the sequences are experimental (not necessary bio_seq) it is a full_align (don't BLAST!)
+-- if this is a subalignment, a row in align_partial referencing this must exist
 CREATE TABLE IF NOT EXISTS    align
                  (
                    Id_align  INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -223,27 +212,40 @@ CREATE TABLE IF NOT EXISTS    align
                    Ref       text        -- if not NULL, the suggested reference sequence
                  );
 
+-- aligned_seq. This is part of an alignment
+CREATE TABLE IF NOT EXISTS  aligned_seq
+                 (
+                   Id_algseq     INTEGER PRIMARY KEY NOT NULL,
+                   Id_align      INTEGER NOT NULL REFERENCES align,
+                   Id_seq_region INTEGER NOT NULL REFERENCES seq_region(Id_seq_region), -- partial_seq,
+                   Seq           TEXT,            -- The aligned sequence, with internal gaps
+                   pbeg          INT,             -- relative to the alignment
+                   pend          INT
+                 );
+
 -- to analise a region of a big alignment we create partial alignments from the original
 CREATE TABLE IF NOT EXISTS    align_partial
                  (
-                   Id_al_part  INTEGER PRIMARY KEY AUTOINCREMENT,
-                   Id_align    INTEGER    REFERENCES align(Id_align),  -- the original alignmet
+                   Id_align    INTEGER NOT NULL PRIMARY KEY REFERENCES align(Id_align),  -- the alignment
+                   parent      INTEGER NOT NULL REFERENCES align(Id_align),
                    Name        TEXT,
                    Al_len      INTEGER ,
-                   pbeg        INTEGER ,       -- relative to the original alignmet
+                   pbeg        INTEGER ,       -- relative to the parent alignment
                    pend        INTEGER ,
                    Ref         text            -- if not NULL, the suggested reference sequence
                  );
 
--- aligned_seq
-CREATE TABLE IF NOT EXISTS  aligned_seq
+
+-- partial_seq ??? -- Usually a temporal information construct containing the seq text,
+--                 for example from: a BLAST hit, or a region selected for phylogenetic analysis
+--       if the corresponding experimental seq is found it can be converted into a seq_fragment
+CREATE TABLE IF NOT EXISTS  partial_seq
                  (
-                   Id_algseq  INTEGER PRIMARY KEY NOT NULL,
-                   Id_align   INTEGER NOT NULL REFERENCES align,
-                   Id_part    INTEGER NOT NULL REFERENCES seq(Id_seq), -- partial_seq,
-                   Seq        TEXT,            -- The aligned sequence, with internal gaps
-                   pbeg        INT,             -- relative to the alignment
-                   pend        INT
+                   Id_part INTEGER PRIMARY KEY NOT NULL,
+                   Id_seq  INTEGER REFERENCES seq(Id_seq),  -- if known
+                   pbeg    INT,             -- relative to the original
+                   pend    INT,
+                   seq     TEXT              -- The aligned sequence, with internal gaps -, but without external
                  );
 
 -- reference
