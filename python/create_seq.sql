@@ -34,7 +34,6 @@ CREATE TABLE IF NOT EXISTS  seq_file_pos
                    file_end INT,      -- optional
                    time     INT       -- format ??
                  );
-*/
 
 -- bio_seq  -- A (preferably) complete sequence from a gen, organism, etc. For example the HEV complete genomes.
 -- temp: just a seq with Id_gen from a genomic_region with Name "CG".
@@ -47,11 +46,25 @@ CREATE TABLE IF NOT EXISTS  bio_seq
          Id_seq           INTEGER   REFERENCES seq(Id_seq)
        );
 
+
+-- GB_seq  -- a simplified view of a GenBank entry sequence: todo use BioSQL
+-- this info duplicate that in other tables.
+CREATE TABLE IF NOT EXISTS  GB_seq
+       (
+         Id_GB_seq        INTEGER PRIMARY KEY AUTOINCREMENT,
+         -- Acc              TEXT    UNIQUE,
+         -- description      TEXT,
+         -- locus            TEXT,
+         Id_seq           INTEGER   REFERENCES seq(Id_seq)
+       );
+
+*/
+
 -- strain: unique, consolidated
 CREATE TABLE IF NOT EXISTS   strain
        (
          Id_strain      INTEGER PRIMARY KEY AUTOINCREMENT,
-         Name           TEXT,         --    UNIQUE?? - not ! only tentatively, as first aproximation,
+         Name           TEXT,         --    UNIQUE?? - not ! only tentatively, as first approximation,
                                       --  subject to confirmation because real world author can chose any name
          Id_taxa        INTEGER   REFERENCES taxa(Id_taxa),       -- the finest available classification, consensus
          host           TEXT,      -- todo: Id_host     INTEGER, --NOT NULL,  -- original taxa    -- consensus
@@ -66,7 +79,7 @@ CREATE TABLE IF NOT EXISTS   isolate
          Id_isolate  INTEGER PRIMARY KEY AUTOINCREMENT,
          Name        TEXT,
          Id_strain   INTEGER NOT NULL REFERENCES strain(Id_strain),
-         col_date    TEXT,                                                      -- consensus
+         col_date    TEXT,                           -- ?  deprecated         -- consensus
          year        INT,                                                     -- consensus
          month       INT,                                                     -- consensus
          day         INT,                                                     -- consensus
@@ -173,17 +186,6 @@ CREATE TABLE IF NOT EXISTS  ref_seq
          -- Id_algseq        INTEGER  NOT NULL REFERENCES aligned_seq
        );
 
-
--- GB_seq  -- a simplified view of a GenBank entry sequence: todo use BioSQL
-CREATE TABLE IF NOT EXISTS  GB_seq
-       (
-         Id_GB_seq        INTEGER PRIMARY KEY AUTOINCREMENT,
-         -- Acc              TEXT    UNIQUE,
-         -- description      TEXT,
-         -- locus            TEXT,
-         Id_seq           INTEGER   REFERENCES seq(Id_seq)
-       );
-
 -- seq_fragment  -- an arbitrary fragment from some seq, for example: a BLAST  hit for which the
 --            original experimental sequence is known, or simple a region selected for phylogenetic analysis
 CREATE TABLE IF NOT EXISTS  seq_fragment
@@ -240,7 +242,7 @@ CREATE TABLE IF NOT EXISTS  aligned_seq
                    pend        INT
                  );
 
-
+-- reference
 CREATE TABLE reference (
     reference_id   INTEGER PRIMARY KEY AUTOINCREMENT,
     title    	   TEXT,                           -- # title
