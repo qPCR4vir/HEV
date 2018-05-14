@@ -266,6 +266,30 @@ CREATE TABLE reference (
     -- FOREIGN KEY ( dbxref_id ) REFERENCES dbxref ( dbxref_id )
 );
 
+-- author
+CREATE TABLE IF NOT EXISTS  author
+       (
+         Id_author  INTEGER PRIMARY KEY AUTOINCREMENT,
+         Name       TEXT,
+         middle     TEXT,
+         surname    TEXT,
+         title      TEXT,
+         genre      TEXT,
+         Id_contact INTEGER REFERENCES contact(Id_contact)    --  NOT NULL
+       );
+
+-- collective
+CREATE TABLE IF NOT EXISTS collective
+        (
+         Id_collective  INTEGER PRIMARY KEY AUTOINCREMENT
+        );
+
+-- authors_collective
+CREATE TABLE IF NOT EXISTS authors_collective
+        (
+         Id_author  INTEGER PRIMARY KEY AUTOINCREMENT,
+
+        );
 -- reference_to_seq   :   all the references papers for a given GB seq
 CREATE TABLE IF NOT EXISTS  reference_to_seq
        (
@@ -286,17 +310,6 @@ CREATE TABLE IF NOT EXISTS location
         coordinate  TEXT
     );
 
--- author
-CREATE TABLE IF NOT EXISTS  author
-       (
-         Id_author  INTEGER PRIMARY KEY AUTOINCREMENT,
-         Name       TEXT    ,
-         middle     TEXT ,
-         surname    TEXT ,
-         title      TEXT,
-         genre      TEXT,
-         Id_contact INTEGER NOT NULL REFERENCES contact(Id_contact)
-       );
 
 -- institution
 CREATE TABLE IF NOT EXISTS  institution
