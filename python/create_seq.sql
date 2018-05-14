@@ -95,11 +95,12 @@ CREATE TABLE IF NOT EXISTS   isolate
        );
 
 
--- isolate_seq   : originally collected data!  all the experimental sequences obtained from a given isolate
+-- isolate_seq   : originally collected data! Original data. Don't delete it
+-- all the experimental sequences obtained from a given isolate
 CREATE TABLE IF NOT EXISTS  isolate_seq
        (
          Id_isolate_seq   INTEGER   PRIMARY KEY AUTOINCREMENT,
-         authority        TEXT,                                          -- who created this info
+         authority        TEXT NOT NULL ,                                       -- who created this info
          Id_isolate       INTEGER   REFERENCES isolate(Id_isolate),
          Id_seq           INTEGER   REFERENCES seq(Id_seq),
          Id_submission    INTEGER REFERENCES submission(Id_submission),  -- move to a separate join table??
@@ -110,11 +111,11 @@ CREATE TABLE IF NOT EXISTS  isolate_seq
          year             INT,
          month            INT,
          day              INT,
-         host            TEXT,      -- todo: Id_host     INTEGER, --NOT NULL,     -- original taxa
-         host_ori        TEXT,      -- todo: Id_host     INTEGER, --NOT NULL,     -- original taxa
-         source          TEXT,      -- todo: Id_source   INTEGER, --NOT NULL,
-         source_ori      TEXT,      -- todo: Id_source   INTEGER, --NOT NULL,
-         -- Id_location     INTEGER REFERENCES location(Id_location), -- NOT NULL,
+         host            TEXT,      -- todo: Id_host     INTEGER,       -- original taxa
+         host_ori        TEXT,      -- todo: Id_host     INTEGER,       -- original taxa
+         source          TEXT,      -- todo: Id_source   INTEGER,
+         source_ori      TEXT,      -- todo: Id_source   INTEGER,
+         -- Id_location     INTEGER REFERENCES location(Id_location),
          country_iso3    TEXT REFERENCES countries(iso3),
          region          TEXT,      -- todo: Id_location,
          region_full     TEXT       -- todo: Id_location
@@ -137,25 +138,28 @@ CREATE TABLE IF NOT EXISTS  submission
        );
 
 -- strain_isolate: all possible isolate for a given strain
+-- ??? only to keep the original name ? Original data. Don't delete it
 CREATE TABLE IF NOT EXISTS   strain_isolate
        (
          Id_strain_isolate   INTEGER   PRIMARY KEY AUTOINCREMENT,
          Id_strain           INTEGER NOT NULL REFERENCES strain(Id_strain),
-         Id_isolate_seq      INTEGER REFERENCES isolate_seq(Id_isolate_seq),
-         authority           TEXT,
+         Id_isolate_seq      INTEGER NOT NULL REFERENCES isolate_seq(Id_isolate_seq),
+         authority           TEXT NOT NULL ,
          Name                TEXT      -- original name, that now maybe obsolete
         );
 
-
+-- classified_seq: it is only the result of an alignment analysis. Original data. Don't delete it
 CREATE TABLE IF NOT EXISTS  classified_seq
        (
          Id_clas_seq      INTEGER PRIMARY KEY AUTOINCREMENT,
          Id_taxa          INTEGER   REFERENCES taxa,          -- the finest available classification
+         authority        TEXT NOT NULL ,                                       -- who created this info
          -- description      TEXT,                               --  ??
          -- Id_isolate       INTEGER   REFERENCES isolate    ,
          Id_algseq        INTEGER  NOT NULL REFERENCES aligned_seq(Id_algseq)   -- PRIMARY KEY  ???????
        );
 
+-- semiorriginal data. May expire
 CREATE TABLE IF NOT EXISTS  pending_seq
        (
          Id_pend_seq      INTEGER   PRIMARY KEY AUTOINCREMENT,
@@ -178,7 +182,7 @@ CREATE TABLE IF NOT EXISTS  ref_schema
 CREATE TABLE IF NOT EXISTS  ref_seq
        (
          Id_ref_seq     INTEGER PRIMARY KEY AUTOINCREMENT,
-         Id_taxa        INTEGER   REFERENCES taxa,                    -- the finest available classification
+         Id_taxa        INTEGER NOT NULL REFERENCES taxa,                    -- the finest available classification
          Id_ref_schema  INTEGER NOT NULL REFERENCES ref_schema(Id_ref_schema),
          Id_seq         INTEGER REFERENCES seq(Id_seq),               -- partial_seq,
          name           TEXT                                          -- preferably = seq.name, but not obligatory
