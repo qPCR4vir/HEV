@@ -7,25 +7,26 @@ import datetime
 print('sqlite3...')
 import sqlite3
 
+# http://biopython.org/
 print('Bio...')
 from Bio import SeqIO
 from Bio import GenBank       # too ?
 #import BioSQL
 #from BioSQL import BioSeqDatabase
 
-import PyQt5
+#import PyQt5
 
 
 #class RefSchema
 
 
 class CreateTaxa:
-    def __init__(self, db, kingdom, root_taxa, NCBI_TaxID  = None):
+    def __init__(self, db, superkingdom_name, root_taxa_name, NCBI_TaxID  = None, syn=None):
         self.db=db
         self.c = db.cursor()
-        self.kingdom = kingdom
-        self._root_rank('superkingdom', kingdom)
-        self._root_taxa(root_taxa, root_taxa, NCBI_TaxID)
+        self.kingdom = superkingdom_name
+        self._root_rank('superkingdom', superkingdom_name)
+        self._root_taxa(root_taxa_name, root_taxa_name, NCBI_TaxID)
 
     def _root_rank (self, name, kingdom):        #  todo: NCBI ? add kingdom ! determine type of rank.
         self.c.execute("INSERT INTO taxa_rank (Name, kingdom )"
