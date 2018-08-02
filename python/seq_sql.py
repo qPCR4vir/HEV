@@ -1208,9 +1208,9 @@ def create_all( ):
     if newly:
         print('Parsing GB_flat_file...')
         # parseGB(sdb, r'C:/Prog/HEV/data/temp/HEV-g3marked_all_2017-09-27.  577 seq.sequence.gb')
-        parseGB(sdb, r'C:/Prog/HEV/data/temp/HEV_all_2017-09-27. 14 469 seq.sequence.gb')
+        parseGB(sdb, r'../data/temp/HEV_all.sequence.gb')
         print('Parsing the big alignment...')
-        ID_align, ref = parse_full_fasta_Align(sdb, ref_name,'C:/Prog/HEV/alignment/HEV.fas')
+        ID_align, ref = parse_full_fasta_Align(sdb, ref_name,'../alignment/HEV.fas')
         print(ref)
     else:
         print('Cleaning parsed Excel...')
@@ -1222,7 +1222,7 @@ def create_all( ):
     print(ref)
 
     print('Parse the Excel file table...')
-    parse_HEV_xlsm(sdb, 'C:/Prog/HEV/data/temp/HEVsubtypingMEGAut - Kopie.xlsm')
+    parse_HEV_xlsm(sdb, '../data/temp/HEVsubtypingMEGAut - Kopie.xlsm')
 
     print('Done !!!')
     sdb.close()
