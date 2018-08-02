@@ -35,7 +35,7 @@ class CreateTaxa:
         self.r_rank = self.c.lastrowid
         return self.r_rank
 
-    def _root_taxa (self, Name ,  vulgar, NCBI_TaxID):
+    def _root_taxa (self, Name ,  vulgar, NCBI_TaxID  = None, syn=None):
         self.c.execute("INSERT INTO taxa      (Name , vulgar, Id_rank    , NCBI_TaxID  )"
                        "               VALUES ( ?   , ?     , ?          , ?           )",
                                               (Name , vulgar, self.r_rank, NCBI_TaxID  ) )
@@ -43,6 +43,8 @@ class CreateTaxa:
         self.c.execute("INSERT INTO taxa_parents (Id_taxa     , parent     , Id_rank      )"
                        "                  VALUES ( ?          , ?          , ?            )",
                                                  (self.r_taxa , self.r_taxa, self.r_rank  ) )
+        self.synonyms(self.r_taxa, [Name, vulgar, NCBI_TaxID])
+        if syn: self.synonyms(self.r_taxa, syn)
         return self.r_taxa
 
     def rank (self, name, parent_rank):
@@ -52,6 +54,7 @@ class CreateTaxa:
         return self.c.lastrowid
 
     def taxa (self, Name, vulgar, rank    , parent_taxa,  NCBI_TaxID  = None, syn=None):
+
         self.c.execute("INSERT INTO taxa (Name,  vulgar, Id_rank, parent     , NCBI_TaxID )"
                        "          VALUES (?   , ?      , ?      , ?          , ?          )",
                        (                  Name, vulgar , rank   , parent_taxa, NCBI_TaxID )   )
@@ -63,11 +66,8 @@ class CreateTaxa:
                        "                  SELECT  ?      , parent, Id_rank       "
                        "FROM taxa_parents WHERE Id_taxa=?",     (Id_taxa , parent_taxa  ) )
 
-        if isinstance(syn, list):
-            syn = [Name, vulgar, NCBI_TaxID] +syn
-        else:
-            syn = [Name, vulgar, NCBI_TaxID]
-        self.synonyms(Id_taxa,  syn)
+        self.synonyms(Id_taxa, [Name, vulgar, NCBI_TaxID])
+        if syn: self.synonyms(Id_taxa, syn)
         return Id_taxa
 
     def synonyms(self, Id_taxa, names):
