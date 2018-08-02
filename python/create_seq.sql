@@ -287,9 +287,8 @@ CREATE TABLE IF NOT EXISTS collective
 -- authors_collective
 CREATE TABLE IF NOT EXISTS authors_collective
         (
-         Id_author  INTEGER PRIMARY KEY AUTOINCREMENT,
-
-        );
+         Id_author  INTEGER PRIMARY KEY AUTOINCREMENT
+         );
 -- reference_to_seq   :   all the references papers for a given GB seq
 CREATE TABLE IF NOT EXISTS  reference_to_seq
        (
