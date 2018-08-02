@@ -345,8 +345,8 @@ def parse_full_fasta_Align(db, ref_seq = None, file_name=None):
                   "         VALUES (?,                  ?,       ?    )",
                                    (str(seq_record.id), exp_seq, len(exp_seq))    )
             Id_part = c.lastrowid
-
-        c.execute("INSERT INTO aligned_seq (Id_align, Id_part, Seq,      pbeg,     pend  ) "
+        # todo revise: Id_seq_region or Id_part ?????
+        c.execute("INSERT INTO aligned_seq (Id_align, Id_seq_region, Seq,      pbeg,     pend  ) "
                   "                 VALUES (?,        ?,       ?,        ?,       ?    )",
                                            (Id_align, Id_part, seq, seq_beg, seq_end )    )
 
