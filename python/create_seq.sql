@@ -447,8 +447,8 @@ SELECT strain.Name, count(isolate.Id_strain) AS str_c
              GROUP BY isolate.Id_strain HAVING count(isolate.Id_strain) >1 ORDER BY str_c DESC;
 CREATE VIEW taxa_tree AS
 SELECT (SELECT Name FROM taxa WHERE Id_taxa=x.Id_taxa ) AS Taxa_name,
-       (SELECT Name FROM taxa WHERE Id_taxa=x.parent ) AS Taxa_parent,
-       (SELECT Name FROM taxa_rank WHERE Id_rank=x.Id_rank ) AS Taxa_rank
+       (SELECT Name FROM taxa_rank WHERE Id_rank=x.Id_rank ) AS Taxa_rank,
+	   (SELECT Name FROM taxa WHERE Id_taxa=x.parent ) AS Taxa_parent
 FROM taxa_parents as x  ORDER BY Id_taxa, Id_rank DESC;
          /*
          Seq_Name  ,
