@@ -1,3 +1,10 @@
+# todo consider using https://github.com/etetoolkit/ete , http://etetoolkit.org/
+# A Python framework for the analysis and visualization of trees.
+# http://etetoolkit.org/cookbook/ete_build_basics.ipynb
+
+
+
+
 print('tk...')
 from tkinter import filedialog
 # import tkinter
@@ -152,6 +159,12 @@ def add_ref_schema(db):
 
 
 def add_def_taxa(db):
+    # todo evaluate if partially reconstruct from https://ftp.ncbi.nlm.nih.gov/pub/taxonomy/new_taxdump/
+    # todo by extracting all the info from all descendant from a given taxa, for example 291484: family Hepeviridae
+    # see also http://etetoolkit.org/docs/2.3/tutorial/tutorial_ncbitaxonomy.html
+    # https://ftp.ncbi.nlm.nih.gov/pub/taxonomy/new_taxdump/taxdump_readme.txt
+    # https://github.com/etetoolkit/ete/blob/master/ete3/ncbi_taxonomy/ncbiquery.py
+
     ct= CreateTaxa(db, 'Viruses', 'Viridae', NCBI_TaxID  = '10239', syn=['Viridae', 'Vira','viruses'])
 
     r   = ct.rank('no rank', ct.r_rank)
@@ -215,58 +228,58 @@ def add_def_taxa(db):
     gC1 = ct.taxa('C1', 'HEV-C1' , rGenotype, tOrthSpcC )
     gC2 = ct.taxa('C2', 'HEV-C2' , rGenotype, tOrthSpcC, syn=['1213422', 'Ferret hepatitis E virus'] )
 
-    rmc  = ct.rank('major clade', rGenotype)
-    maI  = ct.taxa('I'  , 'HEV-g3-I'     , rmc, g3)
-    maII = ct.taxa('II' , 'HEV-g3-II'    , rmc, g3)
-    Rab  = ct.taxa('3ra', 'HEV-g3-rabbit', rmc, g3)
+    rank_MajorClade  = ct.rank('major clade', rGenotype)
+    maI  = ct.taxa('I'  , 'HEV-g3-I'     , rank_MajorClade, g3)
+    maII = ct.taxa('II' , 'HEV-g3-II'    , rank_MajorClade, g3)
+    Rab  = ct.taxa('3ra', 'HEV-g3-rabbit', rank_MajorClade, g3)
 
-    rgr  = ct.rank('group', rmc)
-    grchi  = ct.taxa('3chi'  , 'HEV-g3chi'     , rgr, maI)
-    grjab  = ct.taxa('3jab'  , 'HEV-g3jab'     , rgr, maI)
-    grfeg  = ct.taxa('3feg'  , 'HEV-g3feg'     , rgr, maII)
-    grRab  = ct.taxa('3rab'  , 'HEV-g3rabbit'  , rgr, Rab, syn=['Rab']  )  # temporal???
+    rank_Group  = ct.rank('group', rank_MajorClade)
+    grchi  = ct.taxa('3chi'  , 'HEV-g3chi'     , rank_Group, maI)
+    grjab  = ct.taxa('3jab'  , 'HEV-g3jab'     , rank_Group, maI)
+    grfeg  = ct.taxa('3feg'  , 'HEV-g3feg'     , rank_Group, maII)
+    grRab  = ct.taxa('3rab'  , 'HEV-g3rabbit'  , rank_Group, Rab, syn=['Rab']  )  # temporal???
 
-    rsubt = ct.rank('subtype', rgr)
+    rSubtype = ct.rank('subtype', rank_Group)
 
-    g1a   = ct.taxa('1a', 'HEV-g1a'  , rsubt, g1, syn=['a', 'Ia', 'IA'])
-    g1b   = ct.taxa('1b', 'HEV-g1b'  , rsubt, g1)
-    g1c   = ct.taxa('1c', 'HEV-g1c'  , rsubt, g1)
-    g1d   = ct.taxa('1d', 'HEV-g1d'  , rsubt, g1, syn=['d'])
-    g1e   = ct.taxa('1e', 'HEV-g1e'  , rsubt, g1)
-    g1f   = ct.taxa('1f', 'HEV-g1f'  , rsubt, g1)
-    g1g   = ct.taxa('1g', 'HEV-g1g'  , rsubt, g1)
-    g1h   = ct.taxa('1h', 'HEV-g1h'  , rsubt, g1)
-    g1i   = ct.taxa('1i', 'HEV-g1i'  , rsubt, g1)
-    g1j   = ct.taxa('1j', 'HEV-g1j'  , rsubt, g1)
-    g1k   = ct.taxa('1k', 'HEV-g1k'  , rsubt, g1)
+    g1a   = ct.taxa('1a', 'HEV-g1a'  , rSubtype, g1, syn=['a', 'Ia', 'IA'])
+    g1b   = ct.taxa('1b', 'HEV-g1b'  , rSubtype, g1)
+    g1c   = ct.taxa('1c', 'HEV-g1c'  , rSubtype, g1)
+    g1d   = ct.taxa('1d', 'HEV-g1d'  , rSubtype, g1, syn=['d'])
+    g1e   = ct.taxa('1e', 'HEV-g1e'  , rSubtype, g1)
+    g1f   = ct.taxa('1f', 'HEV-g1f'  , rSubtype, g1)
+    g1g   = ct.taxa('1g', 'HEV-g1g'  , rSubtype, g1)
+    g1h   = ct.taxa('1h', 'HEV-g1h'  , rSubtype, g1)
+    g1i   = ct.taxa('1i', 'HEV-g1i'  , rSubtype, g1)
+    g1j   = ct.taxa('1j', 'HEV-g1j'  , rSubtype, g1)
+    g1k   = ct.taxa('1k', 'HEV-g1k'  , rSubtype, g1)
 
-    g2a   = ct.taxa('2a', 'HEV-g2a'  , rsubt, g2)
+    g2a   = ct.taxa('2a', 'HEV-g2a'  , rSubtype, g2)
 
-    g3a   = ct.taxa('3a', 'HEV-g3a'  , rsubt, grjab, syn=['a'])
-    g3b   = ct.taxa('3b', 'HEV-g3b'  , rsubt, grjab)
-    g3c   = ct.taxa('3c', 'HEV-g3c'  , rsubt, grchi, syn=['c', 'G3c'])
-    g3d   = ct.taxa('3d', 'HEV-g3d'  , rsubt, g3, syn=['d'])
-    g3e   = ct.taxa('3e', 'HEV-g3e'  , rsubt, grfeg, syn=['e', 'g3e', 'G3E', '3E'])
-    g3ef  = ct.taxa('3ef', 'HEV-g3ef', rsubt, grfeg )
-    g3f   = ct.taxa('3f', 'HEV-g3f'  , rsubt, grfeg, syn=['f', 'g3f', 'G3F', '3F', '515413', '515412']) # human/3f/Fr-27/France/2006, Fr-26/France/2006
-    g3g   = ct.taxa('3g', 'HEV-g3g'  , rsubt, grfeg)
-    g3h   = ct.taxa('3h', 'HEV-g3h'  , rsubt, grchi, syn=['h', 'g3h', 'G3H', '3H'])
-    g3i   = ct.taxa('3i', 'HEV-g3i'  , rsubt, grchi)
-    g3j   = ct.taxa('3j', 'HEV-g3j'  , rsubt, grjab)
-    g3k   = ct.taxa('3k', 'HEV-g3k'  , rsubt, g3)
-    g3l   = ct.taxa('3l', 'HEV-g3l'  , rsubt, g3)
+    g3a   = ct.taxa('3a', 'HEV-g3a'  , rSubtype, grjab, syn=['a'])
+    g3b   = ct.taxa('3b', 'HEV-g3b'  , rSubtype, grjab)
+    g3c   = ct.taxa('3c', 'HEV-g3c'  , rSubtype, grchi, syn=['c', 'G3c'])
+    g3d   = ct.taxa('3d', 'HEV-g3d'  , rSubtype, g3, syn=['d'])
+    g3e   = ct.taxa('3e', 'HEV-g3e'  , rSubtype, grfeg, syn=['e', 'g3e', 'G3E', '3E'])
+    g3ef  = ct.taxa('3ef', 'HEV-g3ef', rSubtype, grfeg )
+    g3f   = ct.taxa('3f', 'HEV-g3f'  , rSubtype, grfeg, syn=['f', 'g3f', 'G3F', '3F', '515413', '515412']) # human/3f/Fr-27/France/2006, Fr-26/France/2006
+    g3g   = ct.taxa('3g', 'HEV-g3g'  , rSubtype, grfeg)
+    g3h   = ct.taxa('3h', 'HEV-g3h'  , rSubtype, grchi, syn=['h', 'g3h', 'G3H', '3H'])
+    g3i   = ct.taxa('3i', 'HEV-g3i'  , rSubtype, grchi)
+    g3j   = ct.taxa('3j', 'HEV-g3j'  , rSubtype, grjab)
+    g3k   = ct.taxa('3k', 'HEV-g3k'  , rSubtype, g3)
+    g3l   = ct.taxa('3l', 'HEV-g3l'  , rSubtype, g3)
 
-    g4a   = ct.taxa('4a', 'HEV-g4a'  , rsubt, g4)
-    g4b   = ct.taxa('4b', 'HEV-g4b'  , rsubt, g4)
-    g4c   = ct.taxa('4c', 'HEV-g4c'  , rsubt, g4)
-    g4d   = ct.taxa('4d', 'HEV-g4d'  , rsubt, g4, syn=['d'])
-    g4e   = ct.taxa('4e', 'HEV-g4e'  , rsubt, g4)
-    g4f   = ct.taxa('4f', 'HEV-g4f'  , rsubt, g4)
-    g4g   = ct.taxa('4g', 'HEV-g4g'  , rsubt, g4)
-    g4h   = ct.taxa('4h', 'HEV-g4h'  , rsubt, g4, syn=['h'])
-    g4i   = ct.taxa('4i', 'HEV-g4i'  , rsubt, g4)
-    g4j   = ct.taxa('4j', 'HEV-g4j'  , rsubt, g4)
-    g4k   = ct.taxa('4k', 'HEV-g4k'  , rsubt, g4)
+    g4a   = ct.taxa('4a', 'HEV-g4a'  , rSubtype, g4)
+    g4b   = ct.taxa('4b', 'HEV-g4b'  , rSubtype, g4)
+    g4c   = ct.taxa('4c', 'HEV-g4c'  , rSubtype, g4)
+    g4d   = ct.taxa('4d', 'HEV-g4d'  , rSubtype, g4, syn=['d'])
+    g4e   = ct.taxa('4e', 'HEV-g4e'  , rSubtype, g4)
+    g4f   = ct.taxa('4f', 'HEV-g4f'  , rSubtype, g4)
+    g4g   = ct.taxa('4g', 'HEV-g4g'  , rSubtype, g4)
+    g4h   = ct.taxa('4h', 'HEV-g4h'  , rSubtype, g4, syn=['h'])
+    g4i   = ct.taxa('4i', 'HEV-g4i'  , rSubtype, g4)
+    g4j   = ct.taxa('4j', 'HEV-g4j'  , rSubtype, g4)
+    g4k   = ct.taxa('4k', 'HEV-g4k'  , rSubtype, g4)
 
     db.commit()
 
