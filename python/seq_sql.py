@@ -162,12 +162,19 @@ def add_def_taxa(db):
     tRn = ct.taxa('ssRNA negative-strand viruses'              , 'viruses', r, tRs, '35301')
 
     rOrder = ct.rank('Order', r)
-    tByOr  = ct.taxa('Bunyavirales'              , 'Bunyavirales', rOrder, tRn, '1980410')
+    tByOr  = ct.taxa(name        = 'Bunyavirales',
+                     vulgar      = 'Bunyavirales',
+                     rank        = rOrder,
+                     parent_taxa = tRn,
+                     NCBI_TaxID  = '1980410')
 
     rFamily= ct.rank('family', rOrder)
 
-    tPByFm = ct.taxa('Peribunyaviridae'              , 'Peribunyaviridae', rFamily, tByOr, '1980416')
-
+    tArenaFmly = ct.taxa('Arenaviridae'      , 'Arenaviridae', rFamily, tByOr, '11617')
+    tHantaFmly = ct.taxa('Hantaviridae'      , 'Hantaviridae', rFamily, tByOr, '1980413')
+    tNairoFmly = ct.taxa('Nairoviridae'      , 'Nairoviridae', rFamily, tByOr, '1980415')
+    tPerByFmly = ct.taxa('Peribunyaviridae'  , 'Peribunyaviridae', rFamily, tByOr, '1980416')
+    tPhenuFmly = ct.taxa('Phenuiviridae'     , 'Phenuiviridae', rFamily, tByOr, '1980418')
 
     tHEV   = ct.taxa('Hepeviridae', 'HEV'  , rFamily, tRp, '291484',
                    syn=['2021911', '1009842', '172851', '2021912', '2021913', '2021914', '1216472', '996468',
@@ -180,7 +187,10 @@ def add_def_taxa(db):
     # 1229326 Hepelivirus; 879095 rat/R68/DEU/2009; 301242 Big liver and spleen disease virus
 
     rGenus  = ct.rank('genus', rFamily)
-    tOrthBy = ct.taxa('Orthobunyavirus', 'Bunyavirus', rGenus, tPByFm, '11572', syn=['Bunyaviruses'])
+    tOrthBy = ct.taxa('Orthobunyavirus', 'Bunyavirus', rGenus, tPerByFmly, '11572', syn=['Bunyaviruses'])  # syn ?
+    tOrthNa = ct.taxa('Orthonairovirus', 'Nairovirus', rGenus, tNairoFmly, '1980517')
+    tOrthNa = ct.taxa('Orthonairovirus', 'Nairovirus', rGenus, tNairoFmly, '1980517')
+    tOrthNa = ct.taxa('Orthonairovirus', 'Nairovirus', rGenus, tNairoFmly, '1980517')
 
     tOrthHEV= ct.taxa('Orthohepevirus', 'Orthohepevirus'  , rGenus, tHEV, '1678141', syn=['12461', 'Hepatitis E virus','186677', 'Hepevirus'])
     tPisci  = ct.taxa('Piscihepevirus', 'Piscihepevirus'  , rGenus, tHEV, '1678142')
