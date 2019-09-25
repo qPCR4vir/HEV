@@ -212,24 +212,73 @@ def add_def_taxa(db):
     # 1638960 Mystacina/New Zealand/2013;  1674928 seal/AAUST73/BR/2012 ; 1530451 Fesavirus 2; 1328106 Fox
     # 1229326 Hepelivirus; 879095 rat/R68/DEU/2009; 301242 Big liver and spleen disease virus
 
-    rGenus  = ct.rank('genus', rFamily)
-    tOrthBy = ct.taxa('Orthobunyavirus', 'Bunyavirus', rGenus, tPerByFmly, '11572', syn=['Bunyaviruses'])  # syn ?
-    tOrthNa = ct.taxa('Orthonairovirus', 'Nairovirus', rGenus, tNairoFmly, '1980517')
-    tOrthNa = ct.taxa('Orthonairovirus', 'Nairovirus', rGenus, tNairoFmly, '1980517')
-    tOrthNa = ct.taxa('Orthonairovirus', 'Nairovirus', rGenus, tNairoFmly, '1980517')
+    genus  = ct.rank(name='genus',  parent_rank=subfamily)
+    Orthobunyavirus = ct.taxa('Orthobunyavirus', 'Bunyavirus', genus, Peribunyaviridae, '11572', syn=['Bunyaviruses'])  # syn ?
+    Orthonairovirus_genus = ct.taxa('Orthonairovirus', 'Nairovirus', genus, Nairoviridae, '1980517')
+    Phlebovirus = ct.taxa('Phlebovirus',     'Phlebovirus', genus, Phenuiviridae, '11584')
 
     tOrthHEV= ct.taxa('Orthohepevirus', 'Orthohepevirus'  , genus, tHEV, '1678141', syn=['12461', 'Hepatitis E virus','186677', 'Hepevirus'])
     tPisci  = ct.taxa('Piscihepevirus', 'Piscihepevirus'  , genus, tHEV, '1678142')
 
-    rSpecie  = ct.rank('species', rGenus)
+    species  = ct.rank('species', parent_rank=genus)
 
-    tBySp    = ct.taxa('Bunyamwera orthobunyavirus', 'Bunyamwera orthobunyavirus'  , rSpecie, tOrthBy, '1933179')
-    rSubSpecie = ct.rank('subspecie', rSpecie)
+    tBySp    = ct.taxa('Bunyamwera orthobunyavirus', 'Bunyamwera orthobunyavirus'  , species, Orthobunyavirus, '1933179')
+    rSubSpecie = ct.rank('subspecie', species)
     tByVr    = ct.taxa('Bunyamwera virus', 'Bunyamwera serogroup'  , rSubSpecie, tBySp, '35304', syn=['Bunyamwera virus group', 'Bunyamwera bunyavirus group'])
     tBtVr    = ct.taxa('Batai virus', 'Batai'  , rSubSpecie, tBySp, '80942' )
 
+    # Serogroup Crimean-Congo hemorrhagic fever
+    CCHFV_Sp    = ct.taxa('Crimean-Congo hemorrhagic fever orthonairovirus', 'CCHFV', species, Orthonairovirus_genus, '1980519')
+    HAZV_Sp     = ct.taxa('Hazara orthonairovirus',   'HAZV',     species, Orthonairovirus_genus, '1980522')
+    # Tofla (TFLV)
 
-    tOrthSpcA= ct.taxa('Orthohepevirus A', 'Orthohepevirus A'  , rSpecie, tOrthHEV, '1678143', syn=[ 'Swine hepatitis E virus', '63421']) # ?? syn??
+    # Serogroup Dera Ghazi Khan
+    DGKV_Sp = ct.taxa('Dera Ghazi Khan orthonairovirus', 'DGKV', species, Orthonairovirus_genus, '1980520')
+    # Abu Hammad  (AHV)
+    # Abu Mina  (AMV)
+
+    # Serogroup Hughes
+    HUGV_Sp   = ct.taxa('Hughes orthonairovirus',   'HUGV',   species, Orthonairovirus_genus, '1980523')
+    # Caspiy  (CASV)
+    # Farallon (FARV)
+    # Punta salinas  (PSV)
+    # Raza  (RAZAV)
+    # Soldado  (SOLV)
+    # Zirqa (ZIRV)
+
+    # Serogroup Sakhalin
+    SAKV_Sp = ct.taxa('Sakhalin orthonairovirus', 'SAKV', species, Orthonairovirus_genus, '1980528')
+    # Avalon  (AVAV)
+    # Paramushir  (PMRV)
+    # Tilamook  (TILV)
+
+    # Serogroup Nairobi sheep disease
+    NSDV_Sp     = ct.taxa('Nairobi sheep disease orthonairovirus', 'NSDV', species, Orthonairovirus_genus, '1980526')
+    # Ganjam  (GANV)
+    # Dugbe  (DUGV)
+    # Kupe (KUPV)
+
+    # Serogroup Qalyub
+    QYBV_Sp   = ct.taxa('Qalyub orthonairovirus',   'QYBV',   species, Orthonairovirus_genus, '1980527')
+    CHIMV_Sp  = ct.taxa('Chim orthonairovirus',     'CHIMV',  species, Orthonairovirus_genus, '2170062')
+    # Geran  (GERV)
+    # Bandia  (BDAV)
+
+    # Serogroup Thiafora
+    TFAV_Sp = ct.taxa('Thiafora orthonairovirus', 'TFAV', species, Orthonairovirus_genus, '1980529')
+
+
+    Artashat_Sp = ct.taxa('Artashat orthonairovirus', 'Artashat', species, Orthonairovirus_genus, '2170061')
+    Burana_Sp   = ct.taxa('Burana orthonairovirus',   'Burana',   species, Orthonairovirus_genus, '1980518')  # ?
+    Dugbe_Sp    = ct.taxa('Dugbe orthonairovirus',    'Dugbe',    species, Orthonairovirus_genus, '1980521')
+    Kasokero_Sp = ct.taxa('Kasokero orthonairovirus', 'Kasokero', species, Orthonairovirus_genus, '1980524')
+    Keterah_Sp  = ct.taxa('Keterah orthonairovirus',  'Keterah',  species, Orthonairovirus_genus, '1980525')
+    Qalyub_Sp   = ct.taxa('Qalyub orthonairovirus',   'Qalyub',   species, Orthonairovirus_genus, '1980527')
+    Tamdy_Sp    = ct.taxa('Tamdy orthonairovirus',    'Tamdy',    species, Orthonairovirus_genus, '2170063')
+    # Estero Real orthonairovirus : https://talk.ictvonline.org//taxonomy/p/taxonomy-history?taxnode_id=201850107
+    # Estero Real orthobunyavirus : https://www.ncbi.nlm.nih.gov/Taxonomy/Browser/wwwtax.cgi?name=Estero+Real+virus
+
+    tOrthSpcA= ct.taxa('Orthohepevirus A', 'Orthohepevirus A'  , species, tOrthHEV, '1678143', syn=[ 'Swine hepatitis E virus', '63421']) # ?? syn??
     ct.synonyms(tOrthSpcA, '12461')
     tOrthSpcB= ct.taxa('Orthohepevirus B', 'Orthohepevirus B'  , species, tOrthHEV, '1678144') # NCBI_ID tentative !!
     tOrthSpcC= ct.taxa('Orthohepevirus C', 'Orthohepevirus C'  , species, tOrthHEV, '1678145', syn=['879096', '1414752']) # rat/R63/DEU/2009, Mink
