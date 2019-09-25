@@ -253,9 +253,9 @@ def add_def_taxa(db):
     # Tilamook  (TILV)
 
     # Serogroup Nairobi sheep disease
-    NSDV_Sp     = ct.taxa('Nairobi sheep disease orthonairovirus', 'NSDV', species, Orthonairovirus_genus, '1980526')
+    NSDV_Sp    = ct.taxa('Nairobi sheep disease orthonairovirus', 'NSDV', species, Orthonairovirus_genus, '1980526')
+    DUGV_Sp    = ct.taxa('Dugbe orthonairovirus',                 'DUGV', species, Orthonairovirus_genus, '1980521')
     # Ganjam  (GANV)
-    # Dugbe  (DUGV)
     # Kupe (KUPV)
 
     # Serogroup Qalyub
@@ -266,15 +266,25 @@ def add_def_taxa(db):
 
     # Serogroup Thiafora
     TFAV_Sp = ct.taxa('Thiafora orthonairovirus', 'TFAV', species, Orthonairovirus_genus, '1980529')
+    # Erve (ERVV)
 
+    # Serogroup Issyk-kul
+    # Issyk-kul (ISKV)
+    # Gossas (GOSV)
+    # Uzun Agach (UZAV)
+
+    # Serogroup Kasokero
+    KKOV_Sp = ct.taxa('Kasokero orthonairovirus', 'KKOV', species, Orthonairovirus_genus, '1980524')
+    # Leopards Hill  (LPHV)
+    # Yogue (YOGV)
+
+    # Serogroup Burana
+    BURV_Sp = ct.taxa('Burana orthonairovirus', 'BURV', species, Orthonairovirus_genus, '1980518')  # not official?
+    TDYV_Sp = ct.taxa('Tamdy orthonairovirus',  'TDYV', species, Orthonairovirus_genus, '2170063')
 
     Artashat_Sp = ct.taxa('Artashat orthonairovirus', 'Artashat', species, Orthonairovirus_genus, '2170061')
-    Burana_Sp   = ct.taxa('Burana orthonairovirus',   'Burana',   species, Orthonairovirus_genus, '1980518')  # ?
-    Dugbe_Sp    = ct.taxa('Dugbe orthonairovirus',    'Dugbe',    species, Orthonairovirus_genus, '1980521')
-    Kasokero_Sp = ct.taxa('Kasokero orthonairovirus', 'Kasokero', species, Orthonairovirus_genus, '1980524')
     Keterah_Sp  = ct.taxa('Keterah orthonairovirus',  'Keterah',  species, Orthonairovirus_genus, '1980525')
     Qalyub_Sp   = ct.taxa('Qalyub orthonairovirus',   'Qalyub',   species, Orthonairovirus_genus, '1980527')
-    Tamdy_Sp    = ct.taxa('Tamdy orthonairovirus',    'Tamdy',    species, Orthonairovirus_genus, '2170063')
     # Estero Real orthonairovirus : https://talk.ictvonline.org//taxonomy/p/taxonomy-history?taxnode_id=201850107
     # Estero Real orthobunyavirus : https://www.ncbi.nlm.nih.gov/Taxonomy/Browser/wwwtax.cgi?name=Estero+Real+virus
 
