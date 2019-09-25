@@ -202,7 +202,7 @@ def add_def_taxa(db):
     Peribunyaviridae = ct.taxa('Peribunyaviridae'  , 'Peribunyaviridae', family, Bunyavirales, '1980416')
     Phenuiviridae    = ct.taxa('Phenuiviridae'     , 'Phenuiviridae', family, Bunyavirales, '1980418')
 
-    tHEV   = ct.taxa('Hepeviridae', 'HEV'  , rFamily, tRp, '291484',
+    tHEV   = ct.taxa('Hepeviridae', 'HEV'  , family, Riboviria, '291484',
                    syn=['2021911', '1009842', '172851', '2021912', '2021913', '2021914', '1216472', '996468',
                        '1638959', '1638960', '1674928', '1530451', '1328106', '1229326', '879095', '301242'])
 
@@ -218,8 +218,8 @@ def add_def_taxa(db):
     tOrthNa = ct.taxa('Orthonairovirus', 'Nairovirus', rGenus, tNairoFmly, '1980517')
     tOrthNa = ct.taxa('Orthonairovirus', 'Nairovirus', rGenus, tNairoFmly, '1980517')
 
-    tOrthHEV= ct.taxa('Orthohepevirus', 'Orthohepevirus'  , rGenus, tHEV, '1678141', syn=['12461', 'Hepatitis E virus','186677', 'Hepevirus'])
-    tPisci  = ct.taxa('Piscihepevirus', 'Piscihepevirus'  , rGenus, tHEV, '1678142')
+    tOrthHEV= ct.taxa('Orthohepevirus', 'Orthohepevirus'  , genus, tHEV, '1678141', syn=['12461', 'Hepatitis E virus','186677', 'Hepevirus'])
+    tPisci  = ct.taxa('Piscihepevirus', 'Piscihepevirus'  , genus, tHEV, '1678142')
 
     rSpecie  = ct.rank('species', rGenus)
 
@@ -231,14 +231,14 @@ def add_def_taxa(db):
 
     tOrthSpcA= ct.taxa('Orthohepevirus A', 'Orthohepevirus A'  , rSpecie, tOrthHEV, '1678143', syn=[ 'Swine hepatitis E virus', '63421']) # ?? syn??
     ct.synonyms(tOrthSpcA, '12461')
-    tOrthSpcB= ct.taxa('Orthohepevirus B', 'Orthohepevirus B'  , rSpecie, tOrthHEV, '1678144') # NCBI_ID tentative !!
-    tOrthSpcC= ct.taxa('Orthohepevirus C', 'Orthohepevirus C'  , rSpecie, tOrthHEV, '1678145', syn=['879096', '1414752']) # rat/R63/DEU/2009, Mink
-    tOrthSpcD= ct.taxa('Orthohepevirus D', 'Orthohepevirus D'  , rSpecie, tOrthHEV, '1678146')
+    tOrthSpcB= ct.taxa('Orthohepevirus B', 'Orthohepevirus B'  , species, tOrthHEV, '1678144') # NCBI_ID tentative !!
+    tOrthSpcC= ct.taxa('Orthohepevirus C', 'Orthohepevirus C'  , species, tOrthHEV, '1678145', syn=['879096', '1414752']) # rat/R63/DEU/2009, Mink
+    tOrthSpcD= ct.taxa('Orthohepevirus D', 'Orthohepevirus D'  , species, tOrthHEV, '1678146')
 
 
-    tPisciSpcA=ct.taxa('Piscihepevirus A', 'Piscihepevirus A'  , rSpecie, tPisci,'1678146', syn=['1016879']) # Cutthroat trout virus
+    tPisciSpcA=ct.taxa('Piscihepevirus A', 'Piscihepevirus A'  , species, tPisci,'1678146', syn=['1016879']) # Cutthroat trout virus
 
-    rGenotype = ct.rank('genotype', rSpecie)
+    rGenotype = ct.rank('genotype', species)
     g1  = ct.taxa('1', 'HEV-g1'  , rGenotype, tOrthSpcA, '185579', syn=['I', 'GI', 'G1', 'One'] )
     g2  = ct.taxa('2', 'HEV-g2'  , rGenotype, tOrthSpcA, syn=['II'] )
     g3  = ct.taxa('3', 'HEV-g3'  , rGenotype, tOrthSpcA, '509628', syn=['G3', 'III', 'Gt3', 'g3', 'HEV-3', 'third', 'GIII'])   # , 'Hepatitis E virus type 3'
