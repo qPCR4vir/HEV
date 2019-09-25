@@ -179,20 +179,28 @@ def add_def_taxa(db):
                                 parent_taxa = Negarnaviricota,
                                 NCBI_TaxID  = '2497571')
 
-    rOrder = ct.rank('Order', r)
-    tByOr  = ct.taxa(name        = 'Bunyavirales',
-                     vulgar      = 'Bunyavirales',
-                     rank        = rOrder,
-                     parent_taxa = tRn,
-                     NCBI_TaxID  = '1980410')
+    Class   = ct.rank(name='class', parent_rank=subphylum)
+    Ellioviricetes = ct.taxa(name        = 'Ellioviricetes',
+                             vulgar      = '',
+                             rank        = Class,
+                             parent_taxa = Polyploviricotina,
+                             NCBI_TaxID  = '2497576')
 
-    rFamily= ct.rank('family', rOrder)
+    order = ct.rank(name='Order', parent_rank=Class)
+    Bunyavirales  = ct.taxa(name        = 'Bunyavirales',
+                            vulgar      = 'Bunyavirales',
+                            rank        = order,
+                            parent_taxa = Ellioviricetes,
+                            NCBI_TaxID  = '1980410')
 
-    tArenaFmly = ct.taxa('Arenaviridae'      , 'Arenaviridae', rFamily, tByOr, '11617')
-    tHantaFmly = ct.taxa('Hantaviridae'      , 'Hantaviridae', rFamily, tByOr, '1980413')
-    tNairoFmly = ct.taxa('Nairoviridae'      , 'Nairoviridae', rFamily, tByOr, '1980415')
-    tPerByFmly = ct.taxa('Peribunyaviridae'  , 'Peribunyaviridae', rFamily, tByOr, '1980416')
-    tPhenuFmly = ct.taxa('Phenuiviridae'     , 'Phenuiviridae', rFamily, tByOr, '1980418')
+    family    = ct.rank(name='family',    parent_rank=order)
+    subfamily = ct.rank(name='subfamily', parent_rank=family)
+
+    Arenaviridae     = ct.taxa('Arenaviridae'      , 'Arenaviridae', family, Bunyavirales, '11617')
+    Hantaviridae     = ct.taxa('Hantaviridae'      , 'Hantaviridae', family, Bunyavirales, '1980413')
+    Nairoviridae     = ct.taxa('Nairoviridae'      , 'Nairoviridae', family, Bunyavirales, '1980415')
+    Peribunyaviridae = ct.taxa('Peribunyaviridae'  , 'Peribunyaviridae', family, Bunyavirales, '1980416')
+    Phenuiviridae    = ct.taxa('Phenuiviridae'     , 'Phenuiviridae', family, Bunyavirales, '1980418')
 
     tHEV   = ct.taxa('Hepeviridae', 'HEV'  , rFamily, tRp, '291484',
                    syn=['2021911', '1009842', '172851', '2021912', '2021913', '2021914', '1216472', '996468',
