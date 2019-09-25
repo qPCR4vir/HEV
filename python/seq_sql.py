@@ -25,27 +25,27 @@ class CreateTaxa:
         self.db=db
         self.c = db.cursor()
         self.kingdom = superkingdom_name
-        self._root_rank('superkingdom', superkingdom_name)
-        self._root_taxa(root_taxa_name, root_taxa_name, NCBI_TaxID)
+        self.root_rank = self._root_rank('superkingdom', superkingdom_name)
+        self.root_taxa = self._root_taxa(root_taxa_name, root_taxa_name, NCBI_TaxID)
 
     def _root_rank (self, name, kingdom):        #  todo: NCBI ? add kingdom ! determine type of rank.
         self.c.execute("INSERT INTO taxa_rank (Name, kingdom )"
                        "               VALUES (?   , ?       )",
                        (                       name, kingdom )   )
-        self.r_rank = self.c.lastrowid
-        return self.r_rank
+        self.root_rank = self.c.lastrowid
+        return self.root_rank
 
-    def _root_taxa (self, Name ,  vulgar, NCBI_TaxID  = None, syn=None):
+    def _root_taxa (self, name, vulgar, NCBI_TaxID  = None, syn=None):
         self.c.execute("INSERT INTO taxa      (Name , vulgar, Id_rank    , NCBI_TaxID  )"
                        "               VALUES ( ?   , ?     , ?          , ?           )",
-                                              (Name , vulgar, self.r_rank, NCBI_TaxID  ) )
-        self.r_taxa = self.c.lastrowid
+                       (name , vulgar, self.root_rank, NCBI_TaxID))
+        self.root_taxa = self.c.lastrowid
         self.c.execute("INSERT INTO taxa_parents (Id_taxa     , parent     , Id_rank      )"
                        "                  VALUES ( ?          , ?          , ?            )",
-                                                 (self.r_taxa , self.r_taxa, self.r_rank  ) )
-        self.synonyms(self.r_taxa, [Name, vulgar, NCBI_TaxID])
-        if syn: self.synonyms(self.r_taxa, syn)
-        return self.r_taxa
+                       (self.root_taxa , self.root_taxa, self.root_rank))
+        self.synonyms(self.root_taxa, [name, vulgar, NCBI_TaxID])
+        if syn: self.synonyms(self.root_taxa, syn)
+        return self.root_taxa
 
     def rank (self, name, parent_rank):
         self.c.execute("INSERT INTO taxa_rank (Name, kingdom     , parent      )"
@@ -53,11 +53,11 @@ class CreateTaxa:
                        (                       name, self.kingdom, parent_rank )   )
         return self.c.lastrowid
 
-    def taxa (self, Name, vulgar, rank    , parent_taxa,  NCBI_TaxID  = None, syn=None):
+    def taxa (self, name, vulgar, rank, parent_taxa, NCBI_TaxID  = None, syn=None):
 
         self.c.execute("INSERT INTO taxa (Name,  vulgar, Id_rank, parent     , NCBI_TaxID )"
                        "          VALUES (?   , ?      , ?      , ?          , ?          )",
-                       (                  Name, vulgar , rank   , parent_taxa, NCBI_TaxID )   )
+                       (name, vulgar , rank   , parent_taxa, NCBI_TaxID))
         Id_taxa=self.c.lastrowid
         self.c.execute("INSERT INTO taxa_parents (Id_taxa, parent, Id_rank      )"
                        "                  VALUES ( ?     , ?     , ?            )",
@@ -66,7 +66,7 @@ class CreateTaxa:
                        "                  SELECT  ?      , parent, Id_rank       "
                        "FROM taxa_parents WHERE Id_taxa=?",     (Id_taxa , parent_taxa  ) )
 
-        self.synonyms(Id_taxa, [Name, vulgar, NCBI_TaxID])
+        self.synonyms(Id_taxa, [name, vulgar, NCBI_TaxID])
         if syn: self.synonyms(Id_taxa, syn)
         return Id_taxa
 
@@ -152,14 +152,32 @@ def add_ref_schema(db):
 
 
 def add_def_taxa(db):
-    ct= CreateTaxa(db, 'Viruses', 'Viridae', NCBI_TaxID  = '10239', syn=['Viridae', 'Vira','viruses'])
+    ct = CreateTaxa(db,
+                    superkingdom_name = 'Viruses',
+                    root_taxa_name    = 'Viridae',
+                    NCBI_TaxID        = '10239',
+                    syn               = ['Viridae', 'Vira','viruses'])
 
-    r   = ct.rank('no rank', ct.r_rank)
-    tRs = ct.taxa('ssRNA viruses', 'viruses', r, ct.r_taxa, '439488')
+    realm   = ct.rank(name='Realm', parent_rank=ct.root_rank)  # no rank at NCBI
+    Riboviria = ct.taxa(name        = 'Riboviria',
+                        vulgar      = 'RNA viruses',
+                        rank        = realm,
+                        parent_taxa = ct.root_taxa,
+                        NCBI_TaxID  = '439488')
 
-    r   = ct.rank('', r)
-    tRp = ct.taxa('ssRNA positive-strand viruses, no DNA stage', 'viruses', r, tRs, '35278')
-    tRn = ct.taxa('ssRNA negative-strand viruses'              , 'viruses', r, tRs, '35301')
+    phylum   = ct.rank(name='phylum', parent_rank=realm)
+    Negarnaviricota = ct.taxa(name        = 'Negarnaviricota',
+                              vulgar      = '',
+                              rank        = phylum,
+                              parent_taxa = Riboviria,
+                              NCBI_TaxID  = '2497569')
+
+    subphylum   = ct.rank(name='subphylum', parent_rank=phylum)
+    Polyploviricotina = ct.taxa(name        = 'Polyploviricotina',
+                                vulgar      = '',
+                                rank        = subphylum,
+                                parent_taxa = Negarnaviricota,
+                                NCBI_TaxID  = '2497571')
 
     rOrder = ct.rank('Order', r)
     tByOr  = ct.taxa(name        = 'Bunyavirales',
