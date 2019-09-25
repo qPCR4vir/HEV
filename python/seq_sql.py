@@ -231,6 +231,7 @@ def add_def_taxa(db):
     # Serogroup Crimean-Congo hemorrhagic fever
     CCHFV_Sp    = ct.taxa('Crimean-Congo hemorrhagic fever orthonairovirus', 'CCHFV', species, Orthonairovirus_genus, '1980519',
                           syn=['402369', '402370', '402371'])   # and many more <--- actually subCC
+                            # JF807432.1, JF523542.1 seg-L 258, 490 = but - to different
     HAZV_Sp     = ct.taxa('Hazara orthonairovirus',   'HAZV',     species, Orthonairovirus_genus, '1980522',
                           syn=['11596', '11597'])   #   <--- actually subHAZ ?
     # not official. NCBI parent: no rank - unclassified Nairovirus - 1340802
@@ -308,10 +309,10 @@ def add_def_taxa(db):
     # not official. NCBI parent: no rank - unclassified Nairovirus - 1340802
     Bat_Sp        = ct.taxa('Bat orthonairovirus',        'Bat',        species, Orthonairovirus_genus, '1340803')
     Beiji_Sp      = ct.taxa('Beiji orthonairovirus',      'Beiji',      species, Orthonairovirus_genus, '2304647')
-    Grotenhout_Sp = ct.taxa('Grotenhout orthonairovirus', 'Grotenhout', species, Orthonairovirus_genus, '1971396')
+    Grotenhout_Sp = ct.taxa('Grotenhout orthonairovirus', 'Grotenhout', species, Orthonairovirus_genus, '1971396')  # too different. L:14,854, M:0, L:3728
     Nayun_Sp      = ct.taxa('Nayun tick orthonairovirus', 'Nayun',      species, Orthonairovirus_genus, '1610817')
     Norway_Sp     = ct.taxa('Norway nairovirus 1 orthonairovirus',      'Norway nairovirus 1',   species, Orthonairovirus_genus, '2034329')
-    Pacific_Sp    = ct.taxa('Pacific coast tick orthonairovirus',      'Pacific coast tick nairovirus',   species, Orthonairovirus_genus, '1977074')
+    Pacific_Sp    = ct.taxa('Pacific coast tick orthonairovirus',      'Pacific coast tick nairovirus',   species, Orthonairovirus_genus, '1977074') # to long: M
     Pustyn_Sp     = ct.taxa('Pustyn orthonairovirus',      'Pustyn',   species, Orthonairovirus_genus, '1857750')
     Saphire_Sp    = ct.taxa('Saphire II orthonairovirus', 'Saphire II virus',  species, Orthonairovirus_genus, '1815512')
     SouthBay_Sp   = ct.taxa('South Bay orthonairovirus',  'South Bay virus',   species, Orthonairovirus_genus, '1526514')
