@@ -220,74 +220,105 @@ def add_def_taxa(db):
     tOrthHEV= ct.taxa('Orthohepevirus', 'Orthohepevirus'  , genus, tHEV, '1678141', syn=['12461', 'Hepatitis E virus','186677', 'Hepevirus'])
     tPisci  = ct.taxa('Piscihepevirus', 'Piscihepevirus'  , genus, tHEV, '1678142')
 
-    species  = ct.rank('species', parent_rank=genus)
+    species     = ct.rank('species', parent_rank=genus)
+    subspecies  = ct.rank('species', parent_rank=species)
 
     tBySp    = ct.taxa('Bunyamwera orthobunyavirus', 'Bunyamwera orthobunyavirus'  , species, Orthobunyavirus, '1933179')
-    rSubSpecie = ct.rank('subspecie', species)
-    tByVr    = ct.taxa('Bunyamwera virus', 'Bunyamwera serogroup'  , rSubSpecie, tBySp, '35304', syn=['Bunyamwera virus group', 'Bunyamwera bunyavirus group'])
-    tBtVr    = ct.taxa('Batai virus', 'Batai'  , rSubSpecie, tBySp, '80942' )
+    tByVr    = ct.taxa('Bunyamwera virus', 'Bunyamwera serogroup'  , subspecies, tBySp, '35304', syn=['Bunyamwera virus group', 'Bunyamwera bunyavirus group'])
+    tBtVr    = ct.taxa('Batai virus', 'Batai'  , subspecies, tBySp, '80942' )
 
+    # Orthonairovirus_genus species
     # Serogroup Crimean-Congo hemorrhagic fever
-    CCHFV_Sp    = ct.taxa('Crimean-Congo hemorrhagic fever orthonairovirus', 'CCHFV', species, Orthonairovirus_genus, '1980519')
-    HAZV_Sp     = ct.taxa('Hazara orthonairovirus',   'HAZV',     species, Orthonairovirus_genus, '1980522')
-    # Tofla (TFLV)
+    CCHFV_Sp    = ct.taxa('Crimean-Congo hemorrhagic fever orthonairovirus', 'CCHFV', species, Orthonairovirus_genus, '1980519',
+                          syn=['402369', '402370', '402371'])   # and many more <--- actually subCC
+    HAZV_Sp     = ct.taxa('Hazara orthonairovirus',   'HAZV',     species, Orthonairovirus_genus, '1980522',
+                          syn=['11596', '11597'])   #   <--- actually subHAZ ?
+    # not official. NCBI parent: no rank - unclassified Nairovirus - 1340802
+    TFLV_Sp     = ct.taxa('Tofla orthonairovirus',    'TFLV',     species, Orthonairovirus_genus, '1615758')
 
     # Serogroup Dera Ghazi Khan
     DGKV_Sp = ct.taxa('Dera Ghazi Khan orthonairovirus', 'DGKV', species, Orthonairovirus_genus, '1980520')
-    # Abu Hammad  (AHV)
-    # Abu Mina  (AMV)
+    AHV_Sp = ct.taxa('Abu Hammad virus', 'AHV', subspecies, DGKV_Sp, '248058')
+    AMV_Sp = ct.taxa('Abu Mina virus',   'AMV', subspecies, DGKV_Sp, '248059')
 
     # Serogroup Hughes
-    HUGV_Sp   = ct.taxa('Hughes orthonairovirus',   'HUGV',   species, Orthonairovirus_genus, '1980523')
-    # Caspiy  (CASV)
-    # Farallon (FARV)
-    # Punta salinas  (PSV)
-    # Raza  (RAZAV)
-    # Soldado  (SOLV)
+    HUGV_Sp   = ct.taxa('Hughes orthonairovirus', 'HUGV',  species, Orthonairovirus_genus, '248053')
+    FARV_Sp   = ct.taxa('Farallon virus',         'FARV',  subspecies, HUGV_Sp, '248059')
+    PSV_Sp    = ct.taxa('Punta salinas virus',    'PSV',   subspecies, HUGV_Sp, '248056')
+    RAZAV_Sp  = ct.taxa('Raza virus',             'RAZAV', subspecies, HUGV_Sp, '248054')
+    SOLV_Sp   = ct.taxa('Soldado virus',          'SOLV',  subspecies, HUGV_Sp, '426791')
     # Zirqa (ZIRV)
+    # not official. NCBI parent: no rank - unclassified Nairovirus - 1340802
+    CASV_Sp   = ct.taxa('Caspiy orthonairovirus',   'CASV',   species, Orthonairovirus_genus, '1453405')
+    # not official.
 
     # Serogroup Sakhalin
     SAKV_Sp = ct.taxa('Sakhalin orthonairovirus', 'SAKV', species, Orthonairovirus_genus, '1980528')
-    # Avalon  (AVAV)
-    # Paramushir  (PMRV)
-    # Tilamook  (TILV)
+    TILV_Sp     = ct.taxa('Tillamook virus',   'TILV', subspecies, SAKV_Sp, '37297')
+    CMV_Sp      = ct.taxa('Clo Mor virus',      'CMV', subspecies, SAKV_Sp, '1810952')
+    Taggert_Sp  = ct.taxa('Taggert virus',  'Taggert', subspecies, SAKV_Sp, '487050')
+    # not official. NCBI parent: no rank - unclassified Nairovirus - 1340802
+    PMRV_Sp = ct.taxa('Paramushir orthonairovirus', 'PMRV', species, Orthonairovirus_genus, '1453409')
+    # not official. NCBI parent: no rank - unclassified viruses - 12429
+    AVAV_Sp = ct.taxa('Avalon orthonairovirus', 'AVAV', species, Orthonairovirus_genus, '1810950')
 
     # Serogroup Nairobi sheep disease
-    NSDV_Sp    = ct.taxa('Nairobi sheep disease orthonairovirus', 'NSDV', species, Orthonairovirus_genus, '1980526')
+    NSDV_Sp    = ct.taxa('Nairobi sheep disease orthonairovirus', 'NSDV', species, Orthonairovirus_genus, '1980526', syn=['194540'])
+    KUPV_Sp    = ct.taxa('Kupe virus',  'KUPV', subspecies, NSDV_Sp, '498356')
+    # Ganjam  (GANV) strain ??
     DUGV_Sp    = ct.taxa('Dugbe orthonairovirus',                 'DUGV', species, Orthonairovirus_genus, '1980521')
-    # Ganjam  (GANV)
-    # Kupe (KUPV)
+
 
     # Serogroup Qalyub
-    QYBV_Sp   = ct.taxa('Qalyub orthonairovirus',   'QYBV',   species, Orthonairovirus_genus, '1980527')
-    CHIMV_Sp  = ct.taxa('Chim orthonairovirus',     'CHIMV',  species, Orthonairovirus_genus, '2170062')
-    # Geran  (GERV)
-    # Bandia  (BDAV)
+    QYBV_Sp   = ct.taxa('Qalyub orthonairovirus',  'QYBV',   species, Orthonairovirus_genus, '1980527')
+    BDAV_Sp   = ct.taxa('Bandia virus',  'BDAV', subspecies, QYBV_Sp, '248060')
+    CHIMV_Sp  = ct.taxa('Chim orthonairovirus',    'CHIMV',  species, Orthonairovirus_genus, '2170062')
+    # not official. NCBI parent: no rank - unclassified Nairovirus - 1340802
+    GERV_Sp   = ct.taxa('Geran orthonairovirus',   'GERV',   species, Orthonairovirus_genus, '1453407')
 
     # Serogroup Thiafora
     TFAV_Sp = ct.taxa('Thiafora orthonairovirus', 'TFAV', species, Orthonairovirus_genus, '1980529')
-    # Erve (ERVV)
+    ERVV_Sp   = ct.taxa('Erve virus',  'ERVV', subspecies, TFAV_Sp, '248062')
 
     # Serogroup Issyk-kul
-    # Issyk-kul (ISKV)
-    # Gossas (GOSV)
-    # Uzun Agach (UZAV)
+    # not official. NCBI parent: no rank - unclassified Nairovirus - 1340802
+    ISKV_Sp  = ct.taxa('Issyk-kul orthonairovirus',  'ISKV',  species, Orthonairovirus_genus, '1453408')
+    GOSV_Sp  = ct.taxa('Gossas orthonairovirus',     'GOSV',  species, Orthonairovirus_genus, '1714376')
+    UZAV_Sp  = ct.taxa('Uzun Agach orthonairovirus', 'UZAV',  species, Orthonairovirus_genus, '1523052')
 
     # Serogroup Kasokero
-    KKOV_Sp = ct.taxa('Kasokero orthonairovirus', 'KKOV', species, Orthonairovirus_genus, '1980524')
-    # Leopards Hill  (LPHV)
-    # Yogue (YOGV)
+    KKOV_Sp = ct.taxa('Kasokero orthonairovirus', 'KKOV', species, Orthonairovirus_genus, '1980524', syn=['1712570'])
+    Kasokero_Sp = ct.taxa('Kasokero virus',  'Kasokero', subspecies, KKOV_Sp, '1712570')
+    # not official. NCBI parent: no rank - unclassified Nairovirus - 1340802
+    LPHV_Sp = ct.taxa('Leopards Hill orthonairovirus', 'LPHV', species, Orthonairovirus_genus, '1381104')
+    YOGV_Sp = ct.taxa('Yogue orthonairovirus', 'YOGV', species, Orthonairovirus_genus, '1712572')
 
     # Serogroup Burana
     BURV_Sp = ct.taxa('Burana orthonairovirus', 'BURV', species, Orthonairovirus_genus, '1980518')  # not official?
-    TDYV_Sp = ct.taxa('Tamdy orthonairovirus',  'TDYV', species, Orthonairovirus_genus, '2170063')
+    Tacheng_Sp = ct.taxa('Tacheng Tick virus',  'Tacheng', subspecies, BURV_Sp, '1608083')
+    TDYV_Sp = ct.taxa('Tamdy orthonairovirus',  'TDYV', species, Orthonairovirus_genus, '2170063', syn=['1453410']) # 1453410: unclassified Nairovirus
+    Burana_Sp = ct.taxa('Burana virus',  'Burana', subspecies, TDYV_Sp, '1453404')
 
-    Artashat_Sp = ct.taxa('Artashat orthonairovirus', 'Artashat', species, Orthonairovirus_genus, '2170061')
-    Keterah_Sp  = ct.taxa('Keterah orthonairovirus',  'Keterah',  species, Orthonairovirus_genus, '1980525')
-    Qalyub_Sp   = ct.taxa('Qalyub orthonairovirus',   'Qalyub',   species, Orthonairovirus_genus, '1980527')
+    Artashat_Sp  = ct.taxa('Artashat orthonairovirus',    'Artashat', species, Orthonairovirus_genus, '2170061')
+    Keterah_Sp   = ct.taxa('Keterah orthonairovirus',     'Keterah',  species, Orthonairovirus_genus, '1980525', syn=['1712571'])
+    Qalyub_Sp    = ct.taxa('Qalyub orthonairovirus',      'Qalyub',   species, Orthonairovirus_genus, '1980527')
     # Estero Real orthonairovirus : https://talk.ictvonline.org//taxonomy/p/taxonomy-history?taxnode_id=201850107
     # Estero Real orthobunyavirus : https://www.ncbi.nlm.nih.gov/Taxonomy/Browser/wwwtax.cgi?name=Estero+Real+virus
+    EsteroReal_Sp= ct.taxa('Estero Real orthonairovirus', 'Estero Real',   species, Orthonairovirus_genus, '2170057')
+    # not official. NCBI parent: no rank - unclassified Nairovirus - 1340802
+    Bat_Sp        = ct.taxa('Bat orthonairovirus',        'Bat',        species, Orthonairovirus_genus, '1340803')
+    Beiji_Sp      = ct.taxa('Beiji orthonairovirus',      'Beiji',      species, Orthonairovirus_genus, '2304647')
+    Grotenhout_Sp = ct.taxa('Grotenhout orthonairovirus', 'Grotenhout', species, Orthonairovirus_genus, '1971396')
+    Nayun_Sp      = ct.taxa('Nayun tick orthonairovirus', 'Nayun',      species, Orthonairovirus_genus, '1610817')
+    Norway_Sp     = ct.taxa('Norway nairovirus 1 orthonairovirus',      'Norway nairovirus 1',   species, Orthonairovirus_genus, '2034329')
+    Pacific_Sp    = ct.taxa('Pacific coast tick orthonairovirus',      'Pacific coast tick nairovirus',   species, Orthonairovirus_genus, '1977074')
+    Pustyn_Sp     = ct.taxa('Pustyn orthonairovirus',      'Pustyn',   species, Orthonairovirus_genus, '1857750')
+    Saphire_Sp    = ct.taxa('Saphire II orthonairovirus', 'Saphire II virus',  species, Orthonairovirus_genus, '1815512')
+    SouthBay_Sp   = ct.taxa('South Bay orthonairovirus',  'South Bay virus',   species, Orthonairovirus_genus, '1526514')
+    Uzun_Sp       = ct.taxa('Uzun Agach orthonairovirus', 'Uzun Agach virus',  species, Orthonairovirus_genus, '1523052')
+    Vinegar_Sp    = ct.taxa('Vinegar Hill orthonairovirus','Vinegar Hill virus',species, Orthonairovirus_genus,'2059308')
 
+    # HEV
     tOrthSpcA= ct.taxa('Orthohepevirus A', 'Orthohepevirus A'  , species, tOrthHEV, '1678143', syn=[ 'Swine hepatitis E virus', '63421']) # ?? syn??
     ct.synonyms(tOrthSpcA, '12461')
     tOrthSpcB= ct.taxa('Orthohepevirus B', 'Orthohepevirus B'  , species, tOrthHEV, '1678144') # NCBI_ID tentative !!
