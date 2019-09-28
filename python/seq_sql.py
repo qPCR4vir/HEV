@@ -32,27 +32,27 @@ class CreateTaxa:
         self.db=db
         self.c = db.cursor()
         self.kingdom = superkingdom_name
-        self._root_rank('superkingdom', superkingdom_name)
-        self._root_taxa(root_taxa_name, root_taxa_name, NCBI_TaxID)
+        self.root_rank = self._root_rank('superkingdom', superkingdom_name)
+        self.root_taxa = self._root_taxa(root_taxa_name, root_taxa_name, NCBI_TaxID)
 
     def _root_rank (self, name, kingdom):        #  todo: NCBI ? add kingdom ! determine type of rank.
         self.c.execute("INSERT INTO taxa_rank (Name, kingdom )"
                        "               VALUES (?   , ?       )",
                        (                       name, kingdom )   )
-        self.r_rank = self.c.lastrowid
-        return self.r_rank
+        self.root_rank = self.c.lastrowid
+        return self.root_rank
 
-    def _root_taxa (self, Name ,  vulgar, NCBI_TaxID  = None, syn=None):
+    def _root_taxa (self, name, vulgar, NCBI_TaxID  = None, syn=None):
         self.c.execute("INSERT INTO taxa      (Name , vulgar, Id_rank    , NCBI_TaxID  )"
                        "               VALUES ( ?   , ?     , ?          , ?           )",
-                                              (Name , vulgar, self.r_rank, NCBI_TaxID  ) )
-        self.r_taxa = self.c.lastrowid
+                       (name , vulgar, self.root_rank, NCBI_TaxID))
+        self.root_taxa = self.c.lastrowid
         self.c.execute("INSERT INTO taxa_parents (Id_taxa     , parent     , Id_rank      )"
                        "                  VALUES ( ?          , ?          , ?            )",
-                                                 (self.r_taxa , self.r_taxa, self.r_rank  ) )
-        self.synonyms(self.r_taxa, [Name, vulgar, NCBI_TaxID])
-        if syn: self.synonyms(self.r_taxa, syn)
-        return self.r_taxa
+                       (self.root_taxa , self.root_taxa, self.root_rank))
+        self.synonyms(self.root_taxa, [name, vulgar, NCBI_TaxID])
+        if syn: self.synonyms(self.root_taxa, syn)
+        return self.root_taxa
 
     def rank (self, name, parent_rank):
         self.c.execute("INSERT INTO taxa_rank (Name, kingdom     , parent      )"
@@ -60,11 +60,11 @@ class CreateTaxa:
                        (                       name, self.kingdom, parent_rank )   )
         return self.c.lastrowid
 
-    def taxa (self, Name, vulgar, rank    , parent_taxa,  NCBI_TaxID  = None, syn=None):
+    def taxa (self, name, vulgar, rank, parent_taxa, NCBI_TaxID  = None, syn=None):
 
         self.c.execute("INSERT INTO taxa (Name,  vulgar, Id_rank, parent     , NCBI_TaxID )"
                        "          VALUES (?   , ?      , ?      , ?          , ?          )",
-                       (                  Name, vulgar , rank   , parent_taxa, NCBI_TaxID )   )
+                       (name, vulgar , rank   , parent_taxa, NCBI_TaxID))
         Id_taxa=self.c.lastrowid
         self.c.execute("INSERT INTO taxa_parents (Id_taxa, parent, Id_rank      )"
                        "                  VALUES ( ?     , ?     , ?            )",
@@ -73,7 +73,7 @@ class CreateTaxa:
                        "                  SELECT  ?      , parent, Id_rank       "
                        "FROM taxa_parents WHERE Id_taxa=?",     (Id_taxa , parent_taxa  ) )
 
-        self.synonyms(Id_taxa, [Name, vulgar, NCBI_TaxID])
+        self.synonyms(Id_taxa, [name, vulgar, NCBI_TaxID])
         if syn: self.synonyms(Id_taxa, syn)
         return Id_taxa
 
@@ -165,24 +165,57 @@ def add_def_taxa(db):
     # https://ftp.ncbi.nlm.nih.gov/pub/taxonomy/new_taxdump/taxdump_readme.txt
     # https://github.com/etetoolkit/ete/blob/master/ete3/ncbi_taxonomy/ncbiquery.py
 
-    ct= CreateTaxa(db, 'Viruses', 'Viridae', NCBI_TaxID  = '10239', syn=['Viridae', 'Vira','viruses'])
+    ct = CreateTaxa(db,
+                    superkingdom_name = 'Viruses',
+                    root_taxa_name    = 'Viridae',
+                    NCBI_TaxID        = '10239',
+                    syn               = ['Viridae', 'Vira','viruses'])
 
-    r   = ct.rank('no rank', ct.r_rank)
-    tRs = ct.taxa('ssRNA viruses', 'viruses', r, ct.r_taxa, '439488')
+    realm   = ct.rank(name='Realm', parent_rank=ct.root_rank)  # no rank at NCBI
+    Riboviria = ct.taxa(name        = 'Riboviria',
+                        vulgar      = 'RNA viruses',
+                        rank        = realm,
+                        parent_taxa = ct.root_taxa,
+                        NCBI_TaxID  = '439488')
 
-    r   = ct.rank('', r)
-    tRp = ct.taxa('ssRNA positive-strand viruses, no DNA stage', 'viruses', r, tRs, '35278')
-    tRn = ct.taxa('ssRNA negative-strand viruses'              , 'viruses', r, tRs, '35301')
+    phylum   = ct.rank(name='phylum', parent_rank=realm)
+    Negarnaviricota = ct.taxa(name        = 'Negarnaviricota',
+                              vulgar      = '',
+                              rank        = phylum,
+                              parent_taxa = Riboviria,
+                              NCBI_TaxID  = '2497569')
 
-    rOrder = ct.rank('Order', r)
-    tByOr  = ct.taxa('Bunyavirales'              , 'Bunyavirales', rOrder, tRn, '1980410')
+    subphylum   = ct.rank(name='subphylum', parent_rank=phylum)
+    Polyploviricotina = ct.taxa(name        = 'Polyploviricotina',
+                                vulgar      = '',
+                                rank        = subphylum,
+                                parent_taxa = Negarnaviricota,
+                                NCBI_TaxID  = '2497571')
 
-    rFamily= ct.rank('family', rOrder)
+    Class   = ct.rank(name='class', parent_rank=subphylum)
+    Ellioviricetes = ct.taxa(name        = 'Ellioviricetes',
+                             vulgar      = '',
+                             rank        = Class,
+                             parent_taxa = Polyploviricotina,
+                             NCBI_TaxID  = '2497576')
 
-    tPByFm = ct.taxa('Peribunyaviridae'              , 'Peribunyaviridae', rFamily, tByOr, '1980416')
+    order = ct.rank(name='Order', parent_rank=Class)
+    Bunyavirales  = ct.taxa(name        = 'Bunyavirales',
+                            vulgar      = 'Bunyavirales',
+                            rank        = order,
+                            parent_taxa = Ellioviricetes,
+                            NCBI_TaxID  = '1980410')
 
+    family    = ct.rank(name='family',    parent_rank=order)
+    subfamily = ct.rank(name='subfamily', parent_rank=family)
 
-    tHEV   = ct.taxa('Hepeviridae', 'HEV'  , rFamily, tRp, '291484',
+    Arenaviridae     = ct.taxa('Arenaviridae'      , 'Arenaviridae', family, Bunyavirales, '11617')
+    Hantaviridae     = ct.taxa('Hantaviridae'      , 'Hantaviridae', family, Bunyavirales, '1980413')
+    Nairoviridae     = ct.taxa('Nairoviridae'      , 'Nairoviridae', family, Bunyavirales, '1980415')
+    Peribunyaviridae = ct.taxa('Peribunyaviridae'  , 'Peribunyaviridae', family, Bunyavirales, '1980416')
+    Phenuiviridae    = ct.taxa('Phenuiviridae'     , 'Phenuiviridae', family, Bunyavirales, '1980418')
+
+    tHEV   = ct.taxa('Hepeviridae', 'HEV'  , family, Riboviria, '291484',
                    syn=['2021911', '1009842', '172851', '2021912', '2021913', '2021914', '1216472', '996468',
                        '1638959', '1638960', '1674928', '1530451', '1328106', '1229326', '879095', '301242'])
 
@@ -192,30 +225,124 @@ def add_def_taxa(db):
     # 1638960 Mystacina/New Zealand/2013;  1674928 seal/AAUST73/BR/2012 ; 1530451 Fesavirus 2; 1328106 Fox
     # 1229326 Hepelivirus; 879095 rat/R68/DEU/2009; 301242 Big liver and spleen disease virus
 
-    rGenus  = ct.rank('genus', rFamily)
-    tOrthBy = ct.taxa('Orthobunyavirus', 'Bunyavirus', rGenus, tPByFm, '11572', syn=['Bunyaviruses'])
+    genus  = ct.rank(name='genus',  parent_rank=subfamily)
+    Orthobunyavirus = ct.taxa('Orthobunyavirus', 'Bunyavirus', genus, Peribunyaviridae, '11572', syn=['Bunyaviruses'])  # syn ?
+    Orthonairovirus_genus = ct.taxa('Orthonairovirus', 'Nairovirus', genus, Nairoviridae, '1980517')
+    Phlebovirus = ct.taxa('Phlebovirus',     'Phlebovirus', genus, Phenuiviridae, '11584')
 
-    tOrthHEV= ct.taxa('Orthohepevirus', 'Orthohepevirus'  , rGenus, tHEV, '1678141', syn=['12461', 'Hepatitis E virus','186677', 'Hepevirus'])
-    tPisci  = ct.taxa('Piscihepevirus', 'Piscihepevirus'  , rGenus, tHEV, '1678142')
+    tOrthHEV= ct.taxa('Orthohepevirus', 'Orthohepevirus'  , genus, tHEV, '1678141', syn=['12461', 'Hepatitis E virus','186677', 'Hepevirus'])
+    tPisci  = ct.taxa('Piscihepevirus', 'Piscihepevirus'  , genus, tHEV, '1678142')
 
-    rSpecie  = ct.rank('species', rGenus)
+    species     = ct.rank('species', parent_rank=genus)
+    subspecies  = ct.rank('species', parent_rank=species)
 
-    tBySp    = ct.taxa('Bunyamwera orthobunyavirus', 'Bunyamwera orthobunyavirus'  , rSpecie, tOrthBy, '1933179')
-    rSubSpecie = ct.rank('subspecie', rSpecie)
-    tByVr    = ct.taxa('Bunyamwera virus', 'Bunyamwera serogroup'  , rSubSpecie, tBySp, '35304', syn=['Bunyamwera virus group', 'Bunyamwera bunyavirus group'])
-    tBtVr    = ct.taxa('Batai virus', 'Batai'  , rSubSpecie, tBySp, '80942' )
+    tBySp    = ct.taxa('Bunyamwera orthobunyavirus', 'Bunyamwera orthobunyavirus'  , species, Orthobunyavirus, '1933179')
+    tByVr    = ct.taxa('Bunyamwera virus', 'Bunyamwera serogroup'  , subspecies, tBySp, '35304', syn=['Bunyamwera virus group', 'Bunyamwera bunyavirus group'])
+    tBtVr    = ct.taxa('Batai virus', 'Batai'  , subspecies, tBySp, '80942' )
+
+    # Orthonairovirus_genus species
+    # Serogroup Crimean-Congo hemorrhagic fever
+    CCHFV_Sp    = ct.taxa('Crimean-Congo hemorrhagic fever orthonairovirus', 'CCHFV', species, Orthonairovirus_genus, '1980519',
+                          syn=['402369', '402370', '402371'])   # and many more <--- actually subCC
+                            # JF807432.1, JF523542.1 seg-L 258, 490 = but - to different
+    HAZV_Sp     = ct.taxa('Hazara orthonairovirus',   'HAZV',     species, Orthonairovirus_genus, '1980522',
+                          syn=['11596', '11597'])   #   <--- actually subHAZ ?
+    # not official. NCBI parent: no rank - unclassified Nairovirus - 1340802
+    TFLV_Sp     = ct.taxa('Tofla orthonairovirus',    'TFLV',     species, Orthonairovirus_genus, '1615758')
+
+    # Serogroup Dera Ghazi Khan
+    DGKV_Sp = ct.taxa('Dera Ghazi Khan orthonairovirus', 'DGKV', species, Orthonairovirus_genus, '1980520')
+    AHV_Sp = ct.taxa('Abu Hammad virus', 'AHV', subspecies, DGKV_Sp, '248058')
+    AMV_Sp = ct.taxa('Abu Mina virus',   'AMV', subspecies, DGKV_Sp, '248059')
+
+    # Serogroup Hughes
+    HUGV_Sp   = ct.taxa('Hughes orthonairovirus', 'HUGV',  species, Orthonairovirus_genus, '248053')
+    FARV_Sp   = ct.taxa('Farallon virus',         'FARV',  subspecies, HUGV_Sp, '248059')
+    PSV_Sp    = ct.taxa('Punta salinas virus',    'PSV',   subspecies, HUGV_Sp, '248056')
+    RAZAV_Sp  = ct.taxa('Raza virus',             'RAZAV', subspecies, HUGV_Sp, '248054')
+    SOLV_Sp   = ct.taxa('Soldado virus',          'SOLV',  subspecies, HUGV_Sp, '426791')
+    # Zirqa (ZIRV)
+    # not official. NCBI parent: no rank - unclassified Nairovirus - 1340802
+    CASV_Sp   = ct.taxa('Caspiy orthonairovirus',   'CASV',   species, Orthonairovirus_genus, '1453405')
+    # not official.
+
+    # Serogroup Sakhalin
+    SAKV_Sp = ct.taxa('Sakhalin orthonairovirus', 'SAKV', species, Orthonairovirus_genus, '1980528')
+    TILV_Sp     = ct.taxa('Tillamook virus',   'TILV', subspecies, SAKV_Sp, '37297')
+    CMV_Sp      = ct.taxa('Clo Mor virus',      'CMV', subspecies, SAKV_Sp, '1810952')
+    Taggert_Sp  = ct.taxa('Taggert virus',  'Taggert', subspecies, SAKV_Sp, '487050')
+    # not official. NCBI parent: no rank - unclassified Nairovirus - 1340802
+    PMRV_Sp = ct.taxa('Paramushir orthonairovirus', 'PMRV', species, Orthonairovirus_genus, '1453409')
+    # not official. NCBI parent: no rank - unclassified viruses - 12429
+    AVAV_Sp = ct.taxa('Avalon orthonairovirus', 'AVAV', species, Orthonairovirus_genus, '1810950')
+
+    # Serogroup Nairobi sheep disease
+    NSDV_Sp    = ct.taxa('Nairobi sheep disease orthonairovirus', 'NSDV', species, Orthonairovirus_genus, '1980526', syn=['194540'])
+    KUPV_Sp    = ct.taxa('Kupe virus',  'KUPV', subspecies, NSDV_Sp, '498356')
+    # Ganjam  (GANV) strain ??
+    DUGV_Sp    = ct.taxa('Dugbe orthonairovirus',                 'DUGV', species, Orthonairovirus_genus, '1980521')
 
 
-    tOrthSpcA= ct.taxa('Orthohepevirus A', 'Orthohepevirus A'  , rSpecie, tOrthHEV, '1678143', syn=[ 'Swine hepatitis E virus', '63421']) # ?? syn??
+    # Serogroup Qalyub
+    QYBV_Sp   = ct.taxa('Qalyub orthonairovirus',  'QYBV',   species, Orthonairovirus_genus, '1980527')
+    BDAV_Sp   = ct.taxa('Bandia virus',  'BDAV', subspecies, QYBV_Sp, '248060')
+    CHIMV_Sp  = ct.taxa('Chim orthonairovirus',    'CHIMV',  species, Orthonairovirus_genus, '2170062')
+    # not official. NCBI parent: no rank - unclassified Nairovirus - 1340802
+    GERV_Sp   = ct.taxa('Geran orthonairovirus',   'GERV',   species, Orthonairovirus_genus, '1453407')
+
+    # Serogroup Thiafora
+    TFAV_Sp = ct.taxa('Thiafora orthonairovirus', 'TFAV', species, Orthonairovirus_genus, '1980529')
+    ERVV_Sp   = ct.taxa('Erve virus',  'ERVV', subspecies, TFAV_Sp, '248062')
+
+    # Serogroup Issyk-kul
+    # not official. NCBI parent: no rank - unclassified Nairovirus - 1340802
+    ISKV_Sp  = ct.taxa('Issyk-kul orthonairovirus',  'ISKV',  species, Orthonairovirus_genus, '1453408')
+    GOSV_Sp  = ct.taxa('Gossas orthonairovirus',     'GOSV',  species, Orthonairovirus_genus, '1714376')
+    UZAV_Sp  = ct.taxa('Uzun Agach orthonairovirus', 'UZAV',  species, Orthonairovirus_genus, '1523052')
+
+    # Serogroup Kasokero
+    KKOV_Sp = ct.taxa('Kasokero orthonairovirus', 'KKOV', species, Orthonairovirus_genus, '1980524', syn=['1712570'])
+    Kasokero_Sp = ct.taxa('Kasokero virus',  'Kasokero', subspecies, KKOV_Sp, '1712570')
+    # not official. NCBI parent: no rank - unclassified Nairovirus - 1340802
+    LPHV_Sp = ct.taxa('Leopards Hill orthonairovirus', 'LPHV', species, Orthonairovirus_genus, '1381104')
+    YOGV_Sp = ct.taxa('Yogue orthonairovirus', 'YOGV', species, Orthonairovirus_genus, '1712572')
+
+    # Serogroup Burana
+    BURV_Sp = ct.taxa('Burana orthonairovirus', 'BURV', species, Orthonairovirus_genus, '1980518')  # not official?
+    Tacheng_Sp = ct.taxa('Tacheng Tick virus',  'Tacheng', subspecies, BURV_Sp, '1608083')
+    TDYV_Sp = ct.taxa('Tamdy orthonairovirus',  'TDYV', species, Orthonairovirus_genus, '2170063', syn=['1453410']) # 1453410: unclassified Nairovirus
+    Burana_Sp = ct.taxa('Burana virus',  'Burana', subspecies, TDYV_Sp, '1453404')
+
+    Artashat_Sp  = ct.taxa('Artashat orthonairovirus',    'Artashat', species, Orthonairovirus_genus, '2170061')
+    Keterah_Sp   = ct.taxa('Keterah orthonairovirus',     'Keterah',  species, Orthonairovirus_genus, '1980525', syn=['1712571'])
+    Qalyub_Sp    = ct.taxa('Qalyub orthonairovirus',      'Qalyub',   species, Orthonairovirus_genus, '1980527')
+    # Estero Real orthonairovirus : https://talk.ictvonline.org//taxonomy/p/taxonomy-history?taxnode_id=201850107
+    # Estero Real orthobunyavirus : https://www.ncbi.nlm.nih.gov/Taxonomy/Browser/wwwtax.cgi?name=Estero+Real+virus
+    EsteroReal_Sp= ct.taxa('Estero Real orthonairovirus', 'Estero Real',   species, Orthonairovirus_genus, '2170057')
+    # not official. NCBI parent: no rank - unclassified Nairovirus - 1340802
+    Bat_Sp        = ct.taxa('Bat orthonairovirus',        'Bat',        species, Orthonairovirus_genus, '1340803')
+    Beiji_Sp      = ct.taxa('Beiji orthonairovirus',      'Beiji',      species, Orthonairovirus_genus, '2304647')
+    Grotenhout_Sp = ct.taxa('Grotenhout orthonairovirus', 'Grotenhout', species, Orthonairovirus_genus, '1971396')  # too different. L:14,854, M:0, L:3728
+    Nayun_Sp      = ct.taxa('Nayun tick orthonairovirus', 'Nayun',      species, Orthonairovirus_genus, '1610817')
+    Norway_Sp     = ct.taxa('Norway nairovirus 1 orthonairovirus',      'Norway nairovirus 1',   species, Orthonairovirus_genus, '2034329')
+    Pacific_Sp    = ct.taxa('Pacific coast tick orthonairovirus',      'Pacific coast tick nairovirus',   species, Orthonairovirus_genus, '1977074') # to long: M
+    Pustyn_Sp     = ct.taxa('Pustyn orthonairovirus',      'Pustyn',   species, Orthonairovirus_genus, '1857750')
+    Saphire_Sp    = ct.taxa('Saphire II orthonairovirus', 'Saphire II virus',  species, Orthonairovirus_genus, '1815512')
+    SouthBay_Sp   = ct.taxa('South Bay orthonairovirus',  'South Bay virus',   species, Orthonairovirus_genus, '1526514')
+    Uzun_Sp       = ct.taxa('Uzun Agach orthonairovirus', 'Uzun Agach virus',  species, Orthonairovirus_genus, '1523052')
+    Vinegar_Sp    = ct.taxa('Vinegar Hill orthonairovirus','Vinegar Hill virus',species, Orthonairovirus_genus,'2059308')
+
+    # HEV
+    tOrthSpcA= ct.taxa('Orthohepevirus A', 'Orthohepevirus A'  , species, tOrthHEV, '1678143', syn=[ 'Swine hepatitis E virus', '63421']) # ?? syn??
     ct.synonyms(tOrthSpcA, '12461')
-    tOrthSpcB= ct.taxa('Orthohepevirus B', 'Orthohepevirus B'  , rSpecie, tOrthHEV, '1678144') # NCBI_ID tentative !!
-    tOrthSpcC= ct.taxa('Orthohepevirus C', 'Orthohepevirus C'  , rSpecie, tOrthHEV, '1678145', syn=['879096', '1414752']) # rat/R63/DEU/2009, Mink
-    tOrthSpcD= ct.taxa('Orthohepevirus D', 'Orthohepevirus D'  , rSpecie, tOrthHEV, '1678146')
+    tOrthSpcB= ct.taxa('Orthohepevirus B', 'Orthohepevirus B'  , species, tOrthHEV, '1678144') # NCBI_ID tentative !!
+    tOrthSpcC= ct.taxa('Orthohepevirus C', 'Orthohepevirus C'  , species, tOrthHEV, '1678145', syn=['879096', '1414752']) # rat/R63/DEU/2009, Mink
+    tOrthSpcD= ct.taxa('Orthohepevirus D', 'Orthohepevirus D'  , species, tOrthHEV, '1678146')
 
 
-    tPisciSpcA=ct.taxa('Piscihepevirus A', 'Piscihepevirus A'  , rSpecie, tPisci,'1678146', syn=['1016879']) # Cutthroat trout virus
+    tPisciSpcA=ct.taxa('Piscihepevirus A', 'Piscihepevirus A'  , species, tPisci,'1678146', syn=['1016879']) # Cutthroat trout virus
 
-    rGenotype = ct.rank('genotype', rSpecie)
+    rGenotype = ct.rank('genotype', species)
     g1  = ct.taxa('1', 'HEV-g1'  , rGenotype, tOrthSpcA, '185579', syn=['I', 'GI', 'G1', 'One'] )
     g2  = ct.taxa('2', 'HEV-g2'  , rGenotype, tOrthSpcA, syn=['II'] )
     g3  = ct.taxa('3', 'HEV-g3'  , rGenotype, tOrthSpcA, '509628', syn=['G3', 'III', 'Gt3', 'g3', 'HEV-3', 'third', 'GIII'])   # , 'Hepatitis E virus type 3'
