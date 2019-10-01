@@ -360,7 +360,7 @@ class App(tkinter.Frame):
                         record.sequence = '-' * beg + record.sequence
                         record.sequence = record.sequence + '-' * (self.ref_len - len(record.sequence))
 
-                    sq = '>' + record.locus + el + record.sequence + el
+                    sq = '>' + record.locus + " " + record.definition + el + record.sequence + el
                     # fasta.write('>' + record.locus + el + record.sequence +el)   # record.accession[0]  ??
                     seq.append((sq, beg))
                     csv.write(record.locus + sep)               # MEGA name:(A)

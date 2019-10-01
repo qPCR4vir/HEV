@@ -3,27 +3,25 @@
 # http://etetoolkit.org/cookbook/ete_build_basics.ipynb
 
 
+from pathlib import Path
+import logging
 
-
-print('tk...')
+logging.info('tk...')
 from tkinter import filedialog
-# import tkinter
 
 import datetime
 
-print('sqlite3...')
+logging.info('sqlite3...')
 import sqlite3
 
 # http://biopython.org/
-print('Bio...')
+logging.info('Bio...')
 from Bio import SeqIO
 from Bio import GenBank       # too ?
 #import BioSQL
 #from BioSQL import BioSeqDatabase
 
 #import PyQt5
-
-
 #class RefSchema
 
 
@@ -122,8 +120,10 @@ def rank_ID_taxa(db_cursor, Id_taxa):
 #    c.executescript(sql_create)
 
 
-def create(newly) -> sqlite3.Connection:
-    db = sqlite3.connect("../data/temp/seq.db")
+def create(newly: bool, file_name: Path=None) -> sqlite3.Connection:
+    if file_name is None:
+        file_name = Path("../data/temp/seq.db")
+    db = sqlite3.connect(file_name)
     if newly:
        read_create(db)
        print('Adding default taxas...')
@@ -136,6 +136,7 @@ def create(newly) -> sqlite3.Connection:
 
 
 def read_create(db):
+    logging.info("executescript create_seq.sql")
     with open("create_seq.sql") as dbcreate:
         sql_create = dbcreate.read()
     c = db.cursor()
@@ -242,18 +243,14 @@ def add_def_taxa(db):
 
     # Orthonairovirus_genus species
     # Serogroup Crimean-Congo hemorrhagic fever
-    CCHFV_Sp    = ct.taxa('Crimean-Congo hemorrhagic fever orthonairovirus', 'CCHFV', species, Orthonairovirus_genus, '1980519',
-                          syn=['402369', '402370', '402371'])   # and many more <--- actually subCC
-                            # JF807432.1, JF523542.1 seg-L 258, 490 = but - to different
-    HAZV_Sp     = ct.taxa('Hazara orthonairovirus',   'HAZV',     species, Orthonairovirus_genus, '1980522',
-                          syn=['11596', '11597'])   #   <--- actually subHAZ ?
-    # not official. NCBI parent: no rank - unclassified Nairovirus - 1340802
-    TFLV_Sp     = ct.taxa('Tofla orthonairovirus',    'TFLV',     species, Orthonairovirus_genus, '1615758')
+    CCHFV_Sp    = ct.taxa('Crimean-Congo hemorrhagic fever orthonairovirus', 'CCHFV', species, Orthonairovirus_genus, '1980519',  syn=['402369', '402370', '402371'])   # and many more <--- actually subCC   # JF807432.1, JF523542.1 seg-L 258, 490 = but - to different
+    HAZV_Sp     = ct.taxa('Hazara orthonairovirus',   'HAZV',     species, Orthonairovirus_genus, '1980522',                      syn=['11596', '11597'])   #   <--- actually subHAZ ?
+    TFLV_Sp     = ct.taxa('Tofla orthonairovirus',    'TFLV',     species, Orthonairovirus_genus, '1615758')   # not official. NCBI parent: no rank - unclassified Nairovirus - 1340802
 
     # Serogroup Dera Ghazi Khan
     DGKV_Sp = ct.taxa('Dera Ghazi Khan orthonairovirus', 'DGKV', species, Orthonairovirus_genus, '1980520')
-    AHV_Sp = ct.taxa('Abu Hammad virus', 'AHV', subspecies, DGKV_Sp, '248058')
-    AMV_Sp = ct.taxa('Abu Mina virus',   'AMV', subspecies, DGKV_Sp, '248059')
+    AHV_Sp  = ct.taxa('Abu Hammad virus', 'AHV', subspecies, DGKV_Sp, '248058')
+    AMV_Sp  = ct.taxa('Abu Mina virus',   'AMV', subspecies, DGKV_Sp, '248059')
 
     # Serogroup Hughes
     HUGV_Sp   = ct.taxa('Hughes orthonairovirus', 'HUGV',  species, Orthonairovirus_genus, '248053')
@@ -261,25 +258,22 @@ def add_def_taxa(db):
     PSV_Sp    = ct.taxa('Punta salinas virus',    'PSV',   subspecies, HUGV_Sp, '248056')
     RAZAV_Sp  = ct.taxa('Raza virus',             'RAZAV', subspecies, HUGV_Sp, '248054')
     SOLV_Sp   = ct.taxa('Soldado virus',          'SOLV',  subspecies, HUGV_Sp, '426791')
-    # Zirqa (ZIRV)
-    # not official. NCBI parent: no rank - unclassified Nairovirus - 1340802
-    CASV_Sp   = ct.taxa('Caspiy orthonairovirus',   'CASV',   species, Orthonairovirus_genus, '1453405')
-    # not official.
+    #                   Zirqa (ZIRV)
+    CASV_Sp   = ct.taxa('Caspiy orthonairovirus',   'CASV',   species, Orthonairovirus_genus, '1453405')  # not official. NCBI parent: no rank - unclassified Nairovirus - 1340802
 
     # Serogroup Sakhalin
-    SAKV_Sp = ct.taxa('Sakhalin orthonairovirus', 'SAKV', species, Orthonairovirus_genus, '1980528')
+    SAKV_Sp     = ct.taxa('Sakhalin orthonairovirus', 'SAKV', species, Orthonairovirus_genus, '1980528')
     TILV_Sp     = ct.taxa('Tillamook virus',   'TILV', subspecies, SAKV_Sp, '37297')
     CMV_Sp      = ct.taxa('Clo Mor virus',      'CMV', subspecies, SAKV_Sp, '1810952')
     Taggert_Sp  = ct.taxa('Taggert virus',  'Taggert', subspecies, SAKV_Sp, '487050')
-    # not official. NCBI parent: no rank - unclassified Nairovirus - 1340802
-    PMRV_Sp = ct.taxa('Paramushir orthonairovirus', 'PMRV', species, Orthonairovirus_genus, '1453409')
-    # not official. NCBI parent: no rank - unclassified viruses - 12429
-    AVAV_Sp = ct.taxa('Avalon orthonairovirus', 'AVAV', species, Orthonairovirus_genus, '1810950')
+    PMRV_Sp     = ct.taxa('Paramushir orthonairovirus', 'PMRV', species, Orthonairovirus_genus, '1453409')  # not official. NCBI parent: no rank - unclassified Nairovirus - 1340802
+    AVAV_Sp     = ct.taxa('Avalon orthonairovirus',     'AVAV', species, Orthonairovirus_genus, '1810950')  # not official. NCBI parent: no rank - unclassified viruses - 12429
+
 
     # Serogroup Nairobi sheep disease
     NSDV_Sp    = ct.taxa('Nairobi sheep disease orthonairovirus', 'NSDV', species, Orthonairovirus_genus, '1980526', syn=['194540'])
-    KUPV_Sp    = ct.taxa('Kupe virus',  'KUPV', subspecies, NSDV_Sp, '498356')
-    # Ganjam  (GANV) strain ??
+    KUPV_Sp    = ct.taxa('Kupe virus', 'KUPV', subspecies, NSDV_Sp, '498356')
+    #                     Ganjam  (GANV) strain ??
     DUGV_Sp    = ct.taxa('Dugbe orthonairovirus',                 'DUGV', species, Orthonairovirus_genus, '1980521')
 
 
@@ -287,8 +281,8 @@ def add_def_taxa(db):
     QYBV_Sp   = ct.taxa('Qalyub orthonairovirus',  'QYBV',   species, Orthonairovirus_genus, '1980527')
     BDAV_Sp   = ct.taxa('Bandia virus',  'BDAV', subspecies, QYBV_Sp, '248060')
     CHIMV_Sp  = ct.taxa('Chim orthonairovirus',    'CHIMV',  species, Orthonairovirus_genus, '2170062')
-    # not official. NCBI parent: no rank - unclassified Nairovirus - 1340802
-    GERV_Sp   = ct.taxa('Geran orthonairovirus',   'GERV',   species, Orthonairovirus_genus, '1453407')
+    GERV_Sp   = ct.taxa('Geran orthonairovirus',   'GERV',   species, Orthonairovirus_genus, '1453407')  # not official. NCBI parent: no rank - unclassified Nairovirus - 1340802
+
 
     # Serogroup Thiafora
     TFAV_Sp = ct.taxa('Thiafora orthonairovirus', 'TFAV', species, Orthonairovirus_genus, '1980529')
@@ -1327,10 +1321,11 @@ def parse_source(host:str, source:str):
 
     return h, s
 
+
 def create_all( ):
 
-    newly=True   # False
-    country=True # False
+    newly = True   # False
+    country = True # False
 
     print('Creating db BioSQL...')
 

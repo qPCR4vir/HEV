@@ -1,3 +1,5 @@
+from pathlib import Path
+import logging
 
 import sys
 from PyQt5.QtCore import Qt
@@ -8,8 +10,6 @@ from PyQt5 import QtSql
 
 print('import seq_sql')
 from seq_sql import create_all
-
-
 
 
 class MW(QMainWindow):
@@ -213,8 +213,6 @@ class MW(QMainWindow):
 
     def importGB(self):
         return
-
-
 
 
 if __name__ == '__main__':
