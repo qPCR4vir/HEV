@@ -242,7 +242,7 @@ def add_def_taxa(db):
     tBtVr    = ct.taxa('Batai virus', 'Batai'  , subspecies, tBySp, '80942' )
 
     # Orthonairovirus_genus species
-    # Serogroup Crimean-Congo hemorrhagic fever
+        # Serogroup Crimean-Congo hemorrhagic fever
     CCHFV_Sp    = ct.taxa('Crimean-Congo hemorrhagic fever orthonairovirus', 'CCHFV', species, Orthonairovirus_genus, '1980519',  syn=['402369', '402370', '402371'])   # and many more <--- actually subCC   # JF807432.1, JF523542.1 seg-L 258, 490 = but - to different
     HAZV_Sp     = ct.taxa('Hazara orthonairovirus',   'HAZV',     species, Orthonairovirus_genus, '1980522',                      syn=['11596', '11597'])   #   <--- actually subHAZ ?
     TFLV_Sp     = ct.taxa('Tofla orthonairovirus',    'TFLV',     species, Orthonairovirus_genus, '1615758')   # not official. NCBI parent: no rank - unclassified Nairovirus - 1340802
@@ -308,7 +308,7 @@ def add_def_taxa(db):
     Burana_Sp = ct.taxa('Burana virus',  'Burana', subspecies, TDYV_Sp, '1453404')
 
     Artashat_Sp  = ct.taxa('Artashat orthonairovirus',    'Artashat', species, Orthonairovirus_genus, '2170061')
-    Keterah_Sp   = ct.taxa('Keterah orthonairovirus',     'Keterah',  species, Orthonairovirus_genus, '1980525', syn=['1712571'])
+    Keterrah_Sp   = ct.taxa('Keterrah orthonairovirus',     'Keterrah',  species, Orthonairovirus_genus, '1980525', syn=['1712571'])
     Qalyub_Sp    = ct.taxa('Qalyub orthonairovirus',      'Qalyub',   species, Orthonairovirus_genus, '1980527')
     # Estero Real orthonairovirus : https://talk.ictvonline.org//taxonomy/p/taxonomy-history?taxnode_id=201850107
     # Estero Real orthobunyavirus : https://www.ncbi.nlm.nih.gov/Taxonomy/Browser/wwwtax.cgi?name=Estero+Real+virus

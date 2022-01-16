@@ -109,23 +109,19 @@ class App(tkinter.Frame):
         h = 40
 
         self.ID_original = ID_list(self, "Load original list of ID", w, h)
-        self.ID_original.grid(row=0, column=0, sticky=tkinter.NSEW)
+        self.ID_add      = ID_list(self, "Load ID to add",           w, h)
+        self.ID_unique   = ID_list(self, "Load",                     w, h)
 
-        self.ID_add = ID_list(self, "Load ID to add", w, h)
-        self.ID_add.grid(row=0, column=1, sticky=tkinter.NSEW)
-        tkinter.Button(self, text="BLAST",
-                             command=self.blast)                     .grid(row=2, column=1)
+        self.ID_original                                                           .grid(row=0, column=0, sticky=tkinter.NSEW)
+        self.ID_add                                                                .grid(row=0, column=1, sticky=tkinter.NSEW)
+        self.ID_unique                                                             .grid(row=0, column=2, sticky=tkinter.NSEW)
 
-        self.ID_unique = ID_list(self, "Load", w, h)
-        self.ID_unique.grid(row=0, column=2, sticky=tkinter.NSEW)
-        tkinter.Button(self, text="Load BLAST",
-                             command=self.load_blast)                .grid(row=2, column=2)
-        tkinter.Button(self, text="Seq from GB file",
-                             command=self.parseGB)                   .grid(row=2, column=0)
-        tkinter.Button(self, text="Filter",
-                             command=self.filter)                    .grid(row=3, column=2)
-        tkinter.Button(self, text="Parse alignment",
-                             command=self.parse_alignment)                .grid(row=3, column=0)
+        tkinter.Button(self, text="Seq from GB file", command=self.parseGB)        .grid(row=2, column=0)
+        tkinter.Button(self, text="Parse alignment",  command=self.parse_alignment).grid(row=3, column=0)
+        tkinter.Button(self, text="BLAST",            command=self.blast)          .grid(row=2, column=1)
+        tkinter.Button(self, text="Load BLAST",       command=self.load_blast)     .grid(row=2, column=2)
+        tkinter.Button(self, text="Filter",           command=self.filter)         .grid(row=3, column=2)
+
         if align_file_name:
             self.parse_alignment(align_file_name)
 
@@ -174,8 +170,15 @@ class App(tkinter.Frame):
         self.ID_original.add('\n'.join(self.ref_seq.keys()))
 
     def filter_add(self, add):
+        """
+        Actualises the right panel to a list of unique IDs adding the current IDs in that panel
+        plus ID in the center (add) panel but excluding ID from the original (left) panel. The add panel is then cleared.
+        :param add:
+        :return:
+        """
         ori  = set([oID.split('.')[0] for oID in self.ID_original.lines()])
         uniq = set([oID.split('.')[0] for oID in self.ID_unique.lines()])
+
         uniq.update([oID.split('.')[0] for oID in add])
         uniq -= ori
         self.ID_add.clear()
