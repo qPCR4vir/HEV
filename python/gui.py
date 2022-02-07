@@ -194,6 +194,7 @@ class App(tkinter.Frame):
         with open(blast_file_name, mode='r') as blast_file:
             self.load_blast_data(blast_file)
 
+
     def load_blast(self):
         with filedialog.askopenfile(filetypes=(("BLAST (xml)", "*.xml"), ("All files", "*.*") ), title='Load a BLAST result in XML format') as blast_file:
             self.load_blast_data(blast_file)
@@ -252,6 +253,51 @@ class App(tkinter.Frame):
                 print(align_pos)
 
         self.filter_add(IDs)
+
+    def load_primer_blast(self):
+        with filedialog.askopenfile(filetypes=(("BLAST Results", "*.html"), ("All files", "*.*") ), title='Load a Primer-BLAST result in HTML format') as primer_blast_file:
+            self.load_primer_blast_data(primer_blast_file)
+
+    def load_primer_blast_data(self, primer_blast_file):
+        IDs = set()
+        print('proccesing Primer BLASt file')
+        with open(primer_blast_file) as res_file:
+            seq_name = ''
+            while True:
+                line = res_file.readline()
+                if not line: break
+                new_entrez = line.split('target="new_entrez">')
+                www = new_entrez.pop(0)
+                if not new_entrez: continue
+                acc, desc = new_entrez[0].split('</a> ')
+                line = res_file.readline()  # <pre>
+                product_lenght = int(res_file.readline().split('=')[1])  # product length = 102
+                line = res_file.readline()  # Forward primer  1       GCCTTCCAGACCATGCTC  18
+                left = pattern = None
+                for w in res_file.readline().split(' ')[1:-1]:  #Template        202309  ..................  202326
+                    if not w: continue
+                    if not left:      left = int(w)
+                    elif not pattern: pattern = w
+                    else:
+                        right = int(w)
+                        break
+                line = res_file.readline()  # Reverse primer  1       AGTGCGGAGGTCATTTGC  18
+                rproduct_lenght = int(res_file.readline().split('=')[1])
+                line = res_file.readline()  # Forward primer  1       GCCTTCCAGACCATGCTC  18
+                rleft = rpattern = None
+                for w in res_file.readline().split(' ')[1:-1]:
+                    if not w: continue
+                    if not rleft:
+                        rleft = int(w)
+                    elif not rpattern:
+                        rpattern = w
+                    else:
+                        rright = int(w)
+                        break
+
+                print (f"{acc} fw:{pattern} {left}-{right}  rv:{rpattern} {rleft}-{rright}. {desc}")
+
+        print('proccesing BLASt file: parsed')
 
     def hit_positions(self, alignments):
         #assert (isinstance(alignments, NCBIXML.alignment))
