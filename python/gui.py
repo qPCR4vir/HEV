@@ -1,3 +1,45 @@
+
+"""
+
+Add new sequences with gui.py
+-----------------------------
+
+gui.py is a Python script that will help you select and add sequences with a few clicks and an internet connection.
+
+Prerequisite: python 3 with biopython installed in your machine. None of them need Admin permissions and are free to download.
+
+Led assume you want to subtype some HEV sequences. All you have is a list of the GenBank ID. You will need to compare these IDs
+with the IDs already in the alignment (which are also in the workbook). You probably will also want to collect from the GenBank
+all the sequences which are related to these new sequences. At the end you want to have:
+
+- a list of all the new and unique ID, including all the sequences that are similar to the originals.
+- a fasta file with the sequences to be added to the alignment (*.fasta).
+- a csv file with the related data to be included in the workbook (*.csv).
+
+Launch gui.py.
+
+![HEV gui.py](https://github.com/qPCR4vir/HEV/blob/master/python/HEV.gui.py.png)
+
+You will be presented with a window with three columns for IDs where you can cut, copy, paste, delete or edit IDs as you wish.
+At the top of each list you find a **Load** button that will ask for a file with ID and will ADD the ID to the list.
+At the bottom of each column you have three buttons: **clear**, **save**, and **get**.
+
+- **clear** will ... clear the list.
+- **save** will ask for a text file where you want to have a copy of the list.
+- **get** will connect to the NCBI site, will Get from GenBank online the sequences corresponding to the list of IDs,
+will ask for a file to save the sequences in flat GenBank format (*.gb) and will call the parser to generate a file
+in fasta format (*.fasta) and a file with sequence information in CSV format (*.csv). The sequences are internally
+downloaded in chunks of 100 to avoid problems with the connection to the NCBI, but only one big *.gb file is created
+and parsed. If you first parsed an alignment and/or a BLAST file(in-line or off-line) it will try to locate the approximate
+coordinates of each sequence in the alignment and will add "'-'" at before and after the downloaded here sequence.
+This will help you to quickly (hopefully) manually align the sequences.
+- **BLAST** Take the set of the ID in the "add" list (center list) and make on-line an NCBI.BLAST.
+        Ask for a file to save the results of the BLAST.
+        Call self.load_blast_data(blast_file) to parse the results.
+- **Load BLAST** Load a BLAST result in XML format
+
+"""
+
 __author__ = 'Ariel'
 
 import tkinter
@@ -6,7 +48,6 @@ import tkinter
 from Bio.Blast import NCBIWWW
 from Bio.Blast import NCBIXML
 from Bio import Entrez
-Entrez.email = "arielvina@yahoo.es"
 # http://biopython.org/DIST/docs/api/Bio.SeqIO-module.html
 # http://biopython.org/wiki/SeqIO
 # http://biopython.org/DIST/docs/api/Bio.SeqRecord.SeqRecord-class.html
@@ -18,9 +59,10 @@ from Bio import GenBank
 from tkinter import filedialog
 from tkinter import scrolledtext
 align_file_name = None  # '../alignment/HEV.fas'  # or None to ask first
+Entrez.email = "arielvina@yahoo.es"
 
 
-class Seq_pos:
+class SeqPos:
 
     def __init__(self, seq_beg=0, seq_end=0):
         self.beg = seq_beg
@@ -31,9 +73,9 @@ class Seq_pos:
         self.end = max(pos.end, self.end)
 
 
-class Q_hit_pos:
+class QHitPos:
 
-    def __init__(self, q_pos=Seq_pos(), h_pos=Seq_pos()):
+    def __init__(self, q_pos=SeqPos(), h_pos=SeqPos()):
         self.q = q_pos
         self.h = h_pos
 
@@ -56,9 +98,9 @@ class App(tkinter.Frame):
         # http://infohost.nmt.edu/tcc/help/pubs/tkinter/web/grid.html
         self.grid(sticky=tkinter.NS)
 
-        self.refLen = 0
-        self.refSeq = dict()
-        self.newSeq = dict()
+        self.ref_len = 0
+        self.ref_seq = dict()
+        self.new_seq = dict()
 
         self.winfo_toplevel().rowconfigure(0, weight=1)
         self.rowconfigure(0, weight=1)
@@ -67,27 +109,31 @@ class App(tkinter.Frame):
         h = 40
 
         self.ID_original = ID_list(self, "Load original list of ID", w, h)
-        self.ID_original.grid(row=0, column=0, sticky=tkinter.NSEW)
+        self.ID_add      = ID_list(self, "Load ID to add",           w, h)
+        self.ID_unique   = ID_list(self, "Load",                     w, h)
 
-        self.ID_add = ID_list(self, "Load ID to add", w, h)
-        self.ID_add.grid(row=0, column=1, sticky=tkinter.NSEW)
-        tkinter.Button(self, text="BLAST",
-                             command=self.blast)                     .grid(row=2, column=1)
+        self.ID_original                                                           .grid(row=0, column=0, sticky=tkinter.NSEW)
+        self.ID_add                                                                .grid(row=0, column=1, sticky=tkinter.NSEW)
+        self.ID_unique                                                             .grid(row=0, column=2, sticky=tkinter.NSEW)
 
-        self.ID_unique = ID_list(self, "Load", w, h)
-        self.ID_unique.grid(row=0, column=2, sticky=tkinter.NSEW)
-        tkinter.Button(self, text="Load BLAST",
-                             command=self.load_blast)                .grid(row=2, column=2)
-        tkinter.Button(self, text="Seq from GB file",
-                             command=self.parseGB)                   .grid(row=2, column=0)
-        tkinter.Button(self, text="Filter",
-                             command=self.filter)                    .grid(row=3, column=2)
-        tkinter.Button(self, text="Parse alignment",
-                             command=self.parseAlign)                .grid(row=3, column=0)
+        tkinter.Button(self, text="Seq from GB file", command=self.parseGB)        .grid(row=2, column=0)
+        tkinter.Button(self, text="Parse alignment",  command=self.parse_alignment).grid(row=3, column=0)
+        tkinter.Button(self, text="BLAST",            command=self.blast)          .grid(row=2, column=1)
+        tkinter.Button(self, text="Load BLAST",       command=self.load_blast)     .grid(row=2, column=2)
+        tkinter.Button(self, text="Filter",           command=self.filter)         .grid(row=3, column=2)
+
         if align_file_name:
-            self.parseAlign(align_file_name)
+            self.parse_alignment(align_file_name)
 
-    def parseAlign(self, file_name=None):
+    def parse_alignment(self, file_name=None):
+        """
+        Parce a fasta file and put replace the ID_original list and the list of reference sequences with the parsed sequences.
+
+        :param file_name:
+        :return:
+
+        """
+
         if not file_name:
             file_name = filedialog.askopenfilename( filetypes=(("fasta aligment", "*.fas"), ("All files", "*.*")),
                                                       defaultextension='fas',
@@ -95,7 +141,7 @@ class App(tkinter.Frame):
             if not file_name:
                 return
 
-        self.refSeq.clear()
+        self.ref_seq.clear()
         print(file_name)
         with open(file_name) as align_file:
             seq_name=''
@@ -105,7 +151,7 @@ class App(tkinter.Frame):
                     seq_name = line[1:].rstrip()
                 else:
                     ln = len(line)
-                    self.refLen = max(ln, self.refLen)
+                    self.ref_len = max(ln, self.ref_len)
                     seq_beg = 0
                     seq_end = ln-2
                     while seq_beg<ln :
@@ -119,13 +165,20 @@ class App(tkinter.Frame):
                         else:
                             break   # todo :  check it is a valid base not line end???
                     print('Seq: ' + seq_name + str((seq_beg,seq_end)))
-                    self.refSeq[seq_name] = Seq_pos(seq_beg, seq_end)
+                    self.ref_seq[seq_name] = SeqPos(seq_beg, seq_end)
         self.ID_original.clear()
-        self.ID_original.add('\n'.join(self.refSeq.keys()))
+        self.ID_original.add('\n'.join(self.ref_seq.keys()))
 
     def filter_add(self, add):
+        """
+        Actualises the right panel to a list of unique IDs adding the current IDs in that panel
+        plus ID in the center (add) panel but excluding ID from the original (left) panel. The add panel is then cleared.
+        :param add:
+        :return:
+        """
         ori  = set([oID.split('.')[0] for oID in self.ID_original.lines()])
         uniq = set([oID.split('.')[0] for oID in self.ID_unique.lines()])
+
         uniq.update([oID.split('.')[0] for oID in add])
         uniq -= ori
         self.ID_add.clear()
@@ -202,8 +255,8 @@ class App(tkinter.Frame):
     def load_blast_data(self, blast_data):
         """
         Uses NCBIXML.parse to parse the result of the BLAST and identify each sequence there:
-         Look for each sequence in the self.refSeq dictionary to know if it is a reference sequence (the ones added with
-         parse alignment) and add it to self.newSeq if not a ref.
+         Look for each sequence in the self.ref_seq dictionary to know if it is a reference sequence (the ones added with
+         parse alignment) and add it to self.new_seq if not a ref.
         :param blast_data: an open XML BLAST file.
         :return:
         """
@@ -218,14 +271,14 @@ class App(tkinter.Frame):
                 qID = blast_record.query_id.split('|')[3].split('.')[0]
             except:
                 qID = blast_record.query
-            q_is_ref = qID in self.refSeq.keys()
-            align_pos = Q_hit_pos()
+            q_is_ref = qID in self.ref_seq.keys()
+            align_pos = QHitPos()
             if q_is_ref:
-                align_pos.q = self.refSeq[qID]
+                align_pos.q = self.ref_seq[qID]
             h_is_ref = False
             print('Query: ' + blast_record.query_id + ' : ' + qID + '. Is a Reference: ' + str(q_is_ref))
             for alignment in blast_record.alignments:
-                h_is_ref = alignment.accession in self.refSeq.keys()
+                h_is_ref = alignment.accession in self.ref_seq.keys()
                 print('Hit: ' + alignment.accession + '. Is a Reference: ' + str(h_is_ref))
                 IDs.add(alignment.accession)           # alignment.title.split('|')[3].split('.')[0])
                 if q_is_ref and h_is_ref:
@@ -236,18 +289,18 @@ class App(tkinter.Frame):
                 if q_is_ref:
                     if not h_is_ref:
                         align_pos.adjust_h(h)
-                        if alignment.accession in self.newSeq:
-                            self.newSeq[alignment.accession].expand(align_pos.h)
+                        if alignment.accession in self.new_seq:
+                            self.new_seq[alignment.accession].expand(align_pos.h)
                         else:
-                            self.newSeq[alignment.accession] = align_pos.h
+                            self.new_seq[alignment.accession] = align_pos.h
                 else:
                     if h_is_ref:
-                        align_pos.h = self.refSeq[alignment.accession]
+                        align_pos.h = self.ref_seq[alignment.accession]
                         align_pos.adjust_q(h)
-                        if qID in self.newSeq:
-                            self.newSeq[qID].expand(align_pos.q)
+                        if qID in self.new_seq:
+                            self.new_seq[qID].expand(align_pos.q)
                         else:
-                            self.newSeq[qID] = align_pos.q
+                            self.new_seq[qID] = align_pos.q
 
 
                 print(align_pos)
@@ -301,7 +354,7 @@ class App(tkinter.Frame):
 
     def hit_positions(self, alignments):
         #assert (isinstance(alignments, NCBIXML.alignment))
-        pos=[Q_hit_pos(Seq_pos(hit.query_start, hit.query_end), Seq_pos(hit.sbjct_start, hit.sbjct_end)) for hit in alignments.hsps]
+        pos=[QHitPos(SeqPos(hit.query_start, hit.query_end), SeqPos(hit.sbjct_start, hit.sbjct_end)) for hit in alignments.hsps]
         h = pos[0]
         if len(pos) == 1:
             return h
@@ -352,7 +405,8 @@ class App(tkinter.Frame):
 
     def parseGB(self):
         '''
-        Load and parse a GenBank sequence flat file
+        Load and parse a GenBank sequence flat file and generate a file in fasta format (*.fasta)
+        and a file with sequence information in CSV format (*.csv).
         :return:
         '''
         seq_flat_file_name = filedialog.askopenfilename(filetypes=(("Seq flat GB", "*.gb"), ("All files", "*.*") ),
@@ -374,16 +428,16 @@ class App(tkinter.Frame):
                     #  http://biopython.org/DIST/docs/api/Bio.GenBank.Record-module.html
                     #  http://biopython.org/DIST/docs/api/Bio.GenBank.Record.Record-class.html
                     #  http://biopython.org/DIST/docs/api/Bio.GenBank.Scanner-pysrc.html#GenBankScanner._feed_header_lines
-                    if record.locus in self.refSeq:
+                    if record.locus in self.ref_seq:
                         continue
                     beg = 0
                     end = 0
-                    if record.locus in self.newSeq:
-                        beg, end = self.newSeq[record.locus]
+                    if record.locus in self.new_seq:
+                        beg, end = self.new_seq[record.locus]
                         record.sequence = '-' * beg + record.sequence
-                        record.sequence = record.sequence + '-' * (self.refLen-len(record.sequence) )
+                        record.sequence = record.sequence + '-' * (self.ref_len - len(record.sequence))
 
-                    sq = '>' + record.locus + el + record.sequence + el
+                    sq = '>' + record.locus + " " + record.definition + el + record.sequence + el
                     # fasta.write('>' + record.locus + el + record.sequence +el)   # record.accession[0]  ??
                     seq.append((sq, beg))
                     csv.write(record.locus + sep)               # MEGA name:(A)

@@ -1,22 +1,27 @@
-print('tk...')
+# todo consider using https://github.com/etetoolkit/ete , http://etetoolkit.org/
+# A Python framework for the analysis and visualization of trees.
+# http://etetoolkit.org/cookbook/ete_build_basics.ipynb
+
+
+from pathlib import Path
+import logging
+
+logging.info('tk...')
 from tkinter import filedialog
-# import tkinter
 
 import datetime
 
-print('sqlite3...')
+logging.info('sqlite3...')
 import sqlite3
 
 # http://biopython.org/
-print('Bio...')
+logging.info('Bio...')
 from Bio import SeqIO
 from Bio import GenBank       # too ?
 #import BioSQL
 #from BioSQL import BioSeqDatabase
 
 #import PyQt5
-
-
 #class RefSchema
 
 
@@ -115,8 +120,10 @@ def rank_ID_taxa(db_cursor, Id_taxa):
 #    c.executescript(sql_create)
 
 
-def create(newly) -> sqlite3.Connection:
-    db = sqlite3.connect("../data/temp/seq.db")
+def create(newly: bool, file_name: Path=None) -> sqlite3.Connection:
+    if file_name is None:
+        file_name = Path("../data/temp/seq.db")
+    db = sqlite3.connect(file_name)
     if newly:
        read_create(db)
        print('Adding default taxas...')
@@ -129,6 +136,7 @@ def create(newly) -> sqlite3.Connection:
 
 
 def read_create(db):
+    logging.info("executescript create_seq.sql")
     with open("create_seq.sql") as dbcreate:
         sql_create = dbcreate.read()
     c = db.cursor()
@@ -152,6 +160,12 @@ def add_ref_schema(db):
 
 
 def add_def_taxa(db):
+    # todo evaluate if partially reconstruct from https://ftp.ncbi.nlm.nih.gov/pub/taxonomy/new_taxdump/
+    # todo by extracting all the info from all descendant from a given taxa, for example 291484: family Hepeviridae
+    # see also http://etetoolkit.org/docs/2.3/tutorial/tutorial_ncbitaxonomy.html
+    # https://ftp.ncbi.nlm.nih.gov/pub/taxonomy/new_taxdump/taxdump_readme.txt
+    # https://github.com/etetoolkit/ete/blob/master/ete3/ncbi_taxonomy/ncbiquery.py
+
     ct = CreateTaxa(db,
                     superkingdom_name = 'Viruses',
                     root_taxa_name    = 'Viridae',
@@ -228,19 +242,15 @@ def add_def_taxa(db):
     tBtVr    = ct.taxa('Batai virus', 'Batai'  , subspecies, tBySp, '80942' )
 
     # Orthonairovirus_genus species
-    # Serogroup Crimean-Congo hemorrhagic fever
-    CCHFV_Sp    = ct.taxa('Crimean-Congo hemorrhagic fever orthonairovirus', 'CCHFV', species, Orthonairovirus_genus, '1980519',
-                          syn=['402369', '402370', '402371'])   # and many more <--- actually subCC
-                            # JF807432.1, JF523542.1 seg-L 258, 490 = but - to different
-    HAZV_Sp     = ct.taxa('Hazara orthonairovirus',   'HAZV',     species, Orthonairovirus_genus, '1980522',
-                          syn=['11596', '11597'])   #   <--- actually subHAZ ?
-    # not official. NCBI parent: no rank - unclassified Nairovirus - 1340802
-    TFLV_Sp     = ct.taxa('Tofla orthonairovirus',    'TFLV',     species, Orthonairovirus_genus, '1615758')
+        # Serogroup Crimean-Congo hemorrhagic fever
+    CCHFV_Sp    = ct.taxa('Crimean-Congo hemorrhagic fever orthonairovirus', 'CCHFV', species, Orthonairovirus_genus, '1980519',  syn=['402369', '402370', '402371'])   # and many more <--- actually subCC   # JF807432.1, JF523542.1 seg-L 258, 490 = but - to different
+    HAZV_Sp     = ct.taxa('Hazara orthonairovirus',   'HAZV',     species, Orthonairovirus_genus, '1980522',                      syn=['11596', '11597'])   #   <--- actually subHAZ ?
+    TFLV_Sp     = ct.taxa('Tofla orthonairovirus',    'TFLV',     species, Orthonairovirus_genus, '1615758')   # not official. NCBI parent: no rank - unclassified Nairovirus - 1340802
 
     # Serogroup Dera Ghazi Khan
     DGKV_Sp = ct.taxa('Dera Ghazi Khan orthonairovirus', 'DGKV', species, Orthonairovirus_genus, '1980520')
-    AHV_Sp = ct.taxa('Abu Hammad virus', 'AHV', subspecies, DGKV_Sp, '248058')
-    AMV_Sp = ct.taxa('Abu Mina virus',   'AMV', subspecies, DGKV_Sp, '248059')
+    AHV_Sp  = ct.taxa('Abu Hammad virus', 'AHV', subspecies, DGKV_Sp, '248058')
+    AMV_Sp  = ct.taxa('Abu Mina virus',   'AMV', subspecies, DGKV_Sp, '248059')
 
     # Serogroup Hughes
     HUGV_Sp   = ct.taxa('Hughes orthonairovirus', 'HUGV',  species, Orthonairovirus_genus, '248053')
@@ -248,25 +258,22 @@ def add_def_taxa(db):
     PSV_Sp    = ct.taxa('Punta salinas virus',    'PSV',   subspecies, HUGV_Sp, '248056')
     RAZAV_Sp  = ct.taxa('Raza virus',             'RAZAV', subspecies, HUGV_Sp, '248054')
     SOLV_Sp   = ct.taxa('Soldado virus',          'SOLV',  subspecies, HUGV_Sp, '426791')
-    # Zirqa (ZIRV)
-    # not official. NCBI parent: no rank - unclassified Nairovirus - 1340802
-    CASV_Sp   = ct.taxa('Caspiy orthonairovirus',   'CASV',   species, Orthonairovirus_genus, '1453405')
-    # not official.
+    #                   Zirqa (ZIRV)
+    CASV_Sp   = ct.taxa('Caspiy orthonairovirus',   'CASV',   species, Orthonairovirus_genus, '1453405')  # not official. NCBI parent: no rank - unclassified Nairovirus - 1340802
 
     # Serogroup Sakhalin
-    SAKV_Sp = ct.taxa('Sakhalin orthonairovirus', 'SAKV', species, Orthonairovirus_genus, '1980528')
+    SAKV_Sp     = ct.taxa('Sakhalin orthonairovirus', 'SAKV', species, Orthonairovirus_genus, '1980528')
     TILV_Sp     = ct.taxa('Tillamook virus',   'TILV', subspecies, SAKV_Sp, '37297')
     CMV_Sp      = ct.taxa('Clo Mor virus',      'CMV', subspecies, SAKV_Sp, '1810952')
     Taggert_Sp  = ct.taxa('Taggert virus',  'Taggert', subspecies, SAKV_Sp, '487050')
-    # not official. NCBI parent: no rank - unclassified Nairovirus - 1340802
-    PMRV_Sp = ct.taxa('Paramushir orthonairovirus', 'PMRV', species, Orthonairovirus_genus, '1453409')
-    # not official. NCBI parent: no rank - unclassified viruses - 12429
-    AVAV_Sp = ct.taxa('Avalon orthonairovirus', 'AVAV', species, Orthonairovirus_genus, '1810950')
+    PMRV_Sp     = ct.taxa('Paramushir orthonairovirus', 'PMRV', species, Orthonairovirus_genus, '1453409')  # not official. NCBI parent: no rank - unclassified Nairovirus - 1340802
+    AVAV_Sp     = ct.taxa('Avalon orthonairovirus',     'AVAV', species, Orthonairovirus_genus, '1810950')  # not official. NCBI parent: no rank - unclassified viruses - 12429
+
 
     # Serogroup Nairobi sheep disease
     NSDV_Sp    = ct.taxa('Nairobi sheep disease orthonairovirus', 'NSDV', species, Orthonairovirus_genus, '1980526', syn=['194540'])
-    KUPV_Sp    = ct.taxa('Kupe virus',  'KUPV', subspecies, NSDV_Sp, '498356')
-    # Ganjam  (GANV) strain ??
+    KUPV_Sp    = ct.taxa('Kupe virus', 'KUPV', subspecies, NSDV_Sp, '498356')
+    #                     Ganjam  (GANV) strain ??
     DUGV_Sp    = ct.taxa('Dugbe orthonairovirus',                 'DUGV', species, Orthonairovirus_genus, '1980521')
 
 
@@ -274,8 +281,8 @@ def add_def_taxa(db):
     QYBV_Sp   = ct.taxa('Qalyub orthonairovirus',  'QYBV',   species, Orthonairovirus_genus, '1980527')
     BDAV_Sp   = ct.taxa('Bandia virus',  'BDAV', subspecies, QYBV_Sp, '248060')
     CHIMV_Sp  = ct.taxa('Chim orthonairovirus',    'CHIMV',  species, Orthonairovirus_genus, '2170062')
-    # not official. NCBI parent: no rank - unclassified Nairovirus - 1340802
-    GERV_Sp   = ct.taxa('Geran orthonairovirus',   'GERV',   species, Orthonairovirus_genus, '1453407')
+    GERV_Sp   = ct.taxa('Geran orthonairovirus',   'GERV',   species, Orthonairovirus_genus, '1453407')  # not official. NCBI parent: no rank - unclassified Nairovirus - 1340802
+
 
     # Serogroup Thiafora
     TFAV_Sp = ct.taxa('Thiafora orthonairovirus', 'TFAV', species, Orthonairovirus_genus, '1980529')
@@ -301,7 +308,7 @@ def add_def_taxa(db):
     Burana_Sp = ct.taxa('Burana virus',  'Burana', subspecies, TDYV_Sp, '1453404')
 
     Artashat_Sp  = ct.taxa('Artashat orthonairovirus',    'Artashat', species, Orthonairovirus_genus, '2170061')
-    Keterah_Sp   = ct.taxa('Keterah orthonairovirus',     'Keterah',  species, Orthonairovirus_genus, '1980525', syn=['1712571'])
+    Keterrah_Sp   = ct.taxa('Keterrah orthonairovirus',     'Keterrah',  species, Orthonairovirus_genus, '1980525', syn=['1712571'])
     Qalyub_Sp    = ct.taxa('Qalyub orthonairovirus',      'Qalyub',   species, Orthonairovirus_genus, '1980527')
     # Estero Real orthonairovirus : https://talk.ictvonline.org//taxonomy/p/taxonomy-history?taxnode_id=201850107
     # Estero Real orthobunyavirus : https://www.ncbi.nlm.nih.gov/Taxonomy/Browser/wwwtax.cgi?name=Estero+Real+virus
@@ -342,58 +349,58 @@ def add_def_taxa(db):
     gC1 = ct.taxa('C1', 'HEV-C1' , rGenotype, tOrthSpcC )
     gC2 = ct.taxa('C2', 'HEV-C2' , rGenotype, tOrthSpcC, syn=['1213422', 'Ferret hepatitis E virus'] )
 
-    rmc  = ct.rank('major clade', rGenotype)
-    maI  = ct.taxa('I'  , 'HEV-g3-I'     , rmc, g3)
-    maII = ct.taxa('II' , 'HEV-g3-II'    , rmc, g3)
-    Rab  = ct.taxa('3ra', 'HEV-g3-rabbit', rmc, g3)
+    rank_MajorClade  = ct.rank('major clade', rGenotype)
+    maI  = ct.taxa('I'  , 'HEV-g3-I'     , rank_MajorClade, g3)
+    maII = ct.taxa('II' , 'HEV-g3-II'    , rank_MajorClade, g3)
+    Rab  = ct.taxa('3ra', 'HEV-g3-rabbit', rank_MajorClade, g3)
 
-    rgr  = ct.rank('group', rmc)
-    grchi  = ct.taxa('3chi'  , 'HEV-g3chi'     , rgr, maI)
-    grjab  = ct.taxa('3jab'  , 'HEV-g3jab'     , rgr, maI)
-    grfeg  = ct.taxa('3feg'  , 'HEV-g3feg'     , rgr, maII)
-    grRab  = ct.taxa('3rab'  , 'HEV-g3rabbit'  , rgr, Rab, syn=['Rab']  )  # temporal???
+    rank_Group  = ct.rank('group', rank_MajorClade)
+    grchi  = ct.taxa('3chi'  , 'HEV-g3chi'     , rank_Group, maI)
+    grjab  = ct.taxa('3jab'  , 'HEV-g3jab'     , rank_Group, maI)
+    grfeg  = ct.taxa('3feg'  , 'HEV-g3feg'     , rank_Group, maII)
+    grRab  = ct.taxa('3rab'  , 'HEV-g3rabbit'  , rank_Group, Rab, syn=['Rab']  )  # temporal???
 
-    rsubt = ct.rank('subtype', rgr)
+    rSubtype = ct.rank('subtype', rank_Group)
 
-    g1a   = ct.taxa('1a', 'HEV-g1a'  , rsubt, g1, syn=['a', 'Ia', 'IA'])
-    g1b   = ct.taxa('1b', 'HEV-g1b'  , rsubt, g1)
-    g1c   = ct.taxa('1c', 'HEV-g1c'  , rsubt, g1)
-    g1d   = ct.taxa('1d', 'HEV-g1d'  , rsubt, g1, syn=['d'])
-    g1e   = ct.taxa('1e', 'HEV-g1e'  , rsubt, g1)
-    g1f   = ct.taxa('1f', 'HEV-g1f'  , rsubt, g1)
-    g1g   = ct.taxa('1g', 'HEV-g1g'  , rsubt, g1)
-    g1h   = ct.taxa('1h', 'HEV-g1h'  , rsubt, g1)
-    g1i   = ct.taxa('1i', 'HEV-g1i'  , rsubt, g1)
-    g1j   = ct.taxa('1j', 'HEV-g1j'  , rsubt, g1)
-    g1k   = ct.taxa('1k', 'HEV-g1k'  , rsubt, g1)
+    g1a   = ct.taxa('1a', 'HEV-g1a'  , rSubtype, g1, syn=['a', 'Ia', 'IA'])
+    g1b   = ct.taxa('1b', 'HEV-g1b'  , rSubtype, g1)
+    g1c   = ct.taxa('1c', 'HEV-g1c'  , rSubtype, g1)
+    g1d   = ct.taxa('1d', 'HEV-g1d'  , rSubtype, g1, syn=['d'])
+    g1e   = ct.taxa('1e', 'HEV-g1e'  , rSubtype, g1)
+    g1f   = ct.taxa('1f', 'HEV-g1f'  , rSubtype, g1)
+    g1g   = ct.taxa('1g', 'HEV-g1g'  , rSubtype, g1)
+    g1h   = ct.taxa('1h', 'HEV-g1h'  , rSubtype, g1)
+    g1i   = ct.taxa('1i', 'HEV-g1i'  , rSubtype, g1)
+    g1j   = ct.taxa('1j', 'HEV-g1j'  , rSubtype, g1)
+    g1k   = ct.taxa('1k', 'HEV-g1k'  , rSubtype, g1)
 
-    g2a   = ct.taxa('2a', 'HEV-g2a'  , rsubt, g2)
+    g2a   = ct.taxa('2a', 'HEV-g2a'  , rSubtype, g2)
 
-    g3a   = ct.taxa('3a', 'HEV-g3a'  , rsubt, grjab, syn=['a'])
-    g3b   = ct.taxa('3b', 'HEV-g3b'  , rsubt, grjab)
-    g3c   = ct.taxa('3c', 'HEV-g3c'  , rsubt, grchi, syn=['c', 'G3c'])
-    g3d   = ct.taxa('3d', 'HEV-g3d'  , rsubt, g3, syn=['d'])
-    g3e   = ct.taxa('3e', 'HEV-g3e'  , rsubt, grfeg, syn=['e', 'g3e', 'G3E', '3E'])
-    g3ef  = ct.taxa('3ef', 'HEV-g3ef', rsubt, grfeg )
-    g3f   = ct.taxa('3f', 'HEV-g3f'  , rsubt, grfeg, syn=['f', 'g3f', 'G3F', '3F', '515413', '515412']) # human/3f/Fr-27/France/2006, Fr-26/France/2006
-    g3g   = ct.taxa('3g', 'HEV-g3g'  , rsubt, grfeg)
-    g3h   = ct.taxa('3h', 'HEV-g3h'  , rsubt, grchi, syn=['h', 'g3h', 'G3H', '3H'])
-    g3i   = ct.taxa('3i', 'HEV-g3i'  , rsubt, grchi)
-    g3j   = ct.taxa('3j', 'HEV-g3j'  , rsubt, grjab)
-    g3k   = ct.taxa('3k', 'HEV-g3k'  , rsubt, g3)
-    g3l   = ct.taxa('3l', 'HEV-g3l'  , rsubt, g3)
+    g3a   = ct.taxa('3a', 'HEV-g3a'  , rSubtype, grjab, syn=['a'])
+    g3b   = ct.taxa('3b', 'HEV-g3b'  , rSubtype, grjab)
+    g3c   = ct.taxa('3c', 'HEV-g3c'  , rSubtype, grchi, syn=['c', 'G3c'])
+    g3d   = ct.taxa('3d', 'HEV-g3d'  , rSubtype, g3, syn=['d'])
+    g3e   = ct.taxa('3e', 'HEV-g3e'  , rSubtype, grfeg, syn=['e', 'g3e', 'G3E', '3E'])
+    g3ef  = ct.taxa('3ef', 'HEV-g3ef', rSubtype, grfeg )
+    g3f   = ct.taxa('3f', 'HEV-g3f'  , rSubtype, grfeg, syn=['f', 'g3f', 'G3F', '3F', '515413', '515412']) # human/3f/Fr-27/France/2006, Fr-26/France/2006
+    g3g   = ct.taxa('3g', 'HEV-g3g'  , rSubtype, grfeg)
+    g3h   = ct.taxa('3h', 'HEV-g3h'  , rSubtype, grchi, syn=['h', 'g3h', 'G3H', '3H'])
+    g3i   = ct.taxa('3i', 'HEV-g3i'  , rSubtype, grchi)
+    g3j   = ct.taxa('3j', 'HEV-g3j'  , rSubtype, grjab)
+    g3k   = ct.taxa('3k', 'HEV-g3k'  , rSubtype, g3)
+    g3l   = ct.taxa('3l', 'HEV-g3l'  , rSubtype, g3)
 
-    g4a   = ct.taxa('4a', 'HEV-g4a'  , rsubt, g4)
-    g4b   = ct.taxa('4b', 'HEV-g4b'  , rsubt, g4)
-    g4c   = ct.taxa('4c', 'HEV-g4c'  , rsubt, g4)
-    g4d   = ct.taxa('4d', 'HEV-g4d'  , rsubt, g4, syn=['d'])
-    g4e   = ct.taxa('4e', 'HEV-g4e'  , rsubt, g4)
-    g4f   = ct.taxa('4f', 'HEV-g4f'  , rsubt, g4)
-    g4g   = ct.taxa('4g', 'HEV-g4g'  , rsubt, g4)
-    g4h   = ct.taxa('4h', 'HEV-g4h'  , rsubt, g4, syn=['h'])
-    g4i   = ct.taxa('4i', 'HEV-g4i'  , rsubt, g4)
-    g4j   = ct.taxa('4j', 'HEV-g4j'  , rsubt, g4)
-    g4k   = ct.taxa('4k', 'HEV-g4k'  , rsubt, g4)
+    g4a   = ct.taxa('4a', 'HEV-g4a'  , rSubtype, g4)
+    g4b   = ct.taxa('4b', 'HEV-g4b'  , rSubtype, g4)
+    g4c   = ct.taxa('4c', 'HEV-g4c'  , rSubtype, g4)
+    g4d   = ct.taxa('4d', 'HEV-g4d'  , rSubtype, g4, syn=['d'])
+    g4e   = ct.taxa('4e', 'HEV-g4e'  , rSubtype, g4)
+    g4f   = ct.taxa('4f', 'HEV-g4f'  , rSubtype, g4)
+    g4g   = ct.taxa('4g', 'HEV-g4g'  , rSubtype, g4)
+    g4h   = ct.taxa('4h', 'HEV-g4h'  , rSubtype, g4, syn=['h'])
+    g4i   = ct.taxa('4i', 'HEV-g4i'  , rSubtype, g4)
+    g4j   = ct.taxa('4j', 'HEV-g4j'  , rSubtype, g4)
+    g4k   = ct.taxa('4k', 'HEV-g4k'  , rSubtype, g4)
 
     db.commit()
 
@@ -472,8 +479,8 @@ def parse_full_fasta_Align(db, ref_seq = None, file_name=None):
                   "         VALUES (?,                  ?,       ?    )",
                                    (str(seq_record.id), exp_seq, len(exp_seq))    )
             Id_part = c.lastrowid
-
-        c.execute("INSERT INTO aligned_seq (Id_align, Id_part, Seq,      pbeg,     pend  ) "
+        # todo revise: Id_seq_region or Id_part ?????
+        c.execute("INSERT INTO aligned_seq (Id_align, Id_seq_region, Seq,      pbeg,     pend  ) "
                   "                 VALUES (?,        ?,       ?,        ?,       ?    )",
                                            (Id_align, Id_part, seq, seq_beg, seq_end )    )
 
@@ -1314,10 +1321,11 @@ def parse_source(host:str, source:str):
 
     return h, s
 
+
 def create_all( ):
 
-    newly=True   # False
-    country=True # False
+    newly = True   # False
+    country = True # False
 
     print('Creating db BioSQL...')
 
