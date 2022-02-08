@@ -42,6 +42,7 @@ This will help you to quickly (hopefully) manually align the sequences.
 
 __author__ = 'Ariel'
 
+import logging
 import tkinter
 # http://biopython.org/DIST/docs/tutorial/Tutorial.html
 # http://biopython.org/DIST/docs/api/Bio-module.html
@@ -68,9 +69,128 @@ class SeqPos:
         self.beg = seq_beg
         self.end = seq_end
 
+    def __str__(self):
+        return f"Seq pos: {self.beg}-{self.end}"
+
     def expand(self, pos):
-        self.beg = min(pos.beg, self.beg)
-        self.end = max(pos.end, self.end)
+        """
+        it conserv the 'initial' orientation
+        :param pos:
+        :return:
+        """
+        if pos.beg is None and pos.end is None:
+            return
+        if self.beg is None and self.end is None:
+            self.beg = pos.beg
+            self.end = pos.end
+            return
+
+        if pos.is_direct():
+            if self.is_direct():
+                self.beg = min(pos.beg, self.beg)
+                self.end = max(pos.end, self.end)
+                return
+            elif self.is_compl():
+                self.end = min(pos.beg, self.end)
+                self.beg = max(pos.end, self.beg)
+                return
+            elif self.beg is None:
+                self.beg = min(pos.beg, self.end)
+                self.end = max(pos.end, self.end)
+                return
+            else:
+                self.beg = min(pos.beg, self.beg)
+                self.end = max(pos.end, self.beg)
+                return
+
+        elif pos.is_compl():
+            if self.is_direct():
+                self.beg = min(pos.beg, self.beg)
+                self.end = max(pos.end, self.end)
+                return
+            elif self.is_compl():
+                self.end = min(pos.end, self.end)
+                self.beg = max(pos.beg, self.beg)
+                return
+            elif self.beg is None:
+                self.beg = min(pos.end, self.end)
+                self.end = max(pos.beg, self.end)
+                return
+            else:
+                self.beg = min(pos.beg, self.beg)
+                self.end = max(pos.beg, self.beg)
+                return
+
+        elif self.is_direct():
+            if pos.beg is None:
+                self.beg = min(pos.end, self.beg)
+                self.end = max(pos.end, self.end)
+                return
+            else:
+                self.beg = min(pos.beg, self.beg)
+                self.end = max(pos.beg, self.end)
+                return
+        elif self.is_compl():
+            if pos.beg is None:
+                self.end = min(pos.end, self.end)
+                self.beg = max(pos.end, self.beg)
+                return
+            else:
+                self.end = min(pos.beg, self.end)
+                self.beg = max(pos.beg, self.beg)
+                return
+
+        elif self.beg is None:
+            if pos.beg is None:
+                self.beg = min(pos.end, self.end)
+                self.end = max(pos.end, self.end)
+                return
+            else:
+                self.beg = min(pos.beg, self.end)
+                self.end = max(pos.beg, self.end)
+                return
+
+        elif pos.beg is None:
+            self.beg = min(pos.end, self.beg)
+            self.end = max(pos.end, self.beg)
+            return
+        else:
+            self.beg = min(pos.beg, self.beg)
+            self.end = max(pos.beg, self.beg)
+            return
+
+
+    def is_direct(self):
+        if self.beg is None or self.end is None:
+            return False
+        return self.beg <= self.end
+
+    def is_compl(self):
+        if self.beg is None or self.end is None:
+            return False
+        return self.beg > self.end
+
+    def expand_by(self, nt):
+        if self.is_direct():
+            self.beg -= nt
+            self.end += nt
+        else:
+            self.beg += nt
+            self.end -= nt
+
+    def increment(self):
+        return self.end - self.beg
+
+    def len(self):
+        return abs(self.increment())
+
+    def invert(self):
+        self.beg, self.end = self.end, self.beg
+
+    def abs_expand(self):
+        pass
+
+
 
 
 class QHitPos:
@@ -78,6 +198,9 @@ class QHitPos:
     def __init__(self, q_pos=SeqPos(), h_pos=SeqPos()):
         self.q = q_pos
         self.h = h_pos
+
+    def __str__(self):
+        return f"Hit pos: Query {self.q}, Hit{self.h}"
 
     def adjust_h(self, hit):
         self.h.beg = self.q.beg + (hit.q.beg - hit.h.beg)
@@ -142,11 +265,11 @@ class App(tkinter.Frame):
                 return
 
         self.ref_seq.clear()
-        print(file_name)
+        logging.info(file_name)
         with open(file_name) as align_file:
             seq_name=''
             for line in align_file.readlines():
-                # print(line)
+                logging.debug(line)
                 if line[0] == '>':
                     seq_name = line[1:].rstrip()
                 else:
@@ -164,7 +287,7 @@ class App(tkinter.Frame):
                             seq_end -= 1
                         else:
                             break   # todo :  check it is a valid base not line end???
-                    print('Seq: ' + seq_name + str((seq_beg,seq_end)))
+                    logging.debug('Seq: ' + seq_name + str((seq_beg,seq_end)))
                     self.ref_seq[seq_name] = SeqPos(seq_beg, seq_end)
         self.ID_original.clear()
         self.ID_original.add('\n'.join(self.ref_seq.keys()))
@@ -197,7 +320,7 @@ class App(tkinter.Frame):
         :return:
         """
         IDs = list(set(self.ID_add.lines()))
-        print (' '.join(IDs))
+        logging.debug(' '.join(IDs))
         if not blast_file_name:
             blast_file_name = filedialog.asksaveasfilename(filetypes=(("BLAST", "*.xml"), ("All files", "*.*") ), defaultextension='xml', title='Save the BLAST result in XML format')
         if not blast_file_name:
@@ -207,10 +330,10 @@ class App(tkinter.Frame):
         i = 0
         while i < len(IDs):
             self.master.title('Talking to NCBI. Running BLAST. Be VERY patient ...')
-            print('BLAST: ' + ' '.join(IDs[i : i + NS]))
+            logging.info('BLAST: ' + ' '.join(IDs[i : i + NS]))
             result_handle = NCBIWWW.qblast("blastn", "nt", '\n'.join(IDs[i:i+NS]))   #, hitlist_size=50, perc_ident=90, threshold=1, alignments=50, filter="HEV", format_type='XML', results_file=blast_file_name )
             self.master.title('Adding new sequences...')
-            print('returned')
+            print('... Returned from NCBI BLAST')
             # http://tkinter.unpythonic.net/wiki/tkFileDialog
             with open(blast_file_name+'-'+str(i), mode='w') as blast_file:
                 blast_file.write(result_handle.read())
@@ -227,7 +350,7 @@ class App(tkinter.Frame):
         if not blast_file_name:
             return
         self.master.title('Talking to NCBI. Running BLAST. Be VERY patient ...')
-        print('BLAST: ' + seq)
+        logging.info('BLAST: ' + seq)
         result_handle = NCBIWWW.qblast(program="blastn",
                                        database="nt",
                                        sequence=seq,
@@ -239,7 +362,7 @@ class App(tkinter.Frame):
                                           # format_type='XML', results_file=blast_file_name )
 
         self.master.title('Adding new sequences...')
-        print('returned')
+        print('... Returned from NCBI BLAST')
         with open(blast_file_name, mode='w') as blast_file:
             blast_file.write(result_handle.read())
         result_handle.close()
@@ -247,9 +370,10 @@ class App(tkinter.Frame):
         with open(blast_file_name, mode='r') as blast_file:
             self.load_blast_data(blast_file)
 
-
     def load_blast(self):
-        with filedialog.askopenfile(filetypes=(("BLAST (xml)", "*.xml"), ("All files", "*.*") ), title='Load a BLAST result in XML format') as blast_file:
+        with filedialog.askopenfile(filetypes=(("BLAST (xml)", "*.xml"), ("All files", "*.*") ),
+                                    title='Load a BLAST result in XML format') as blast_file:
+            logging.info(f'Proccesing BLASt file: {blast_file.name}')
             self.load_blast_data(blast_file)
 
     def load_blast_data(self, blast_data):
@@ -261,11 +385,10 @@ class App(tkinter.Frame):
         :return:
         """
         IDs = set()
-        print('proccesing BLASt file')
-        blast_records = NCBIXML.parse(blast_data)
-        print('proccesing BLASt file: parsed')
+        blast_records = NCBIXML.parse(blast_data)  # http://biopython.org/DIST/docs/tutorial/Tutorial.html#htoc91
+        logging.info('proccesing BLASt file: parsed')
         q_is_ref = False
-        # http://biopython.org/DIST/docs/tutorial/Tutorial.html#htoc91
+
         for blast_record in blast_records:
             try:
                 qID = blast_record.query_id.split('|')[3].split('.')[0]
@@ -276,16 +399,16 @@ class App(tkinter.Frame):
             if q_is_ref:
                 align_pos.q = self.ref_seq[qID]
             h_is_ref = False
-            print('Query: ' + blast_record.query_id + ' : ' + qID + '. Is a Reference: ' + str(q_is_ref))
+            logging.debug('Query: ' + blast_record.query_id + ' : ' + qID + '. Is a Reference: ' + str(q_is_ref))
             for alignment in blast_record.alignments:
                 h_is_ref = alignment.accession in self.ref_seq.keys()
-                print('Hit: ' + alignment.accession + '. Is a Reference: ' + str(h_is_ref))
+                logging.debug('Hit: ' + str(alignment.accession) + '. Is a Reference: ' + str(h_is_ref))
                 IDs.add(alignment.accession)           # alignment.title.split('|')[3].split('.')[0])
                 if q_is_ref and h_is_ref:
                     continue
                 h = self.hit_positions(alignment)
-                print(h)
-                print(align_pos)
+                logging.debug(h)
+                logging.debug(align_pos)
                 if q_is_ref:
                     if not h_is_ref:
                         align_pos.adjust_h(h)
@@ -303,54 +426,53 @@ class App(tkinter.Frame):
                             self.new_seq[qID] = align_pos.q
 
 
-                print(align_pos)
+                logging.debug(align_pos)
 
         self.filter_add(IDs)
 
     def load_primer_blast(self):
-        with filedialog.askopenfile(filetypes=(("BLAST Results", "*.html"), ("All files", "*.*") ), title='Load a Primer-BLAST result in HTML format') as primer_blast_file:
+        with filedialog.askopenfile(filetypes=(("BLAST Results", "*.html"), ("All files", "*.*") ),
+                                    title='Load a Primer-BLAST result in HTML format') as primer_blast_file:
+            logging.info(f'Proccesing Primer-BLAST file: {primer_blast_file.name}')
             self.load_primer_blast_data(primer_blast_file)
 
     def load_primer_blast_data(self, primer_blast_file):
         IDs = set()
-        print('proccesing Primer BLASt file')
-        with open(primer_blast_file) as res_file:
-            seq_name = ''
-            while True:
-                line = res_file.readline()
-                if not line: break
-                new_entrez = line.split('target="new_entrez">')
-                www = new_entrez.pop(0)
-                if not new_entrez: continue
-                acc, desc = new_entrez[0].split('</a> ')
-                line = res_file.readline()  # <pre>
-                product_lenght = int(res_file.readline().split('=')[1])  # product length = 102
-                line = res_file.readline()  # Forward primer  1       GCCTTCCAGACCATGCTC  18
-                left = pattern = None
-                for w in res_file.readline().split(' ')[1:-1]:  #Template        202309  ..................  202326
-                    if not w: continue
-                    if not left:      left = int(w)
-                    elif not pattern: pattern = w
-                    else:
-                        right = int(w)
-                        break
-                line = res_file.readline()  # Reverse primer  1       AGTGCGGAGGTCATTTGC  18
-                rproduct_lenght = int(res_file.readline().split('=')[1])
-                line = res_file.readline()  # Forward primer  1       GCCTTCCAGACCATGCTC  18
-                rleft = rpattern = None
-                for w in res_file.readline().split(' ')[1:-1]:
-                    if not w: continue
-                    if not rleft:
-                        rleft = int(w)
-                    elif not rpattern:
-                        rpattern = w
-                    else:
-                        rright = int(w)
-                        break
+        seq_name = ''
+        new_entrez = False
+        while not new_entrez:  # skip html headers
+            line = primer_blast_file.readline()
+            logging.debug(f'Parsing line: {line}')
+            if not line: return
+            new_entrez = line.split('target="new_entrez">')
+            wwwt = new_entrez.pop(0)
 
-                print (f"{acc} fw:{pattern} {left}-{right}  rv:{rpattern} {rleft}-{rright}. {desc}")
+        while True:
+            while not new_entrez:  # skip html headers
+                line = primer_blast_file.readline()                               # new_entrez ? or just <pre>?
+                if not line: return
+                if not "<pre>" == line[:-1]:
+                    new_entrez = line.split('target="new_entrez">')
+                    wwwt = new_entrez.pop(0)
+                    continue      # <pre>
+                logging.debug(f'Parsing line: {line}')
+                product_lenght = int(primer_blast_file.readline().split('=')[1])   # product length = 102
+                line = primer_blast_file.readline()                                # Forward primer  1       GCCTTCCAGACCATGCTC  18
+                _, left, pattern, right = primer_blast_file.readline().split()     # Template        202309  ..................  202326
+                line = primer_blast_file.readline()                                #
+                line = primer_blast_file.readline()                                # Reverse primer  1       AGTGCGGAGGTCATTTGC  18
+                _, rleft, rpattern, rright = primer_blast_file.readline().split()  # Template        202410  ..................  202393
+                line = primer_blast_file.readline()                                #
+                line = primer_blast_file.readline()                                # </pre>
 
-        print('proccesing BLASt file: parsed')
+                print (f"{acc}\tAmplify\t{product_lenght}\tnt\tfw:\t{pattern}\t{left}\t{right}\trv:\t{rpattern}\t{rleft}\t{rright}\t{desc[:-1]}")
+
+            logging.debug(f'Parsing new_entrez: {new_entrez}')
+            acc, desc = new_entrez[0].split('</a> ')
+            www = wwwt
+            new_entrez = False
+
+        # print('proccesing BLASt file: parsed')
 
     def hit_positions(self, alignments):
         #assert (isinstance(alignments, NCBIXML.alignment))
@@ -375,7 +497,7 @@ class App(tkinter.Frame):
         :return:
         '''
 
-        print (IDs)
+        logging.debug (IDs)
         seq_flat_file_name = filedialog.asksaveasfilename(filetypes=(("Seq flat GB", "*.gb"), ("All files", "*.*")),
                                                           defaultextension='gb',
                                                           title='Save the GenBank sequences in flat format')
@@ -386,7 +508,7 @@ class App(tkinter.Frame):
         with open(seq_flat_file_name, mode='w') as seq_file:
             while i < len(IDs):
                 #ID =
-                print('GenBank: ' + str(IDs[i: i + NS]))
+                logging.debug('GenBank: ' + str(IDs[i: i + NS]))
                 self.master.title('Talking to the NCBI. Getting sequences. Be VERY patient ...')
                 seq_handle = Entrez.efetch(db="nuccore",
                                            id=IDs[i: i + NS],
