@@ -31,8 +31,124 @@ class Seq_pos:
         return f"Seq pos: {self.beg}-{self.end}"
 
     def expand(self, pos):
-        self.beg = min(pos.beg, self.beg)
-        self.end = max(pos.end, self.end)
+        """
+        it conserv the 'initial' orientation
+        :param pos:
+        :return:
+        """
+        if pos.beg is None and pos.end is None:
+            return
+        if self.beg is None and self.end is None:
+            self.beg = pos.beg
+            self.end = pos.end
+            return
+
+        if pos.is_direct():
+            if self.is_direct():
+                self.beg = min(pos.beg, self.beg)
+                self.end = max(pos.end, self.end)
+                return
+            elif self.is_compl():
+                self.end = min(pos.beg, self.end)
+                self.beg = max(pos.end, self.beg)
+                return
+            elif self.beg is None:
+                self.beg = min(pos.beg, self.end)
+                self.end = max(pos.end, self.end)
+                return
+            else:
+                self.beg = min(pos.beg, self.beg)
+                self.end = max(pos.end, self.beg)
+                return
+
+        elif pos.is_compl():
+            if self.is_direct():
+                self.beg = min(pos.beg, self.beg)
+                self.end = max(pos.end, self.end)
+                return
+            elif self.is_compl():
+                self.end = min(pos.end, self.end)
+                self.beg = max(pos.beg, self.beg)
+                return
+            elif self.beg is None:
+                self.beg = min(pos.end, self.end)
+                self.end = max(pos.beg, self.end)
+                return
+            else:
+                self.beg = min(pos.beg, self.beg)
+                self.end = max(pos.beg, self.beg)
+                return
+
+        elif self.is_direct():
+            if pos.beg is None:
+                self.beg = min(pos.end, self.beg)
+                self.end = max(pos.end, self.end)
+                return
+            else:
+                self.beg = min(pos.beg, self.beg)
+                self.end = max(pos.beg, self.end)
+                return
+        elif self.is_compl():
+            if pos.beg is None:
+                self.end = min(pos.end, self.end)
+                self.beg = max(pos.end, self.beg)
+                return
+            else:
+                self.end = min(pos.beg, self.end)
+                self.beg = max(pos.beg, self.beg)
+                return
+
+        elif self.beg is None:
+            if pos.beg is None:
+                self.beg = min(pos.end, self.end)
+                self.end = max(pos.end, self.end)
+                return
+            else:
+                self.beg = min(pos.beg, self.end)
+                self.end = max(pos.beg, self.end)
+                return
+
+        elif pos.beg is None:
+            self.beg = min(pos.end, self.beg)
+            self.end = max(pos.end, self.beg)
+            return
+        else:
+            self.beg = min(pos.beg, self.beg)
+            self.end = max(pos.beg, self.beg)
+            return
+
+
+    def is_direct(self):
+        if self.beg is None or self.end is None:
+            return False
+        return self.beg <= self.end
+
+    def is_compl(self):
+        if self.beg is None or self.end is None:
+            return False
+        return self.beg > self.end
+
+    def expand_by(self, nt):
+        if self.is_direct():
+            self.beg -= nt
+            self.end += nt
+        else:
+            self.beg += nt
+            self.end -= nt
+
+    def increment(self):
+        return self.end - self.beg
+
+    def len(self):
+        return abs(self.increment())
+
+    def invert(self):
+        self.beg, self.end = self.end, self.beg
+
+    def abs_expand(self):
+        pass
+
+
 
 
 class Q_hit_pos:
@@ -201,13 +317,11 @@ class App(tkinter.Frame):
         with open(blast_file_name, mode='r') as blast_file:
             self.load_blast_data(blast_file)
 
-
     def load_blast(self):
         with filedialog.askopenfile(filetypes=(("BLAST (xml)", "*.xml"), ("All files", "*.*") ),
                                     title='Load a BLAST result in XML format') as blast_file:
             logging.info(f'Proccesing BLASt file: {blast_file.name}')
             self.load_blast_data(blast_file)
-
 
     def load_blast_data(self, blast_data):
         """
@@ -218,10 +332,10 @@ class App(tkinter.Frame):
         :return:
         """
         IDs = set()
-        blast_records = NCBIXML.parse(blast_data)
+        blast_records = NCBIXML.parse(blast_data)  # http://biopython.org/DIST/docs/tutorial/Tutorial.html#htoc91
         logging.info('proccesing BLASt file: parsed')
         q_is_ref = False
-        # http://biopython.org/DIST/docs/tutorial/Tutorial.html#htoc91
+
         for blast_record in blast_records:
             try:
                 qID = blast_record.query_id.split('|')[3].split('.')[0]
