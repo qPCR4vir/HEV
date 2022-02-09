@@ -385,8 +385,9 @@ class App(tkinter.Frame):
         blast_records = NCBIXML.parse(blast_data)  # http://biopython.org/DIST/docs/tutorial/Tutorial.html#htoc91
         logging.info('proccesing BLASt file: parsed')
         q_is_ref = False
-
+        all_records = []
         for blast_record in blast_records:
+            all_records.append(blast_record)
             try:
                 qID = blast_record.query_id.split('|')[3].split('.')[0]
             except:
@@ -427,7 +428,7 @@ class App(tkinter.Frame):
 
         IDs.discard('')
         self.filter_add(IDs)
-        return blast_records
+        return all_records
 
     def load_primer_blast(self):
         with filedialog.askopenfile(filetypes=(("BLAST Results", "*.html"), ("All files", "*.*") ),
@@ -482,7 +483,6 @@ class App(tkinter.Frame):
             descriptions[acc] = desc
             www = wwwt
             new_entrez = False
-
 
     def hit_positions(self, alignments):
         #assert (isinstance(alignments, NCBIXML.alignment))
