@@ -65,7 +65,7 @@ Entrez.email = "arielvina@yahoo.es"
 
 class SeqPos:
 
-    def __init__(self, seq_beg=0, seq_end=0):
+    def __init__(self, seq_beg: int=None, seq_end: int=None):
         self.beg = seq_beg
         self.end = seq_end
 
@@ -105,8 +105,8 @@ class SeqPos:
 
         elif pos.is_compl():
             if self.is_direct():
-                self.beg = min(pos.beg, self.beg)
-                self.end = max(pos.end, self.end)
+                self.beg = min(pos.end, self.beg)
+                self.end = max(pos.beg, self.end)
                 return
             elif self.is_compl():
                 self.end = min(pos.end, self.end)
