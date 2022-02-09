@@ -74,7 +74,7 @@ class SeqPos:
 
     def expand(self, pos):
         """
-        it conserv the 'initial' orientation
+        it preserves the 'initial' orientation
         :param pos:
         :return:
         """
@@ -159,7 +159,6 @@ class SeqPos:
             self.end = max(pos.beg, self.beg)
             return
 
-
     def is_direct(self):
         if self.beg is None or self.end is None:
             return False
@@ -174,7 +173,7 @@ class SeqPos:
         if self.is_direct():
             self.beg -= nt
             self.end += nt
-        else:
+        elif self.is_compl():
             self.beg += nt
             self.end -= nt
 
@@ -187,10 +186,8 @@ class SeqPos:
     def invert(self):
         self.beg, self.end = self.end, self.beg
 
-    def abs_expand(self):
+    def abs_expand(self):  # todo
         pass
-
-
 
 
 class QHitPos:
@@ -307,7 +304,7 @@ class App(tkinter.Frame):
         self.ID_add.clear()
         self.ID_unique.clear()
         for ID in uniq:
-            self.ID_unique.add(ID)
+            self.ID_unique.add(ID+'\n')
 
     def filter(self):
         self.filter_add(self.ID_add.lines())
@@ -374,7 +371,7 @@ class App(tkinter.Frame):
         with filedialog.askopenfile(filetypes=(("BLAST (xml)", "*.xml"), ("All files", "*.*") ),
                                     title='Load a BLAST result in XML format') as blast_file:
             logging.info(f'Proccesing BLASt file: {blast_file.name}')
-            self.load_blast_data(blast_file)
+            return self.load_blast_data(blast_file)
 
     def load_blast_data(self, blast_data):
         """
@@ -429,50 +426,62 @@ class App(tkinter.Frame):
                 logging.debug(align_pos)
 
         self.filter_add(IDs)
+        return blast_records
 
     def load_primer_blast(self):
         with filedialog.askopenfile(filetypes=(("BLAST Results", "*.html"), ("All files", "*.*") ),
                                     title='Load a Primer-BLAST result in HTML format') as primer_blast_file:
             logging.info(f'Proccesing Primer-BLAST file: {primer_blast_file.name}')
-            self.load_primer_blast_data(primer_blast_file)
+            return self.load_primer_blast_data(primer_blast_file)
 
     def load_primer_blast_data(self, primer_blast_file):
         IDs = set()
         seq_name = ''
         new_entrez = False
+        targets = {}  # acc : [(product_lenght, fw_pattern, fw_h, rv_pattern, rv_h)]
+        descriptions = {}  #  # acc : desc
+        f = primer_blast_file
         while not new_entrez:  # skip html headers
             line = primer_blast_file.readline()
             logging.debug(f'Parsing line: {line}')
-            if not line: return
+            if not line: return descriptions, targets
             new_entrez = line.split('target="new_entrez">')
             wwwt = new_entrez.pop(0)
 
         while True:
             while not new_entrez:  # skip html headers
-                line = primer_blast_file.readline()                               # new_entrez ? or just <pre>?
-                if not line: return
+                line = f.readline()                                           # new_entrez ? or just <pre>?
+                if not line: return descriptions, targets
                 if not "<pre>" == line[:-1]:
                     new_entrez = line.split('target="new_entrez">')
                     wwwt = new_entrez.pop(0)
                     continue      # <pre>
                 logging.debug(f'Parsing line: {line}')
-                product_lenght = int(primer_blast_file.readline().split('=')[1])   # product length = 102
-                line = primer_blast_file.readline()                                # Forward primer  1       GCCTTCCAGACCATGCTC  18
-                _, left, pattern, right = primer_blast_file.readline().split()     # Template        202309  ..................  202326
-                line = primer_blast_file.readline()                                #
-                line = primer_blast_file.readline()                                # Reverse primer  1       AGTGCGGAGGTCATTTGC  18
-                _, rleft, rpattern, rright = primer_blast_file.readline().split()  # Template        202410  ..................  202393
-                line = primer_blast_file.readline()                                #
-                line = primer_blast_file.readline()                                # </pre>
+                product_lenght = int(f.readline().split('=')[1])              # product length = 102
 
-                print (f"{acc}\tAmplify\t{product_lenght}\tnt\tfw:\t{pattern}\t{left}\t{right}\trv:\t{rpattern}\t{rleft}\t{rright}\t{desc[:-1]}")
+                fw_h = QHitPos()
+                _,_, fw_h.q.beg, fw_pattern, fw_h.q.end = f.readline().split()  # Forward primer  1       GCCTTCCAGACCATGCTC  18
+                _,   fw_h.h.beg, fw_pattern, fw_h.h.end = f.readline().split()  # Template        202309  ..................  202326
+                line = f.readline()                                             #
+
+                rv_h = QHitPos()
+                _,_, rv_h.q.beg, rv_pattern, rv_h.q.end = f.readline().split()  # Reverse primer  1       AGTGCGGAGGTCATTTGC  18
+                _,   rv_h.h.beg, rv_pattern, rv_h.h.end = f.readline().split()  # Template        202410  ..................  202393
+                line = f.readline()                                             #
+                line = f.readline()                                             # </pre>
+
+                targets[acc].append((product_lenght, fw_pattern, fw_h, rv_pattern, rv_h))
+                print (f"{acc}\tAmplify\t{product_lenght}\tnt\tfw:\t{fw_pattern}\t{fw_h.h.beg}\t{fw_h.h.end}\t"
+                       f"rv:\t{rv_pattern}\t{rv_h.h.beg}\t{rv_h.h.end}\t{desc}")
 
             logging.debug(f'Parsing new_entrez: {new_entrez}')
             acc, desc = new_entrez[0].split('</a> ')
+            desc = desc[:-1]
+            targets[acc] = []
+            descriptions[acc] = desc
             www = wwwt
             new_entrez = False
 
-        # print('proccesing BLASt file: parsed')
 
     def hit_positions(self, alignments):
         #assert (isinstance(alignments, NCBIXML.alignment))
@@ -661,7 +670,7 @@ class ID_list(tkinter.Frame):
                              command=self.get)                       .grid(row=2, column=2 )
 
     def add(self, ID):
-        self.txt_list.insert(tkinter.END, ID+'\n')
+        self.txt_list.insert(tkinter.END, ID)
 
     def clear(self):
         self.txt_list.delete(1.0, tkinter.END)
@@ -669,7 +678,7 @@ class ID_list(tkinter.Frame):
     def load(self):
         with filedialog.askopenfile(filetypes=(("TXT", "*.txt"), ("All files", "*.*") ),
                                         title='Load a ID list in txt format'             ) as ID_file:
-            self.add(ID_file.read())
+            self.add(ID_file.read())  # +'\n'
             #for ID in ID_file:
             #    self.add(ID)
 
@@ -685,6 +694,14 @@ class ID_list(tkinter.Frame):
 
     def get(self):
         self.master.get_seq_GB(', '.join(self.lines()))
+
+    def copy(self, id_list):
+        self.txt_list.insert(tkinter.END, id_list.txt_list.get('1.0',tkinter.END))
+
+    def sort(self):
+        s = sorted(self.lines())
+        self.clear()
+        self.txt_list.insert(tkinter.END, '\n'.join(s))
 
 
 if __name__=='__main__':
