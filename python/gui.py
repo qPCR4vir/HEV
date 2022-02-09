@@ -298,13 +298,13 @@ class App(tkinter.Frame):
         """
         ori  = set([oID.split('.')[0] for oID in self.ID_original.lines()])
         uniq = set([oID.split('.')[0] for oID in self.ID_unique.lines()])
-
         uniq.update([oID.split('.')[0] for oID in add])
         uniq -= ori
+        uniq.discard('')
         self.ID_add.clear()
         self.ID_unique.clear()
-        for ID in uniq:
-            self.ID_unique.add(ID+'\n')
+        if uniq:
+            self.ID_unique.add('\n'.join(uniq))
 
     def filter(self):
         self.filter_add(self.ID_add.lines())
@@ -425,6 +425,7 @@ class App(tkinter.Frame):
 
                 logging.debug(align_pos)
 
+        IDs.discard('')
         self.filter_add(IDs)
         return blast_records
 
@@ -700,6 +701,7 @@ class ID_list(tkinter.Frame):
 
     def sort(self):
         s = sorted(self.lines())
+        # s.remove('')
         self.clear()
         self.txt_list.insert(tkinter.END, '\n'.join(s))
 
