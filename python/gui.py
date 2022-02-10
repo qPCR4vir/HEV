@@ -189,6 +189,17 @@ class SeqPos:
     def abs_expand(self):  # todo
         pass
 
+    def offset(self, nt_pos: int):
+        if self.is_direct():
+            if self.beg <= nt_pos and nt_pos <= self.end:
+                return nt_pos + 1 - self.beg
+            else:
+                return None
+        if self.is_compl():
+            if self.end <= nt_pos and nt_pos <= self.beg:
+                return nt_pos + 1 - self.end
+            else:
+                return None
 
 class QHitPos:
 
