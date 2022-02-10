@@ -65,7 +65,7 @@ Entrez.email = "arielvina@yahoo.es"
 
 class SeqPos:
 
-    def __init__(self, seq_beg: int=None, seq_end: int=None):
+    def __init__(self, seq_beg: int = None, seq_end: int = None):
         self.beg = seq_beg
         self.end = seq_end
 
@@ -255,16 +255,16 @@ class App(tkinter.Frame):
         """
 
         if not file_name:
-            file_name = filedialog.askopenfilename( filetypes=(("fasta aligment", "*.fas"), ("All files", "*.*")),
-                                                      defaultextension='fas',
-                                                      title='Select Master Alignment')
+            file_name = filedialog.askopenfilename(filetypes=(("fasta aligment", "*.fas"), ("All files", "*.*")),
+                                                   defaultextension='fas',
+                                                   title='Select Master Alignment')
             if not file_name:
                 return
 
         self.ref_seq.clear()
         logging.info(file_name)
         with open(file_name) as align_file:
-            seq_name=''
+            seq_name = ''
             for line in align_file.readlines():
                 logging.debug(line)
                 if line[0] == '>':
@@ -274,7 +274,7 @@ class App(tkinter.Frame):
                     self.ref_len = max(ln, self.ref_len)
                     seq_beg = 0
                     seq_end = ln-2
-                    while seq_beg<ln :
+                    while seq_beg < ln:
                         if line[seq_beg] == '-':
                             seq_beg += 1
                         else:
@@ -284,7 +284,7 @@ class App(tkinter.Frame):
                             seq_end -= 1
                         else:
                             break   # todo :  check it is a valid base not line end???
-                    logging.debug('Seq: ' + seq_name + str((seq_beg,seq_end)))
+                    logging.debug('Seq: ' + seq_name + str((seq_beg, seq_end)))
                     self.ref_seq[seq_name] = SeqPos(seq_beg, seq_end)
         self.ID_original.clear()
         self.ID_original.add('\n'.join(self.ref_seq.keys()))
@@ -319,7 +319,7 @@ class App(tkinter.Frame):
         IDs = list(set(self.ID_add.lines()))
         logging.debug(' '.join(IDs))
         if not blast_file_name:
-            blast_file_name = filedialog.asksaveasfilename(filetypes=(("BLAST", "*.xml"), ("All files", "*.*") ), defaultextension='xml', title='Save the BLAST result in XML format')
+            blast_file_name = filedialog.asksaveasfilename(filetypes=(("BLAST", "*.xml"), ("All files", "*.*")), defaultextension='xml', title='Save the BLAST result in XML format')
         if not blast_file_name:
             return
         # lets limit the number of sequences to BLAST in one pass to NS
@@ -327,8 +327,8 @@ class App(tkinter.Frame):
         i = 0
         while i < len(IDs):
             self.master.title('Talking to NCBI. Running BLAST. Be VERY patient ...')
-            logging.info('BLAST: ' + ' '.join(IDs[i : i + NS]))
-            result_handle = NCBIWWW.qblast("blastn", "nt", '\n'.join(IDs[i:i+NS]))   #, hitlist_size=50, perc_ident=90, threshold=1, alignments=50, filter="HEV", format_type='XML', results_file=blast_file_name )
+            logging.info('BLAST: ' + ' '.join(IDs[i: i + NS]))
+            result_handle = NCBIWWW.qblast("blastn", "nt", '\n'.join(IDs[i:i+NS]))   # , hitlist_size=50, perc_ident=90, threshold=1, alignments=50, filter="HEV", format_type='XML', results_file=blast_file_name )
             self.master.title('Adding new sequences...')
             print('... Returned from NCBI BLAST')
             # http://tkinter.unpythonic.net/wiki/tkFileDialog
@@ -342,7 +342,7 @@ class App(tkinter.Frame):
 
     def blast_seq(self, seq, entrez_query="(none)", blast_file_name=None):
         if not blast_file_name:
-            blast_file_name = filedialog.asksaveasfilename(filetypes=(("BLAST", "*.xml"), ("All files", "*.*") ),
+            blast_file_name = filedialog.asksaveasfilename(filetypes=(("BLAST", "*.xml"), ("All files", "*.*")),
                                                            defaultextension='xml', title='Save the BLAST result in XML format')
         if not blast_file_name:
             return
@@ -423,7 +423,6 @@ class App(tkinter.Frame):
                         else:
                             self.new_seq[qID] = align_pos.q
 
-
                 logging.debug(align_pos)
 
         IDs.discard('')
@@ -431,7 +430,7 @@ class App(tkinter.Frame):
         return all_records
 
     def load_primer_blast(self):
-        with filedialog.askopenfile(filetypes=(("BLAST Results", "*.html"), ("All files", "*.*") ),
+        with filedialog.askopenfile(filetypes=(("BLAST Results", "*.html"), ("All files", "*.*")),
                                     title='Load a Primer-BLAST result in HTML format') as primer_blast_file:
             logging.info(f'Proccesing Primer-BLAST file: {primer_blast_file.name}')
             return self.load_primer_blast_data(primer_blast_file)
@@ -441,7 +440,7 @@ class App(tkinter.Frame):
         seq_name = ''
         new_entrez = False
         targets = {}  # acc : [(product_lenght, fw_pattern, fw_h, rv_pattern, rv_h)]
-        descriptions = {}  #  # acc : desc
+        descriptions = {}  # acc : desc
         f = primer_blast_file
         while not new_entrez:  # skip html headers
             line = primer_blast_file.readline()
@@ -706,5 +705,5 @@ class ID_list(tkinter.Frame):
         self.txt_list.insert(tkinter.END, '\n'.join(s))
 
 
-if __name__=='__main__':
+if __name__ == '__main__':
     App().mainloop()
