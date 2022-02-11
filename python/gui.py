@@ -340,8 +340,8 @@ class App(tkinter.Frame):
             self.master.title('Talking to NCBI. Running BLAST. Be VERY patient ...')
             logging.info('BLAST: ' + ' '.join(IDs[i: i + NS]))
             result_handle = NCBIWWW.qblast("blastn", "nt", '\n'.join(IDs[i:i+NS]))   # , hitlist_size=50, perc_ident=90, threshold=1, alignments=50, filter="HEV", format_type='XML', results_file=blast_file_name )
-            self.master.title('Adding new sequences...')
             print('... Returned from NCBI BLAST')
+            self.master.title('Adding new sequences...')
             # http://tkinter.unpythonic.net/wiki/tkFileDialog
             with open(blast_file_name+'-'+str(i), mode='w') as blast_file:
                 blast_file.write(result_handle.read())
